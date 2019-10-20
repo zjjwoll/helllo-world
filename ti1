@@ -1,0 +1,755 @@
+
+So you should all have in front of you a copy of the workshop manual, which looks like this. This is the book that you should all have. It contains all of the workshop slides that we're going to review together today.
+
+And it's, obviously, yours to keep. So feel free to write on this, make any notes you need to, whatever. Let me draw your attention to something, though, that's inside the front cover.
+
+Near the bottom of the inside front cover, you'll find a web link. And that web link will take you to a website which I created to support the materials of the seminar. Let me show you that web link very quickly.
+
+If you go there, you'll find this web page. There's some background information on the seminars. But if you scroll down, you'll reach a point where you can find information on forthcoming events.
+
+Obviously, there's is this one today. There's another one coming up in April. There will be future events as well.
+
+And then further down, there is a section marked Downloads. This is the important part of the web page, because from here you can download the materials that we're going to review. Let me take you there.
+
+There are three downloads here. There's the promotional flyer, which is probably not of much interest. There is the manual, the PDF copy of the manual that you have here.
+
+And the important point about that is that it's, obviously-- because it's a PDF, it's color. Some of the information in the slides are encoded in color. And unfortunately, for printing reasons we weren't able to have those in color. So it may be a little bit easier if you want the color information, to download the PDF.
+
+And then, perhaps most importantly, there's a zip file at the bottom of the page. Let's Just pause for a minute here. OK, there's a zip file at the bottom of the page, which contains the supporting information.
+
+There's documentation up here. We're going to be doing several Matlab tutorials through the day. Well, those tutorials are here in PDF form. But furthermore, the scripts are also here. So if you're interested, you can download the scripts and try them, and follow them through if you want to do that.
+
+And back on the home page, a little bit further down there's some information on a textbook, a book which accompanies this seminar. And I wrote this because it's an opportunity to capture a lot of the derivations and the supporting text that there isn't time to do in the seminar. Don't, whatever you do, go out and buy it, because we have copies that we'll distribute later on today. So you'll all have a copy of this book when you leave this workshop.
+
+But what I would like to show you is that there is an errata sheet associated with it. There's a couple of mistakes in there-- not major ones, but there are a couple of mistakes. And they're all recorded in this PDF file on the website. So do please take a look at the website. Download freely anything that's there.
+
+OK, let me get back to the seminar then. So this is the first day of our three-day industrial control workshop. This is a control theory seminar.
+
+And I should begin, perhaps, by explaining a little bit about this symbol, which appears on practically every page of your books. Can anybody tell me what this is?
+
+Speed control.
+
+It's speed control. It has a couple of names. Somebody mentioned one of them. It's called a steam governor or a flyball governor. It was invented in 1788 by a Scots engineer called James Watt.
+
+And its purpose is to regulate the speed of a steam engine. The shaft of the engine enters on the left side through this shaft marked m. And its rotational movement is transferred into the vertical axis by this bevel gear. So as fast as that shaft is spinning, this whole vertical assembly is spinning-- and along with it, these two masses.
+
+And, obviously, the faster the spindle turns, the more the centrifugal force pulls those two masses apart. Now, that movement is constrained by this yolk assembly so that as they move apart, this little collar at the bottom moves up the spindle like that. And its upward movement is transferred via this linkage to this horizontal shaft.
+
+So what we've done is we've made a horizontal movement proportional to a shaft's speed. And this is held in a feedback loop around the steam engine to regulate the speed. That's how it works. It has absolutely nothing to do with this seminar. But I thought you'd be interested to know what this was.
+
+Now, I've set some reasonably modest objectives today, because after all we're only here for a day. And people spend years studying control theory. It's unrealistic to do anything too detailed.
+
+But what I'd like to do is to try and review some of the basic theory with the objectives of introducing and dispelling some of the jargon, because control theory is replete with jargon, like a lot of engineering disciplines, really. And if you don't know what people are talking about, it's kind of difficult to find your way through it.
+
+It's also an intensely mathematical subject. Control theory is very theoretical and very mathematical. So I'm going to review the mathematics. And I hope I'm going to do it in an intuitive and easy to follow way.
+
+It's certainly not beyond the reach of anybody who's an undergraduate student at university. If you know your way around a Laplace transform, you'll be at home with what we're going to cover today. There's nothing too advanced in this.
+
+Now, obviously, we have to limit the scope if we're only going to do one day of control theory. And the way I'm going to limit it is to look only at systems which are called linear and time invariant. This is a phrase that will come up several times through today.
+
+But it is a gross simplification. I'm going to spend some time explaining what's meant by linear and time invariant before we go much further. And I am going to use the theory to describe systems which are both analog and digital. And I think the fact that you're in a semiconductor manufacturer's premises, you probably know what analog and digital means. I'm going to refer to them as continuous time and discrete time. That's the language that I'm going to use to mean analog and digital.
+
+So let's begin with a definition. This is my favorite definition of control. It comes from a book by William Brogan.
+
+And in it, he says a control system is any system which exists for the purposes of regulating the control of energy, information, money, or some other quantities. Like most definitions, it's kind of hard to follow. So let's look at it conceptually.
+
+Here's my control system. And I would like to design this such that its output follows perfectly any input that I like to apply to it. I'm calling that r of t.
+
+So perfectly that if I were to let overlay these two graphs-- the output and the input graph-- on the same axes, they would be perfectly superimposed. I'd only see one line with no separation between them. In the language of control, that's known as perfect reference tracking.
+
+As I'm sure you know, it is impossible to achieve. To achieve that, our system would have to have infinite bandwidth. No systems have that, so we have to make some compromises.
+
+Now, among the compromises that we make-- well, finite bandwidth, finite speed, many other things. And now we have to somehow specify how good we want our system to be. That's typically done in terms of a transient response or some kind of frequency domain analysis. Obviously, we'd like the system to be stable.
+
+We'd like it to have good, steady state accuracy. That means if we apply a static input, the output should also be static. But there should be no difference. Once the steady state has been reached, the two should be absolutely identical. That's called steady state accuracy.
+
+And one area which is important-- and, honestly, is frequently overlooked-- is the area of sensitivity to disturbances. Disturbances may mean, for example, noise entering the system. It may mean a change in output load, for example. Those would be disturbances.
+
+Less obviously, it may also mean a change in parameters-- variation of parameters with temperature or time, something like that. Most control systems are designed based on a model of the plant that we're trying to control. Well, if that model is imperfect, then obviously the design is going to be compromised in some way.
+
+This is called robust control. This area of modeling uncertainty, of making the control system tolerant to it is called robust control. I'm going to say a few words about that a little bit later on. But it's an important area of control theory.
+
+Now, indulge me for a couple of slides because I'm going to go through two slides that aren't in your books. And there's a very good reason for it. First, I wanted to say a few words about how broad the subject of control theory is.
+
+It applies to practically every engineering discipline, and practically anything else you can think of. You can imagine control is involved in some way. Here, for example, we have factory automation, robotics, agriculture oil and gas, aerospace. You can read the list as well as me.
+
+All of these things are reliant on control for theory in one form or another. But a point I want to make is that at a certain level, the theory is identical across all of these disciplines. So control theory is something that underpins a broad range of engineering disciplines. You may be with us today because you're involved, perhaps, in the control of electrical machines or of power electronics. But we'll be talking about the same theory, regardless of any of these disciplines.
+
+And you might think, therefore, because it's used so widely that control theory is a very old subject. Maybe it's been around for hundreds of years. After all, it's in times of antiquity you can find the ancient Greeks and Romans used feedback for a lot of their systems. James Watt used it in that steam governor that we just looked at.
+
+In actual fact, control theory only ever emerged about 75 years ago. Prior to about 1940, the design techniques for control systems were very ad hoc. A lot of the theory that we take for granted today simply didn't exist.
+
+So someone involved in mechanical engineering, for example, might have applied control theory, but he would have approached in a completely different way from an electrical engineer. The two would never have talked about control theory as a separate discipline because it didn't exist. Then about 1940, a series of unfortunate world events meant that things like flying airplanes in straight lines and pointing guns in the right direction were very important to people.
+
+And the subject of control theory, or server mechanism theory as it was called at the time, emerged. The ideas at this stage were based largely on theory emerging from the telecommunications industry. We'll see later the influence of people like Harold Black and Harry Nyquist, who were influential in the development of telecommunications.
+
+And the use of things like block diagrams and transfer functions was widespread. This is very much what's called classical control these days. And it's the area that we're going to focus on through today-- still very widespread, a lot of industries such as power supply design never do anything else. But we're going to focus on that.
+
+And things proceeded very nicely for a period of about 20 years just using these techniques. In about 1960, late 1950s, there was a complete shift in the theory away from block diagrams and transfer functions, and towards a new paradigm that was at least new in the West. It was called state space.
+
+And there were two reasons for it. The first was the space race. And the second was the availability of the first digital computers. State space problems lend themselves very well to solution by computer. And I've chosen this picture of the Apollo 11 mission, the first one to land a man on the moon, to represent this period.
+
+And along with this shift came a lot of new theory, complete new sub disciplines, things like optimal control, non-linear control, stochastic, a lot of others. These all developed very rapidly with the aid of state space techniques. This, for some reason, is still called modern control theory, despite the fact that it's probably 55 years old nearly by now.
+
+About 1980, I suppose you could say there was a certain amount of progress made, quite rapid progress, in the area of multi-variable control, which involves describing systems as matrices of transfer functions. Quite complex systems can be represented that way. And one area that the theory developed rapidly in was in the idea of robustness.
+
+I've chosen the fighter aircraft. The only reason is that fighter aircraft nowadays, you probably know, are designed to be inherently unstable. They cannot be flown without control. And that's my link anyway to robust control.
+
+Now, there's one other revolution that's taken place more recently. And it's been a slow revolution. A revolution was brought about by the widespread availability of lots of computing power at very low cost. And this has led to the adoption of digital control in areas where you'd never previously have imagined it.
+
+For example, things like-- well, I've chosen the Mars Rover, not a terribly good example. But at least it's a system which has to be autonomous. It consists of many, many computers all talking to one another and making autonomous decisions without the intervention of somebody else, or a central controller. You can find examples of that a lot closer to home than planet Mars.
+
+But the other thing is that, apart from complex systems, simple, low cost digital processes have now become adopted in things like low cost power supplies, and low cost motor controllers, because of their performing power and their cost. I'm going to talk about this a lot more this afternoon. OK, back with the slides.
+
+So we have these two distinct modeling paradigms-- what I called classical control. Well, you could call this input output. And the reason is that in classical control our entire system is represented by one equation.
+
+And it may be a very complicated equation. But there's only one of them. It relates an input-- say, you-- to an output y through something else, maybe a transfer function. This is Laplace. There's only one equation.
+
+If we're talking about a continuous time system, it might be expressed in this form, in terms of Laplace. If it's discrete time, it might be a z transform that we're talking about. Or we might be talking about differential difference equations. But there's only one of them for each system.
+
+The other paradigm in state space involves decomposing the complex system into a large number-- potentially large number-- of first order differential equations, and capturing these in the notation of matrices and vectors. In the state space paradigm, we have an input u and an output y still. But now there is an intermediate set of variables called states that are captured in the matrix x. And, again, state space might be used for continuous time or discrete time systems.
+
+Now, the seminar that I'm going to teach to you today is a one-day seminar. But it's a truncated two-day seminar. The full two-day seminar comprises both of these modeling paradigms. And what I've done is basically separated here.
+
+So we'll be talking about the input output paradigm only today. But we'll do so for both continuous time and discrete time systems. If you're interested in the second day, the materials for this covering state space are part of the downloads on the web. So you can download the complete two-day seminar with all the materials, and so on.
+
+Now, the agenda that I have today is split into four separate sections, each about an hour and a half long. So we're going to try and take a break at the end of each section. The first one I've called fundamental concepts. Its purpose is simply to review the underlying mathematics that we need to use later on.
+
+We're not going to do any control theory in the opening section. It's really an introductory section. I'm going to begin by explaining the concept of linearity, which is fundamental to everything that follows. And having done that, I'm going to explain the use of the Laplace transform and the transfer function describing and manipulating, perhaps, linear systems.
+
+I'll do this in two ways. First of all, I look at their transient response. And then I'll briefly look at their frequency response, because that's something that people generally are a little bit more familiar with.
+
+And I'm going to close by classifying systems-- a couple of classifications which people apply to linear systems. And we'll need to understand those classifications for what happens later, but also for what Dave Wilson is going to cover tomorrow in motor control. Nothing here is unnecessary. All the theory we're going to cover in the opening section will be used later on.
+
+Now, in sections two and three, I'm going to look at feedback control in two different ways. Firstly, I'm going to use the perspective of the frequency domain to explain feedback control. And I'm going to adopt the Nyquist plot as our main working tool for doing that.
+
+The reason is that, although most people in our industry are familiar with the Bode plot, there is information in the Nyquist plot that is either difficult to extract from a Bode plot, or is not there at all. So once I've explained what that information is, I think you'll see the reason why the Nyquist plot is so powerful when it comes to feedback design, at least in the frequency domain.
+
+We're going to use it to design phase compensator. We'll use a phase lead compensator as an example. And I'll use it also to explain the ideas of sensitivity and tracking, and how they relate to robust control. That's section two.
+
+In section three, I'm going to take a different approach. I'm going to look at the time domain of feedback control. And I'm going to use the transient response, is typically the way that people specify, measure, feedback control performance in the time domain. You apply some kind of discontinuous input, such as a step. And then you analyze the output, the response to that.
+
+Now, the response I'll show you shortly comprises two different parts, one of which is the steady state part. And the other is called the transient part. The transient part for a stable system will decay. It will die away.
+
+But the properties of the transient part capture the dynamics of the system. So by tuning those properties, we're tuning the performance of the system. So we'll look at the step response.
+
+And we also introduced the PID controller. Most people are familiar with that. But its connection with the transient response is very intuitive. Once I explain what that is, you'll see how these three terms-- proportional, integral, and derivative-- interact with each other to optimize the transient response.
+
+Now, transient response is connected to the location of roots of poles in the complex plane. And we can exploit this relationship once we understand it in what's known as the root locus design method. If you're not familiar with that, I think you'll enjoy that section. It provides us with a nice graphical and systematic way of designing control systems to meet transient specifications.
+
+Now, all the first three sections are concerned with continuous time systems or analog systems. Section four is here to convert that theory into discrete time or digital systems. Now, there is a reason that I haven't called this digital systems.
+
+And that reason is that I'm only going to consider the temporal aspects of digital control today. That's those effects which are occurring in the time domain-- effects of things like sampling, aliasing, and so on. These are all time domain effects.
+
+And I'm going to neglect-- really in the interest of time only-- the various effects that happen when you quantize a signal and then process it on a computer with finite numerical resolution. Partly in the interest of time, and partly also because a lot of those problems are specific to the architecture that you're using. But it's not such a problem, because there is a huge amount of material for us to go through here.
+
+So I'm going to explain the effects of sampling. That will lead us into the ideas of the z transform, equivalent of the Laplace transform for discrete time systems. And I'll look at how continuous and discrete time systems are related in the complex plane.
+
+The complex plane is actually different under the mapping. The locations of poles and zeroes move as we discretize a system. But furthermore, the meaning of those locations changes too. So I'm going to explain that. It's called complex plane mapping.
+
+And then, finally, I'll look at aliasing. And I'll end by looking at theories of discrete transformations. These are methods whereby you can turn a continuous time system into a discrete time system. There are about half a dozen ways of doing that. And I'm going to go through all of them with you and compare them so you can see what the trade-offs are between them.
+
+Now, I tend to like a bulleted list. You'll see this as we go through, lists of things with bullets in them. But there is one particular kind of bullet which is important. And it's what I'm calling a quad bullet.
+
+If you see this thing up here, there's sort of four bullets together. I'm calling that a quad bullet. And that will indicate a point that is particularly important, something that will come up perhaps in a quiz, or something that's new. It's probably worth remembering that point.
+
+Where we meet new keywords-- jargon busting keywords-- I've tried to highlight them in whatever that color happens to be. You can put your own name to it, muddy crimson or whatever you like. I don't know. But that's the color that we're going to use to highlight new keywords.
+
+Now, my notational preference is to reserve upper case symbols for things like transfer functions and lowercase symbols for things like functions of time. And that'll be true whether we're talking about the Laplace domain, or the time domain, or some other domain. So, for example, this first equation here you would recognize as being written in terms of the Laplace variable s.
+
+y is, obviously, a signal or a function of time eventually. So is u. And g is a transfer function. And then in the second equation, a function of time is an inverse Laplace transform, in this case a transfer function. So lowercase generally means functions of time or signals.
+
+Now, when you write out the equations in this way, sometimes the independent variable becomes a little bit cluttered. So rather than writing open brackets, s, close brackets every time, sometimes if it's obvious I'm going to admit that. So, for example, I might just write g equals y over u. And you recognize that as a rearrangement of the first equation. There's no point in writing open brackets s, close brackets every time.
+
+Now, we're only dealing today with scalar systems, systems modeled using the input output principle. If we were using vectors and matrices, the traditional way of representing those is with bold face. We're not today, but if we were, that's how we'd do it.
+
+And my preference for differentiation is to use prime notation, simply because it's shorter. It's cleaner. And as you know, in vectors dot notation is pretty much universal.
+
+But we'll be staying with prime notation. And in all, but I think one case, we'll be differentiating time. So time is the only independent variable that we'll be differentiating.
+
+Now, some of the slides are decorated with this black rectangle in the lower left hand corner. That indicates, to me at least, that there is a tutorial associated with that slide. And so I'm going to break the presentation at that point.
+
+Most of them will be done in Matlab, or on the white board, or both. It's not just you listening to me. We'll be doing some sort of interactive tutorials as we go through.
+
+And also, I forgot to mention, each section concludes with a short quiz. There are absolutely no prizes. So, obviously, there's no incentive to participate.
+
+But we'll do it for fun. So at least we'll enjoy it, or I will. So we'll have some questions at the end.
+
+OK, now the observant among you will have noticed the presence of a camera at the back. And you don't have to worry, because it's going to be trained on me today. I'm the one that needs to be worried about it.
+
+One thing that we're going to do is to save the questions until a convenient break point. They tell me that makes it easier to post edit. There's quite a lot of post editing needed on this, because they're going to make me look like Roger Moore by the time this gets to the web.
+
+So they've get a lot of work to do. But we're going to save the question until there's convenient break points. If there's something you desperately want to know, put your hand up. And I'll deal with it then.
+
+So let's go into section number one, chapter one, which is entitled fundamental concepts. Each of these chapters has a quotation associated with it. This particular one is taken from a book by Robert Cannon. He was a professor at Stanford when he wrote a book called Dynamics of Physical Systems, a rather voluminous book of about 900 pages.
+
+But very early on, he makes this statement about linear systems, which I'm going to paraphrase in the first slide for you. I think we all realize that linear systems don't exist. They only exist in textbooks.
+
+But we like to make linear approximations to things, because it makes the mathematics so much more tractable. It's so much easier to work with systems which are linear than it is to work with them that are nonlinear. Now, some examples of nonlinearity-- because, of course, we're approximating reality by doing this-- are things like viscous drag, amplify, saturation, Coulomb friction, temperature induced parameter changes.
+
+Linear models can't capture those sort of effects. So we are, at best, making an approximation. Sometimes we do that by using a linearization about a set operating point. Other times, we base the models on linear assumptions. But whatever we end up with, it's a linear system, which I'm going to tell you what it is in a minute.
+
+And, well, the things that we have to accept we're not going to be able to represent-- characteristics like multiple equilibria, or domains of attraction, chaos. All these sorts of things are non-linear effects. So, obviously, we're approximating reality.
+
+Now, I'm going to introduce linearity in this sort of conceptual way, which I think will make it easier. What I'd like you to imagine here is that we have two systems. One of them is marked F1. And the other is marked F2.
+
+We don't need to know what's inside these systems or what they represent. The only thing that we need to know for this slide is that F1 is a nonlinear system and F2 is a linear system. So, remember, F2 non-linear, F2 linear.
+
+And you'll see that their inputs are connected together. They're both subjected to exactly the same input, which in this case is a sine wave of fixed frequency and fixed amplitude. And the outputs are recorded over here in this graph at the top. The nonlinear system and the linear system, in green and blue respectively, both look vaguely sinusoidal, at least they do to me.
+
+Now, at the bottom, We have exactly the same two systems-- F2 non-linear, F2 linear. And, again, they're subjected to the same input. The only difference is that that input has been scaled, amplified, or attenuated by an amount k. k is just an amplification or an attenuation constant. Otherwise, it's the same sine wave.
+
+Now, comparing the outputs, you can see that the nonlinear system has a completely different shape. Its shape has changed. Something about changing the amplitude of the input has changed completely the shape of the output waveform from the nonlinear system.
+
+The linear system, however, in blue is still perfectly sinusoidal. Its shape has not changed. And, in fact, the only thing that has changed about this is that its amplitude has changed. And its amplitude has changed by this amount k.
+
+What we're seeing is an example of what's known as the homogeneous property of linear systems, which says in equation form that if you scale the input, the output simply scales in proportion. This is called a homogeneous property. And it's one of two properties that all linear systems possess.
+
+The other property is known as the additive property. I haven't made a slide for additivity. But you can imagine what it is. If you apply two different inputs to the system at different points in time, the output is the sum of what the two outputs would have been. That's the additive property.
+
+Now, these two properties-- homogeneity and additivity as they're called-- combine to form a third property, which is sometimes used as the definition of stability. It's the most important property of all. It's called the principle of superposition. In equation form, it's represented in the top equation up here.
+
+You can recognize, I think, homogeneity and additivity in this. This is superposition. And it's so important. It's used as the definition of linear systems. Simply put, if a system obeys that, it's linear. If it does not obey it, it is a nonlinear system that we're dealing with.
+
+Now, very often when we construct mathematical models of a system we might use something like Kerckhoff's current laws if it's an electrical system. Or maybe if it's a mechanical system, we'll use Newton's laws of motion or something like that. And we will arrive at the differential equation of some kind.
+
+This is an example of the kind of differential equation that we'll have. It relates an input, u, and higher derivatives of the input all way up to the mth derivative. M is some positive integer. And the other side of the equation contains the output y and higher order derivatives up the nth order derivative.
+
+So m and n are two integers capturing the highest order derivative on each side of this equation. They're important. We'll come back to that in a second.
+
+And each term in this equation is multiplied by a coefficient b zero to b sub m on the right, and a zero to a sub n on the left. These coefficients are very important because all the dynamics of the system is wrapped up in these coefficients. Now, I could write the whole thing out like this. It's a little bit cluttered.
+
+In prime notation I'm using down here, it's a little bit easier because the independent variable is a little bit obscured here. But take it that it's time that's involved. And this is just a little bit clearer. So I'm going to write it in this way.
+
+Now, a couple of important things about these coefficients-- the fact that this model is a physical system, whether you derive it through Kerckhoff, or Newton, or whatever, means that these coefficients are all going to be real. There will be no complex numbers involved in these coefficients. They'll all be real because they're based on things line capacitance, or inductance, or mass, or viscosity, whatever they happen to be.
+
+They're real numbers. That has an important bearing on something we're going to get to in a moment. That's the first thing to bear in mind.
+
+The second thing is that in a large class of systems, these will either be constant or they will change so slowly with time compared with the dynamics of the system that we can treat them as being constants-- so real and constants. And then the equation is known as a constant coefficient differential equation. And we can use it to describe a linear time invariant system, sometimes called an LTI system. This is what linear time invariance means.
+
+So the differential equation-- now, in principle, once we have an equation like this, we can compute the response of the system for any input we like. But to do so, we need to carry out a complex calculation known as convolution. So what's convolution?
+
+Now, this is a convolution integral. And it's kind of horrible. Sometimes convolution is denoted with this star operation between two functions of time.
+
+It's a one-sided integral, because one side of it's infinite, of the input that we're interested in multiplied by a time-reversed function that I'm going to call g. Now, this function is a special function. It's called the impulse response of the system-- this thing. It's the response that the system would give if we were able to provide it with a specific type of input called a delta function, sometimes called a direct function. It's a delta function, I'm going to call it.
+
+Now, the delta function has four important properties that we're going to need today. First of all, it has infinite amplitude. Secondly, it has zero width.
+
+And you'll notice already that those things make it very difficult to draw. PowerPoint or on the white board, it's very difficult to draw something like that. So what we do is we draw a vertical line of height 1 with an arrow on the top.
+
+The reason it's height 1 is that its third property is if you integrate this function, you always get the answer 1. The fact that it has zero width doesn't matter. Its infinite amplitude is enough to make its integral equal to 1.
+
+The fourth property we need I'm going to tell you about this afternoon, just to keep you in suspense. That'll be enough for now. It represents a perfect impulse, a shock to the system.
+
+And the system will respond to that with some kind of output. But, of course, we can never know, because we can never produce the input. But that function is used in the convolution integral. We just time reverse it, multiply it by the input, and integrate-- so easy.
+
+Well, it's actually quite a cumbersome thing to apply for any real system. And, fortunately, there is a much simpler alternative. And that is to apply the method of the Laplace transform.
+
+This is a transformation which takes a function of time and transforms it into a function involving a complex variable, which in most countries is given the symbol lower case s. We'll use lowercase s today.
+
+You take the function of time. You multiply it by a complex exponential and integrate. And if you can do that, you end up with this Laplace transform, as it's called.
+
+Now, this transform has four important properties-- many more than four, but four that we are going to need today. The first is that it has a property called the convolution property. It replaces that convolution integral with a straightforward multiplication. So if we can take the Laplace transforms of the things we're interested in finding out about, all we got to do is multiply them together.
+
+The second property is-- well, who recognizes it? It's superposition, right? It's a linear transformation.
+
+So the fact that this is a linear transformation makes it possible to combine signals in parallel paths, as we might do in a PID controller, for example. The Laplace transform is quite feasible to simply add Laplace transformers together in a situation like that. There is an important property called the final value theorem that we'll use to take the steady state response of a system.
+
+It says that the steady state response is a function of time as time becomes infinite. Well, you can find the same answer directly in the Laplace domain by multiplying the Laplace transform by s, and then taking the limit of s, tending to zero. It gives you the same answer. So that's useful when you want to know about steady state response.
+
+And the final property is called a shifting theorem, or the time shifting property, which tells us how the Laplace transform changes if we apply a time delay or a time advance to a function of time. So in this case, it's a time delay by a fixed amount capital T.
+
+And the Laplace transform is changed by being pre-multiplied by e to the minus st. This will be particularly important later today when we do discrete time systems. It's the method by which we can get between a z transform and a difference equation very easily.
+
+So now we know about the Laplace transform. Let's use it. Here, we're back to our original differential equation, an arbitrary order differential equation-- nth order, actually-- involving an input and an output u and y respectively.
+
+Now, when we take Laplace transforms of each term in this differential equation, subject to-- well, let's call them zero initial conditions. The thing is at rest. It's not moving.
+
+It's at a zero data point, and so on. We can take differential equations. And each time we differentiate, it implies a power of s in the Laplace transform.
+
+So, for example, b1 u prime of t becomes b1 times u of s because it's a first order derivative. If it was a second order derivative, there'd be an s squared involved. And if it was an nth order derivative, there'd be an s to the power of m involved. Otherwise, what we end up with is this equation, in which the coefficients are preserved. The coefficients in the original differential equation also appear in the Laplace transform.
+
+Now, you'll also notice that u of s appears in every term on the right and y of s in every turn on the left. So we can factorize those out to reveal two polynomials. These are very important, to say the least. These capture the dynamics of the system.
+
+And I'm going to call the one on the left, which has coefficients related to the output, alpha of s, and the one the right, which contains coefficients on the input side, beta of s. Now, like all polynomials, these things have roots. Polynomials have roots.
+
+That's the values of the independent variable that make them zero. They're called the roots. And in general, any nth order polynomial-- n can be some integer, any number you like-- will have n roots.
+
+And those roots have names. In fact, the roots of the beta of s polynomial are called the zeroes of the system. And the roots of the alpha of s polynomial are called the poles of the system. Those things tell us a lot about the dynamics of this system.
+
+All right, so here's where we've got to. We've got this equation, alpha of s times y of s equals beta of s times u of s. And that will lead us, trivially, to what is called the transfer function of the system, which tells us how the system responds to an arbitrary input. It's the ratio of output y of s to input u of s.
+
+We'd like the ratio y of s divided by u of s, which is of course beta of s over alpha of s by a simple rearrangement. This is called the transfer function of the system. And if you were to write it out in terms of those two polynomials, this is what you'd have.
+
+Now, of course, once you know this, if you know the Laplace transform over the input, it's a simple rearrangement because the output is equal to g of s times u of s. And now the output function of time is an inverse the Laplace transform of that. So I think you will understand this.
+
+Let me ask you this, then. What is the inverse Laplace transform of this transfer function? Does anybody know? You take a transfer function and inverse Laplace transform it. What do you get?
+
+Let's look at what we're actually doing here. We're taking a product of two Laplace transforms. So we're obviously using the property of convolution-- g of s time for u of s.
+
+It's the impulse response, exactly. We're replacing a convolution. Well, g of s would have been this function here, which of course in terms of convolution is this function here. So if we take a Laplace transform of an impulse response, it's the transfer function that we get, and vice versa. Inverse Laplace transform of transfer function, you have its impulse response. Thank you.
+
+Now, these two integers m and n are used to classify systems. They're always integers. And they're always positive. But they may not always be the same.
+
+And, in fact, usually they're not. Usually, n is bigger than m. That means we have more poles than we do zeros. Systems which have that are called strictly proper systems.
+
+And, theoretically, they're the only kind of systems that we can build, because systems like that have zero amplitude, zero response, at infinite frequency. If they're not strictly proper, there will be some output at infinite frequency. And you know that systems are not like that, in theory.
+
+When m and an are the same, that system is called proper. And, actually, the proper case includes the strictly proper case. So when somebody says, I've got a proper transfer function, you don't know whether they've got more poles than zeroes, or the numbers are the same, because that terminology is applied to both.
+
+And the opposite, the only other case that's not considered, is where you have more zeros than poles. m being greater than n represents an improper system. In theory, you can't build improper systems because their output is infinite at infinite frequency. But you can design them very easily, which makes it very difficult to build later on.
+
+Of course, what we're doing here is we're idealizing something, right? Because we're making the assumption that it's linear to start with. So we're neglecting all the non-linear effects that happen at high frequency.
+
+But these are terms that it applied to linear systems. So I introduced them there. And the important number is the difference between them. n minus m is called the relative degree of the system. It's an important term that we'll come back to several times.
+
+There's plenty of seats down here at the front, gents. Nobody likes to sit near me, but you're free.
+
+So let's go back now to that transfer function. And since you know that the transfer function has poles and zeroes, you also know that the polynomials can be factorized to reveal where those poles and zeroes are. We can also factor out, perhaps, a common term to make these polynomials what is called monic.
+
+Monic means that the leading coefficient is 1, in both cases-- the numerator and denominator. It might be necessary to factor out a constant to make that happen, and then to factorize the poles and zeroes so they're obvious in the transfer function. So here's the output in Laplace. It's g of s times u of s.
+
+And what we do when we want to calculate this for linear systems is we conduct what's called a partial fraction expansion. We represent this as a series of first order terms, each of which has the form-- well, epsilon 1 is the notation I'm using for the numerator, divided by s plus something, a root r1.
+
+Now, I'm going to assume, just for the sake of discussion, that the input function u of s can also be expanded in this way. That may not be true. But I'm going to assume that it is.
+
+So the partial fraction expansion consists of q first order terms. See, you can't immediately say there's going to be n terms here, because you don't know how many are contributed by u. But, in general, the first n of these first order terms will come from the transfer function. And the remaining q minus n will come from u of s input.
+
+These epsilon terms up here, these are called residues. These may be complex, or they may not. But they're what appears in the numerator. And when we take an inverse Laplace transform of this partial fraction expansion, we find a series of exponential terms, because each of these first order terms has the inverse Laplace transform, which is an exponential. So you end up with a series of exponentials here if u of s is as I just described.
+
+Now, look at these exponentials. And recognize that the exponents in each of the first n terms come directly from the denominators of each of these. And each of these comes directly from the poles of the transfer function.
+
+So the first n terms here have exponents which are directly the poles, exactly the poles of the transfer function. The remaining q minus n have roots depending on u of s. But the first n have terms depending on the transfer function.
+
+And the response is separated accordingly. So you can break this response into two distinct parts. The part where the exponentials come from the poles of the transfer function is known as the transient part of the response. That's the part that will decay away if it's a stable system.
+
+And the remaining q minus n terms, they're what's called the steady state response, because these terms came from u of s. So as long as u of s persists, these terms will persist. This gives us the steady state.
+
+So the time response breaks into these two distinct parts-- the transient response, I'm calling it y sub c of t, and the steady state response, y sub p of t. These have various names, depending on where you've come at this from. Transient and steady state are the terms I'm going to use.
+
+You might have heard them called the free response and the forced response. Or in mathematics, these are called the complementary function and the particular integral. There are other names too. But those are the most common ones, which is why I've used c for complementary function and p for particular integral, if you're interested. So here, then, is the transient response and how it relates to the transfer function.
+
+Now, for stable systems, we would like this transient response, this part of the response, to decay to zero as time becomes infinite. That's what a stable system actually is. y sub c of t tends toward zero, as time tends towards infinity. Here's the y sub c of t. It's just the first n exponential terms in the response.
+
+Now, remember before when I said that the coefficients in that differential equation, if it's a physical system model that we're using, must all be real. They may not be constant, but they must all be real. And here's the thing about that, is when you take the poles, you find out where these poles are, because those coefficients were real, there's only two possibilities for those poles.
+
+They'll either be real. Or if they're complex, they'll exist in complex conjugate pairs. And if it's the second case, where they're complex conjugate pairs, the residues associated with them will also be complex conjugates.
+
+So, for example, if I have a pair of complex conjugate poles in the first two terms of the exponential series, then the residues associated with them, those will also be complex conjugates as well. I'm denoting complex conjugate with a bar notation here. Remember, complex conjugate means that the real part is unchanged, but the imaginary part has an opposite sign.
+
+Now, where this is true, this will simplify into an oscillatory term, a sinusoidal term. So pairs of complex conjugate pose always gives us an oscillatory term in the time response. But notice that the oscillatory term is preceded by an exponential.
+
+And the exponential, the exponent of that, sigma, is the real part of the complex pole. So it's the real part of the complex pole now that determines whether this decays to zero as time becomes infinite. It's the real part of the pole that does that. This is the well-known constraint for stability for continuous time systems that the poles must lie in the left half plane.
+
+Now, I've bombarded you with a lot of theory in the last one hour. And I think it's, perhaps, time that we take a short detour into the world of Matlab, because most of the tutorials I'm going to do today are based on Matlab. And can we have a show of hands just briefly who uses Matlab regularly?
+
+OK, I'm guessing that's only about 50% of the audience. So my time will not be wasted. Let me jump briefly into the world of Matlab, just to introduce it, and show you some things about it. And we'll come back shortly to the presentation.
+
+Matlab, if you've never used it, may look something like this. So the Matlab workspace will look something like this. You have a command window, which is where we type our instructions.
+
+There is a workspace where variables are going to appear that we create when we're working with data, a command history where all the nonsense that I've typed previously is remembered. We can reuse that. And then there may be a file folder over here we can manipulate files in.
+
+Now, Matlab is a very powerful tool for manipulating ordered sets of data-- things like matrices and arrays. So let me begin by creating an array of data for us to work with. I'm going to call it t, because I'm going to use it to represent time.
+
+And I would like this array to start at zero seconds, and to increment in 10 millisecond intervals, and to end at 10 seconds. This is the syntax that I use. And when I press Return, you'll notice that the variable t appears in the upper right hand pane. That's the workspace pane. It consists of 1,001 elements.
+
+Now, we have this data in the workspace. Let's do something with it. For example, let's take its sine like that.
+
+And the variable y now appears. And if we wanted, for example, to plot these, x versus y-axes, we might do something like this. And a delightful sine wave will appear in a graph window, which is exciting to some people.
+
+Now, let's do something a bit more adventurous. Let's sum together harmonics of sine waves, just in the interest of doing something even more exciting. To do that, I'm going to need some odd numbers.
+
+I'm going to create an array of odd numbers, and then sum odd harmonics together. So let's call this array k. And I'd like it to begin at one, increment-- obviously, it's odd the numbers I'm interested in. So I'm going to increment in intervals of 2.
+
+And we'll end at say, 9. So we should have 1, 3, 5, 7, and 9 in this array. Now, if you notice, the first two lines here I terminated them with a semi-colon.
+
+And in Matlab, that means, well, you just execute it, save the result over here. But don't do anything in the command window. If you leave that semi-colon off, when you press Return, what happens is it echoes the results onto the command window. So you can check that you're getting what you want.
+
+Now, it's useful with short arrays. It's less useful with arrays of 1,001 numbers in them, because the screen just gets plastered in lots of numbers. Sometimes you'll want to use that. Sometimes you won't.
+
+So let's some of these odd harmonics together. And I think I can do this in a very simple few lines of code like this. I need that fellow.
+
+And I think what will happen now is that the variable y2 contains the first five odd harmonics of that sine wave in a single line of Matlab code, if I'm right. I might not be right. That's quite a powerful thing to do.
+
+Now, to do it, to show you this, I'm going to plot the results on the same graph that we had previously. And I want to store the previous graph without changing it. So I'm going to write hold all.
+
+That tells Matlab not to get rid of the previous results when I plot this thing. And now what I'd like to do is to reuse this command here. I'm going to plot the new data on top of the old one.
+
+It's a previous command. So if I press the up arrow, you'll see that it's remembering these previous commands. When I get to the one that I want, I just change it from y to y2.
+
+And then, hopefully, when we go and look at the graph again, what we've got overlaid on the previous sine wave is the first five harmonics. This green plot is the five harmonics. And, of course, you can see if we go on something more and more high harmonics, we're going to approximate a square wave.
+
+Now, Matlab's great at manipulating data like that. But there are various tool boxes available with Matlab which are designed for specific end applications. One of them is called the control systems toolbox.
+
+It contains many, many functions that are powerful at manipulating control systems. And to illustrate them, I'm going to model a very simple transfer function. I'm going to call it g of s.
+
+And it will be in the denominator s squared plus s plus 1. And in the numerator, we'll just have one, why not? It's a pretty simple transfer function.
+
+Now, to do that I need to use a script called tf for transfer function. And then in brackets, I enter the coefficients of the numerator and the denominator like this. The numerator only has one coefficient.
+
+And then it's a comma separated list. And you'll see there's a sort of syntax help that appears as you begin to type this in. And then the denominator-- well, that has three coefficients. I enter these between square brackets like that, and then close the bracket for the tf function. And when I press Return, hopefully now the transfer function g appears in the workspace. That's the simple transfer function.
+
+Now, let's do something with it. For example, let's find out what its step response is. We just type step g. And this is the step response.
+
+We'll come to know as a slightly under-damped second order system in a moment. We might, for example, want to know what its impulse response is. We might want to do that. Why not?
+
+There is its impulse response. Or we might, perhaps, want to know what its frequency response is. We can construct a Bode plot of that.
+
+And maybe we want to turn the grid on. I don't know. I'm inventing things now.
+
+So there is the frequency response to this particular system. So what we're doing here is subjecting this rather simple system to common types of input steps-- impulses, and the sine waves of varying frequency. What about something a little bit more unusual?
+
+Maybe we would want to subject this system to a random signal, or perhaps something like that approximation to a square wave that we've just created. Well, there's a function we can use to do that called Lsim, linear simulation. We tell it the transfer function-- you can see it's helping me out now. So the transfer function, the input-- well, I'm going to subject to that approximation to a square wave, and lastly a vector representing time.
+
+And when I typed this in, here, indeed, is the response of the system to that particular input. The input is in gray here. And the dark blue line is the response of this system.
+
+You can see that the dynamics of the system are not high enough, not fast enough, to pass all the higher harmonics. But it does at least try to pass the fundamental with some phase shift. And if we look at the first peak compared with the second one, you can see that there's obviously a transient effect. This is not quite as large as that one. And that transient would be wrapped up in the impulse or the step response of the system as well.
+
+So this is a very quick introduction to Matlab, and how we might use it. We'll be using it a lot more in the coming sections.
+
+So before I go on with the next slide, is everybody OK? Any questions so far with the material? We can break regularly for questions, if you want.
+
+Now, we're going to go on and look at-- we're going to use this theory applied to some very simple systems. First of all, we're going to look at first order systems. And then we're going to at second order systems.
+
+First order system has a differential equation which looks-- at least the one I'm going to look at it looks like this. The input side consists of u of t. And the output side consists of thor, this Greek character thor. I'm calling thor anyway, times y prime of t, plus y of t. That's the output side.
+
+So there is one parameter present in this differential equation called thor. This parameter is known as the time constant of the system. And it's the only parameter. So all the performance of the system is wrapped up in a single number known as its time constant.
+
+We treat this differential equation just as we did in the previous slides. We take its Laplace transform for zero initial conditions. So we find that the Laplace transform term by term is thor times s times y of s plus y of s equals u of s. And the transfer function is 1 over s times thor plus 1.
+
+Now we can calculate how this system will respond for various types of input by multiplying both sides by u of s and taking an inverse Laplace transform. When we do this for a step input, u of s would be 1 over s. And a partial fraction expansion followed by an inverse Laplace transform gives us the time response to a unit step-- 1 minus e to the minus t divided by thor.
+
+Now, you can see already that there are two terms in here. And these terms correspond respectively to the steady state and the transient part, the response. The steady state one comes from the input.
+
+That's a step. And the transient response is an exponential where the pole is 1 over thor, which is exactly what we would expect from the transfer function. So even in this simplest of cases, the complementary function of particular integral are present.
+
+Now let's plot this as a function of time. And this is what you get. So, obviously, this graph is a unit step response. So the input had zero value until time t equals zero, and then 1 for all time thereafter.
+
+So this dashed line up here is the input and the blue line is the output of this system. It's 1 minus e to the minus t divided by thor. I've chosen thor to be 1. And the reason I've chosen thor to be 1 in this example is that when we measure seconds on the time axis, each second is an increment of one time constant.
+
+Now, you can tell a large number of things about a system directly from its time constant, because if you have a system which responds by y of t equals 1 minus e to the minus t divided by thor, then for any particular output y of t-- let's call it not-- I know how long it takes to reach that output by a simple rearrangement of this. So let's say that the time it takes t zero to meet some particular output is going to be equal to minus thor times the natural log of 1 minus y zero-- just a simple rearrangement.
+
+So, for example, if I wanted to know how long it took this response to get to 50% of final value, y zero would be 0.5, it'll be minus thor times the natural log of 0.5. And you'll find the answer is 0.693 time constants. After one time constant, you've reached 63% of final value.
+
+And you can use this to work out settling time, because if you define a settling time as 2% and you plug-in 2%, what you'll be finding is minus thor times the natural log of 0.98. That's your settling time. And that answer turns out to be 4 times thor.
+
+Four time constants you within 2% of final value. If you're working against a 1% settling time, you'll find the number is 4.6. These are useful numbers to have in your back pocket. For example, if you want to know the settling time of a filter on an ADC input, for example, is a rather obvious way of applying it.
+
+Now, another thing that we can do is to work out the rise time of this system. And the rise time is often defined as the time it takes the response to get from 10% to 90% of final value. All we do is we apply this formula over here.
+
+So the rise time of this is going to be equal to-- well, the time it takes to get to 90% minus the time it takes to get to 10%. So it's going to minus thor times the natural log of 1 minus 0.9. And that's going to be 0.1.
+
+Now we've got a plus thor times the natural log of 1 minus 0.10. That's 0.9, which equals what? Well, that's thor times the natural log of 9, because we're taking a difference of two natural logarithms. That's the quotient, which is also always going to be equal to 2.2 time constants.
+
+The rise time of any first order system is always approximately, very close, to 2.2 time constants-- 2.198, actually. That's always true, never different. Now, these things are reasonably well known.
+
+But there's another property which I think is even more useful and is even less well known. And it's this. If you take a tangent to this curve at any point you like, doesn't matter where it is, and you project that tangent forward in time one time constant, you'll find it always crosses the final value line there. That property applies wherever you take the tangent. I've taken it at zero, one time constant-- see it's that green line-- two time constants, and so on.
+
+This can be a handy property if you're presented with data that looks vaguely like a first order model might fit. You can try this test at various points. And if you find you're projecting the tangent further forward and getting the same time difference to the final value crossing, then you'll know a first order model will be a good fit.
+
+And you'll immediately have a candidate time constant you can try. It's very trivial to prove that. You just differentiate this, and then add it to that. And you'll get there in a couple of lines.
+
+Now, the only thing that we've got to play with with a first order system is the time constant. And you can see how it affects these things. The settling time and the rise time all depend on it.
+
+So time constants the only thing we've got to play with. The shape of the response is never different for any first order system. It's always exponential, and always looks like that.
+
+For second order systems, things are very different because the differential equation has two parameters now that we need to consider. Here is the classical second order differential equation. The output side u of t as a parameter called omega n. Omega n squared appears over here. Sorry, the output side now has omega n squared.
+
+But it also has a parameter called zeta. So these two parameters-- zeta and omega n-- these have names. Zeta is known as the damping ratio. And omega n is known as the undamped natural frequency.
+
+Undamped is very important, because there is also a damped natural frequency, which has a completely different meaning. You'll see in a second. So we've got zeta damping ratio, omega n undamped natural frequency.
+
+We do exactly what we did before. We take the Laplace transform term by term for zero initial conditions to work out the transfer function. There it is, in terms of these two parameters.
+
+And now we might like to know where the poles of this system are, because after all it's the poles that are going to give us the stability properties. And we determine them by factorizing the denominator and finding the roots. Well, here's the denominator. And, incidentally, when we do that, that equation has a special name. It's called the characteristic equation of the system.
+
+Now we have a quadratic. We want to know the poles. They have to find two of them, because it's second order. And it's a quadratic.
+
+And you remember the formula for solving quadratics, I'm sure-- minus b over plus or minus-- you know the one. And when you do that, you'll find the poles appear in this location-- minus zeta times omega n plus or minus omega n times the root of zeta squared minus 1.
+
+Now, here's the thing. These two numbers, omega n and zeta, are positive reals. They might be zero. But they're positive reals, mostly.
+
+And, therefore, zeta in particular might range between zero and a very big number. Now, when zeta is very big, the term under the square root here is nicely positive. When zeta is very small, less than 1, this is going to be a negative number.
+
+And we're going to take the square root of the negative number. So we're going to end up with complex conjugates for some value of zeta, depends on zeta. And in this way, we can classify the response four different ways.
+
+First of all, when zeta is nice and big, that troublesome term is going to be positive. And what we end up with is two poles, two roots, both of which are real. But they'll will be different.
+
+So if you like, the response will be a combination of two first order systems. This is known as an overdamped type of response. And it's accounted for by the family of curves that look a bit first order, a bit exponential, down here. These are the values of damping ratio, between 2 and 1 in this particular case.
+
+Now, when zeta equals 1, of course this term completely disappears because 1 squared minus 1 is very close to zero, to say the least. So what you end up with is s equals minus omega n-- two roots, but they're both the same. This is what's known as critical damping.
+
+This corresponds to the transient response, which has the fastest rise time. But it never passes beyond the final value. That is the significance of critical damping. It has two real and equal roots.
+
+Now, as you go on reducing zeta, of course, then you're into the area where the term under the square root is going to be negative. So we can factor out as a root of minus 1 here. And we have complex conjugate poles.
+
+This is known as the under-damped family of curves. And when we have an under-damped response, first overshoot, and then overshoot with oscillation appears in the transient response, both of which become progressively more pronounced the smaller zeta gets. So you can see zeta getting smaller and smaller. The first overshoot gets bigger. And then the oscillation appears.
+
+And when we eventually reach zero, well, of course the real term disappears. And we're left with sustained oscillations. That is what's known as an oscillator.
+
+Now, generally speaking, that's undesirable. And having already described to you the first order case, the first two families of curves here can place poles on the real axis. And you could have summed together real experiential terms to do that. It's only really the under-damped case that can give us pole locations which are anywhere other than either the real axis or the imaginary axis. And later on when we come to do design using pole placement, we'll need to account for that. So the under-damped case is particularly important. I'm going to spend a little bit of time looking at that.
+
+So here's the situation. We've got complex conjugate poles. And the real and imaginary parts of those complex conjugates have their own symbols. The real part I'm calling sigma.
+
+Now, this has a name. It's called the damping coefficient of the system. It's the product of damping ratio and undamped natural frequency. It's sometimes thought of in terms of a time constant for a reason I'll tell you in a moment. But this is the damping coefficient, or the reciprocal of the time constant.
+
+The other term-- omega n times the root of 1 minus zeta squared-- that is called the damped natural frequency. It's distinct from the undamped natural frequency by the square root term. This is the frequency of physical oscillations which appear in the system.
+
+The step response of the under-damped case is given by this formula at the bottom. It's an important formula, to say the least, which is why it's got a quad bullet. The step response is one-- that's the steady state part-- minus the transient part.
+
+Now, the transient part is omega n over omega d times e to the minus sigma t-- sigma is the real part of the poles-- times the sine of omega dt. So now you see the damped natural frequency is, indeed, the frequency of oscillation, plus phi. Phi here is a phase shift, which turns out to be only dependent on the damping ratio. It's related to it by an arc cosine. Now you know that the transient response of an under-damped system. It's always that.
+
+It looks like this.
+
+So 1 minus omega n over omega d. So that's a constant times e to the minus sigma t. Now, there's an oscillation. But that all solution is constrained to lie within this term, which is a decaying exponential.
+
+So if you like, there's an oscillation here superimposed on the steady state. But it's constrained by this decaying exponential envelope. And I'm calling c omega n over omega d.
+
+This is a misprint in your books. That should be omega d down there, not omega d, rather obviously. It's a typo. So this is the term which constrains the peaks of the under-damped response.
+
+And we can determine certain things about the under-damped response from the knowledge of the different parameters. For example, we might be interested in, I don't know, maybe the peak value of the overshoot is frequently of interest. Now, to get that, what you do is in a rather long-winded set of algebra, which is in the textbooks but I'm not going through it today, you would differentiate this, and then find the times at which it was equal to 0. And then the first of those would correspond to the overshoot.
+
+And the time would be tp. And the magnitude of the overshoot is 1 plus e to the minus pi sigma over omega d. Now, there's something important about that term. And I'm going to explain what it is.
+
+The peak overshoot is equal to 1 plus e to the minus pi times sigma over omega d. I've previously defined some of these parameters for you. Sigma, remember, we defined that as the damping coefficient. That's the product of zeta and omega n.
+
+And omega d, the damp natural frequency, we defined that as omega n times the square root of 1 minus zeta squared. So can you see what's going to happen when we divide zeta by omega d? These things are going to cancel out.
+
+And what we're going to end up with is 1 plus e to the minus pi times zeta over the root of 1 minus zeta squared. In other words, the only parameter that's present is zeta. When you constrain peak overshoot, you're really constraining the damping ratio, zeta.
+
+An upper limit on peak overshoot corresponds to a lower limit on damping ratio. That's an important fact, and one that we're going to use later when we come to do root locus design. What else might we want?
+
+Well, we know the damp frequency. That's the physical frequency of oscillation. So the period is going to be 2pi over that, 2pi over omega d.
+
+And then we might want to know the settling time. Now, settling time means nothing on its own unless you specify an arrowband. You can't specify settling time unless you specify an arrowband.
+
+It's the time taken for the transient response to settle inside that arrowband and never come out again. Now, obviously, in a transient response which has oscillation like this, the time response is going to go whizzing through that several times before it settles permanently within there. Now, the last time at which that happens is very difficult to compute, analytically in terms of parameters.
+
+So what we do is we take the settling time as the time it takes the exponential decay envelope to intersect with the arrowband. And then you know whatever the oscillations are doing, they're never going to go outside the arrowband because they're constrained by this exponential envelope. So you look at the time that it takes to get there.
+
+Now, obviously, that's going to be pessimistic because all you're doing is you're guaranteeing that you've gone inside the arrowband. You may, of course, have got there up to one oscillation period before that. But you're guaranteed to be there.
+
+Now, the time, therefore, is found by equating this-- 1 plus or minus delta, which is our arrowband-- with 1 plus c times zeta minus sigma t, which is the equation for the decay envelope. If you take the upper decay envelope and the upper arrowband, it's that equals 1 plus delta. And it was a trivial piece of algebra.
+
+You'll find that the settling time is one over sigma times the log of c over delta. c is the decay term here in the decay envelope. And delta is whatever you've chosen the arrowband to be. I mention this because this is one of the arrows that appears in the book, unfortunately and embarrassingly. But this is correct. This is the correct formula for a second order system.
+
+The thing about tuning step responses like this is that, typically, you have a specification that you're trying to-- maybe overshoot. Maybe you get a 2% or 10% maximum overshoot that you're allowed. And then you try and tune the characteristic to meet that. Maybe you'd like to get the fastest transient response that doesn't exceed a 10% overshoot, for example.
+
+Now, you can typically hit one, or perhaps two, specifications. But when you improve one of these specifications, you do so at the expense of one or more of the others. For example, if I wanted to have a step response with a very short rise time, indicating that the system is fast, is very responsive, I might be able to get that. But I would have to suffer increased overshoot and increased settling time.
+
+If I wanted to reduce the settling time to a small number I can do that, but its rise time would be longer in consequence. So tuning against a transient response is really a matter of balancing competing performance objectives. This is something we're going to be say much more about in chapter three when we come to PID control.
+
+You never get 100% of what you want. You've got to give something up. So just to make you aware of that.
+
+So far, we've talked about nice convenient systems that have one pole or two poles. And we haven't said anything about the effect of zeroes in systems. And they're quite important. So I'm going to do that now.
+
+Let's imagine that we have a system like this one-- g of s equals 1 over s squared plus s plus 1. I showed you previously that had a step response that looked a lot like this blue curve. And I think that's what this is.
+
+So this blue curve is the unit step response I showed you earlier of this system. And I'd like you to imagine that we're going to take that system. And we're going to fit a zero into the numerator up here.
+
+And that zero is going to lie in the left half plane. I'm going to represent it in this form. It will be 1 plus s divided by z. z will be a positive real number. And you can satisfy yourself that when s equals minus, you have 1 minus z over z is going to be zero. So this will be our left half plane pole up here.
+
+I know what g of s is because I just looked at it. And, therefore, I know what its output will be for a unit step input. There it is. And, therefore, what effect does this have?
+
+Expand this out. You'll find that the Laplace transform of the output is the original output step response, plus over z times s times that original one. A factor of s implies that we're differentiating the response.
+
+So the time response is going to be the original step response plus 1 over z times its slope. That's the effect of a left half plane zero. So here's our original step response in blue.
+
+What has the left half plane zero done? It's added in a term which is proportional to the slope of that curve. And that slope, you can see at the beginning, is positive. It's getting bigger, and bigger, and bigger. So when we add the zero in, we get this green line-- left half plane zero.
+
+The slope reaches a maximum value about here, which is right about where we get the peak. So we've got peaking now in the response, much bigger peaking than we did before. Then the slope sort of tails off.
+
+And when the slope of the original curve is horizontal, obviously this term goes away. And the two will cross over at that particular instant, and then converge. They'll converge on the same value, because the left half plane pole written in this way doesn't affect the steady state value, which is why it's written like that.
+
+So, in general, then the effects of a left half plane zero give us overshoot. But we get back faster rise times. It's much faster, because we're adding in the derivative. That is the general effect of a left half plane zero.
+
+If it's a right half plane zero, the effects are completely different. Nothing very surprising happens up here. The only difference is that this will be a minus now, rather than a plus.
+
+And that minus will ripple down into this term here. So instead of adding the derivative, we'll be subtracting the derivative from the transient response. This is a right half plane zero. This is what it does in the time domain to the same system.
+
+Now we're subtracting the slope, remember. The slope gets bigger, and bigger, and bigger. But because we're subtracting it, we get an undershoot. A right half plane zero always gives you an undershoot-- classic symptom of a right half plane zero.
+
+That undershoot gets pretty big when the slope is steep. And when the slope is horizontal, these two choices again will cross, because this term becomes zero. So the two terms will cross where the slope of the original curve is horizontal. And then they'll converge on the same steady state.
+
+So the difference now is that the right half plane zero is going to give us undershoot instead of overshoot. And the rise time, it's longer, because we've got to go down before we can recover-- the opposite of the left half plane zero. Now, I wanted to explain these in a sort of conceptual way.
+
+And what I did was I drew this plot. Let me explain it. This is the upper half of the complex plane. So this is the imaginary axis down the middle of the graph. And then the real axis is at the bottom here.
+
+And on this plot, there are a number of these red circles. These indicate the positions of zeros around the complex plane. And associated with each zero is a graph.
+
+And each graph contains two plots within it, one of which is blue, or probably dark gray in your books. And that plot never changes. It's the same plot in each of these graphs. That is the response of a system with no zeros in it at all.
+
+The other plot, the green plot, that is the response of the system with a pair of zeros corresponding to the circle that the graph is connected to. See how it works? So if I move the zero from here to here, the green line indicates the response change. Because the time axis is the same in each of these graphs, we can legitimately compare them and see the effect of changing the zero position.
+
+Now, remember, in general a left half plane zero gives you overshoot but faster rise time. That effect is very pronounced in this one, because it's close to the origin. Why does that matter?
+
+Well, the reason it matters is that because of the 1 over zeta up here, when z is very small-- meaning that the zero is close to the origin-- the effect is very pronounced. So, therefore, we have a very large overshoot and a very fast rise time. But as we move the zero further away along the real axis, those effects become less and less.
+
+Similarly, if they're complex zeroes-- now, I've only drawn the positive zero up here. And I think it's obvious that it represents a complex conjugate pair. So this is the effect of two zeros, but they're coincident. This is the effect of a complex conjugate pair of zeros.
+
+You just can't be bothered to draw the one that's down here, because you know what it would do. It would give you the same result. So this one would have an effect that becomes less and less pronounced the further we get away from the origin, because z is getting bigger.
+
+On the right half plane side, well what we have is undershoot and a longer rise time-- a very pronounced undershoot here, but getting less and less. And those effects, again, are getting less and less as we get further away from the origin. So you can see graphically now, the effects of second order zeroes on transient response.
+
+You may have noticed that the responses we're getting in the right half plane over here aren't just an undershoot. They sort of do an overshoot, and then an undershoot, and then they recover. They go up, down, up.
+
+And the reason for that is that there's a general principle at work with right half plane zeroes, which is that the step response with n right half plane zeros will always cross its starting value at least n times. What that means is we imagine the starting value is zero here. That's zero. That's the point it started out.
+
+With one right half plane zero, it has to cross that line once. So the response goes down and then back up. If I had two right half plane zeros, two real ones, it has to cross that line twice.
+
+Only way it can do that is go up, down, and then up. So that's where you get this family of curves over here that go up, down, up, up, down, up. That's what's going on.
+
+The more right half plane zeroes that we add in, the more times it's got across that original line. If you have 100 right half plane zeros, it's going to go up, down, up, down, up, down, up, down lots and lots of times before it recovers. And as it does so, as you add more and more zeroes in, the amplitude of those oscillations gets smaller.
+
+And that allows us to do something rather nice, because there is an approximation, a well-known one, called the Pade approximation, which exploits this property. The Pade approximation works by approximating time delay with a number-- and you can choose the number-- of right half plane zeros. n is the number you choose to apply, each of which is balanced with the left half plane pole at the same frequency.
+
+Each time that you put another one of these in, you're going to end up with another crossing of that start value. To illustrate it, I've modeled a first order system with a time constant of 1 and a 2 second time delay. This is how it appears using the time shifting property of the Laplace transform. e to the minus 2s tells you a two-second time delay. But it's a first order exponential response we've got-- so flat line till two seconds, and then the first order exponential I showed you earlier.
+
+Now, a second order approximation to that-- meaning n would be 2 up here-- gives you this green line. It's second order. So you've got two right half plane zeros. We've got to cross the lines twice. So we go up, down, up.
+
+You can see it's not a bad approximation. If we go on increasing the number of pole zero pairs up here, we're going to end it with a better and better approximation. And when we have eight of them, you get up, down, up, down, up, down, eight crossings. And you can see little oscillations here. And then it takes off.
+
+So what we're doing is approximating a non-linear effect with a rational transfer function. And you can choose the complexity of that. The trade-off is accuracy versus computational time.
+
+Now, when you read about this in textbooks, most of them will tell you that this approximation is valid at low frequencies. Unfortunately, I haven't come across any textbook that tells you what low is, or why not valid at high frequencies. So I'm going to do both. I'm going to tell you about it.
+
+So you see this is the time shifting property that tells you the Laplace transform effect of a time delay. And what it means in the frequency domain is that a time delay has zero effect on amplitude. It only affects phase.
+
+And the effect on phase is linear with frequency. So if I were to draw it on a graph of frequency versus phase, let's say, I would have a perfectly linear, perfectly straight, line. That's the effect of the phase of time delay. And the only thing that changes is the slope of that line is going to depend on the time delay that's applied. So for two seconds, that would have a particular slope.
+
+When we draw graphs like this of frequency, of course we use typically logarithmic axes for frequency. So a straight line like this gets warped into a sort of bent line that looks like this green line on this graph. This is the phase corresponding to a time delay of two seconds. That's how it looks in a Bode plot, for example.
+
+The equivalent phase of the Pade approximation, this thing at the top, doesn't look like that at all. It stays pretty close to it until you get to the frequency of the pole zero pair that you applied in the approximation. And then there's a departure, because it levels out. That blue line levels out.
+
+So what does high mean? High frequency means any frequency beyond the frequency of the pole zero pair in the Pade approximation, which is the frequency theta divided by 2n-- 1 over that. That's the frequency.
+
+And the higher you make n, the higher that frequency becomes. When you look in the notes on the web, I've constructed a family of these lines for increasing order of Pade. So what happens is that the lines stay close together for a longer range of frequencies the higher the order of the Pade approximation takes.
+
+But, eventually, they're going to depart from one another. And that's the limitation. It's the phase that's different between true time delay and the Pade approximation.
+
+I think I've said all I need to say about time response now to cover us for the rest of the day. I want to say a few words next about the frequency response of systems. And I think I'm going to keep this reasonably short because in the industry that we're in, people are reasonably comfortable with expressing data in terms of the frequency domain.
+
+Things like frequency analyzers will just spit out a Bode plot for you. And we're used to interpreting data from those. So I'm going to keep it reasonably short.
+
+Remember from one of the first slides in this section when I explained the concept of linearity, we saw that a sine wave applied to a linear system produces another sine wave of exactly the same frequency. But its amplitude and its phase may not be the same. Those two properties depend on frequency. In general, both of them will change with frequency.
+
+But the frequency never changes through a linear system. So if subject the system to an input of y not. Say y not is some real positive number, which defines the amplitude of the input sinusoid of frequency omega and phase alpha, the output is a sinusoid of the same frequency.
+
+But its amplitude may be different, as may its phase. In general, the amplitude changes the ratio y not over u not. And the phase changes the difference between beta and alpha. We can plot these two variables, of course, in various different ways, the best known being the Bode plot where they're plotted on two separate graphs with log linear axes.
+
+So these are called the modulus and the argument, of course. And these are the response of the transfer function, the numerical value of the transfer function as a function of frequency. So the transfer function, everyone has a frequency response measured in this way.
+
+Before I go and show you the Bode plot, I'd like to introduce you to a nice conceptual way of thinking about frequency responses of systems in terms of a pole zero map. This system is second order. It happens to be proper because they're the same number of poles as zeros, two of each. One of the zeros in the right half plane, one in the left half plane, and it's a stable system because both the poles happen to be in the left half plane.
+
+In this case, the poles are complex conjugates. So its pole zero map looks like this-- the left and right half plane zeroes and the complex conjugate poles. Now, in order to construct a plot of the frequency response, one way that we could do this is to take values along the positive imaginary axis corresponding to frequency.
+
+Each point has a frequency corresponding to this distance from the origin out to that point on the imaginary axis. And then construct vectors from each pole and each zero out to the same point on the imaginary axis. These gray lines-- r1, r2, r3, r4-- these are the vectors from each of the poles and zeroes out to that point.
+
+Now, by combining the lengths and the angles that those vectors make relative to the real axis, we can construct the frequency response of the system. We move omega not in this case up and down the imaginary axis. At each frequency, the magnitude is going to be equal to the product of the two vector lengths from the zeros, divided by the product of the two vector lengths from the poles. And the phase is constructed this way. You just add up the pole's frequency angles and subtract the-- sorry, you add the zero frequency angles, and subtract the poles.
+
+One thing that is important in all of this-- in fact, whenever you work with complex systems like this-- is to maintain exactly the same notational convention for angle. And, in general in mathematics, counter-clockwise angles are treated as positive, in general. That's the convention that I'm going to adopt today. And if you stay with that, or if you want to choose the opposite that's up to you. But stay with it, don't change.
+
+So this will be treated as a positive angle, because it's counter clockwise. So, therefore, it's added. This one will be treated as a negative angle, theta 2. You'd be subtracting that because it's clockwise.
+
+So stay with that convention. So this is how you would build up a frequency response, by moving omega not up and down the imaginary axis. And this is what it would look like for a first order system.
+
+Now, I think probably most of us are familiar with the construction of Bode asymptotes when fitted to linear systems like this. These are asymptotic straight lines, which in this case there's an asymptotic line on the magnitude curve, which is horizontal for a first order system out to the frequency 1 over thor.
+
+Thor, remember, for a first order system is the only parameter. That frequency is sometimes called a critical frequency, omega c, for a first order system. And at that point, you change the slope of the Bode asymptote from zero to minus 20 db per decade.
+
+That is the slope of a first order roll off. And it turns out that each pole contributes a slope change of minus 20 db per decade. Each zero, it's plus 20 db per decade.
+
+You know that sometimes these slopes are referred to as numbers. This would be a minus 1 slope. So a slope of minus 40db per decade would be called minus 2.
+
+Does anybody know why they're called that? Obviously, it's the number of poles that are involved. But actually, when you look back at the graph paper-- when people used to plot these things by hand, you had log linear graph paper. And you'd go in and plot them.
+
+The graph paper is always scaled so that the slope was exactly that. A minus 20db per decade slope was exactly minus 1. It was 45 degrees going down. So they're still called minus 1.
+
+In the first order case, if you go an octave-- that's a doubling of the frequency above the critical frequency-- you're about 1db in error relative to the asymptotes. And, again, if you halve the frequency, you're about the same error. It's 3db at the critical frequency. And the errors from the phase curve-- because the phase asymptotes are shown here-- well, they're about 5 and 1/2 degrees relative to the Bode asymptotes.
+
+That's the first order case, only one shape of curve because there's only one parameter. So the only effect of changing thor is you move this critical frequency up and down the frequency axis. You never change the shape of the frequency response.
+
+But just as the second order case has varying shapes in its transient response, so its frequency response also has varying shapes. And what happens is that the shape of the magnitude curve acquires a resonant peak in it for small values of zeta. And the transition between zero-- and in this case the limiting phase of minus pi-- becomes more and more rapid as zeta becomes small.
+
+So we're making the system have a sharper change of phase. And associated with that is a resonant peak. Again, the Bode asymptotes, they don't change. But they are zero, and then minus 40 db per decade, and the magnitude [INAUDIBLE].
+
+Now, sometimes it's of interest to know the magnitude of this resonant peak. And to get it, all you need do is-- well, there is the formula for the magnitude of this. You just differentiate it, set it equal to zero.
+
+And what you'll find is that the resonant peak occurs at this frequency omega n times the root of 1 minus 2 zeta squared. So you can see that as zeta becomes small, the resonant peak approaches the natural frequency, which is never changing. So you end up with a peak that gets closer, and closer, and closer to it. And the magnitude of it gets very big because zeta becomes very small.
+
+I'm going to close out this section in a moment. But before I do so, I need to introduce you to some terminology that's applied to linear systems, because we'll be using this today. And Dave Wilson will use it tomorrow a little bit as well.
+
+The first terminology that I need to introduce you to is the concept of an all pass transfer function. Transfer functions are all passed if their pole zero map has symmetry about the imaginary axis. What it means is if I have a pole on one side of the imaginary axis, I have a zero and its mirror image on the other side.
+
+And if it's a stable system, you know that all the poles are going to be in the left half plane. So, therefore, a stable all pass transfer function might have poles and zeroes in these blue locations here and here. That would be an all pass transfer function. It would look like that one-- a pair of complex poles, and a pair of complex zeroes. But they'd be symmetrical in the imaginary axis.
+
+If we had a real first order system that was all passed, there'd be a zero on the right half real axis and a pole in the corresponding place in the left half plane on the real axis. A characteristic of these systems is that the magnitude of the frequency response is always unity. So you can see why the name is there. It comes from filtering, because if you pass all frequencies with the same attenuation-- or in this case no attenuation-- you're passing all frequencies, an all pass transfer function. But, of course, the phase is not fixed. The phase changes.
+
+We have already met one example of an all pass transfer function. Does anybody remember where it was?
+
+OK, let's skip back to this fella here. What is this, apart from an all pass transfer function? We have pole and zero pairs, each of which is a mirror image of the other in the imaginary axis.
+
+The Pade approximation is an all pass transfer function. Unsurprisingly, it doesn't change the magnitude at all because we're trying to mimic the effect of it's pure time delay. It's just a phase shift that it gives us. This blue line is the Pade approximation. It's an all pass transfer function.
+
+The other type of system that I want to introduce to you is called the minimum phase system. And in order to qualify as a minimum phase system, it must have four characteristics. First of all, it must be well-behaved because it needs no time delay, no right half plane zeros, no right half plane poles either, because it's stable.
+
+And it's got poles, they mustn't lie on the imaginary axis. We don't allow oscillators to be called minimum phase. But we do allow integrators to be called minimum phase. So if it has poles on the imaginary axis, the only place they're allowed to be is at the origin.
+
+If a system possesses all of these properties, it is minimum phase. And the significance of that name is that its phase shift over all frequencies from zero to infinity is the smallest value that it's possible for a dynamic system to have. Any of these systems will induce more phase shift over frequency.
+
+Here are some examples of nice, well-behaved minimum phase systems. They're very convenient to work with. And you know what the phase shift actually is.
+
+It's the relative degree. Remember that term, n minus m times pi over 2? That's the relative degree times pi over 2 is the phase shift.
+
+By a process of elimination, if it doesn't possess all of these properties it must be a non-minimum phase system. A non-minimum phase system is a little bit more awkward to work with because you have to model things like time delays, and right half plane zeroes, a little bit inconvenient sometimes. But there is a very useful property, which is that you can represent any system, regardless of whether it's minimum phase or not, as the product of two transfer functions, one of which is all pass, and the other of which is minimum phase. We're going to use that property later on when it comes to designing control systems for non-minimum phase systems. For now, just store it away that a system can be represented by that product.
+
+OK, just finally I want to make a point of this because there's a misconception that's quite widespread, I think, about minimum phase systems. There is a relationship between the magnitude curve and the phase curve of the Bode plot for minimum phase systems only. It relates the slope of the magnitude curve to the phase, or the integral of the phase to the magnitude curve-- one or the other. And it's called the phase area formula.
+
+Most often, it's thought of in these terms. The phase is approximately equal to pi over 2 times the slope, where the slope of the magnitude curve is in multiples of 20 db per decade. So in this case, it's plus 1 because it's 20 people db per decade going up.
+
+The phase is approximately pi over 2 times that for this system. And over here, we have a slope of minus 20 db per decade. That's minus 1. So the slope is going to be pi over 2 times minus 1, minus pi over 2.
+
+This is a commonly used rule of thumb, especially in power supply design. People say things like, I need to have my slope crossing at no more than a slope of minus 1 to guarantee this phase margin. True, but it only holds providing you're at frequencies that are well away from the range of frequencies which cause a change in slope. If there's a pole or a zero here that's causing a change in slope, the transition of phase is much more gradual than it is for slope, as you can see here. So you've got to treat this rule with a certain amount of caution, which is the reason why I put this slide in.
+
+Now, we're going to do a short quiz-- very short. And as I said before, there are no prizes involved. So I don't expect many people will be that interested in answering.
+
+I used to give out t-shirts for correct answers. But the t-shirts that I have started being issued with as prizes were all triple XXXL, XL, or extra small. And most of the customers just weren't interested in those. So I'm not going to hand out t-shirts. Don't worry.
+
+First question, what is the approximate rise time of a first order system? 2.2 time constants, 2.2 thor, thank you.
+
+Can you state two requirements for a linear system to be called minimum phase? There are actually four of them. I'll take any two.
+
+[INAUDIBLE]
+
+No right half plane zeros is a good one. Anybody else like to give me another one?
+
+[INAUDIBLE]
+
+Stable, that's good. Somebody else probably gave me another one there. No time delay would have been great. No poles on the imaginary axis, except at the origin, great.
+
+How does a right half plane zero affect rise time? It's 50-50, isn't it? It's only going to make it longer or shorter. Right half plane zero, rise time is? Longer?
+
+Right half plane will give you undershoot, but the rise time will be longer. A left half plane gives you overshoot and shorter rise time. So the answer is longer.
+
+What is the significance of the inverse Laplace transform of a transfer function? What does that mean? Impulse response, impulse response, you take a Laplace transform of impulse response, you get the transfer function.
+
+Superposition is a combination of which two linear properties?
+
+Additivity.
+
+Additivity is one world, well done Peggy. Anybody want to give me another one? No, it's called a homogeneous property. Homogeneity and additivity combine to give you the principle called superposition, which is used in many cases to define linearity.
+
+Which term constraint-- this is a nasty one. Which term constrains the peaks of the under-damped second order response? You can help me out here as I write this. So the second order response had a unit-- I can hear you all leafing through the books trying to look the answer up. So let me put you out of your misery.
+
+It's 1 minus-- now, over here we had a term which was sine-- we don't need this one, because we're not being asked-- omega d times t plus phi. And then there was a term in here. There was a quotient.
+
+And that was omega n over omega d. And then there was an exponential. What was in the exponent? e to the minus sigma t, great, you make me very happy, e to the minus sigma t.
+
+Why is the Pade approximation only valid at low frequencies? What's wrong with it at high frequencies? Where did it give up? Phase, right, the phase departed from the true phase of a time delay, which would have looked like this linear slope on the white board over here on the left, which was a nice curvy thing.
+
+And, lastly, the most important question of all, what year was the fly-ball governor patented?
+
+1788.
+
+1788, great, you'd have got a t-shirt for that a couple of months ago, well done. Let's take a break now, 15 minutes. And there's coffee and stuff at the back. I think there are some cookies out there as well. We'll come back at 22 and continue with the next section.
+
