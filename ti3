@@ -1,0 +1,867 @@
+
+OK, so we're going to resume. Now it's half past. I want to get back on track with the timing, so let's take a seat.
+
+If you remember, before lunch, we left it at the stage where we designed a phase lead compensator. We'd done it using a manual technique, a rather long-winded way with a paper and pencil, and we've taken advantage in the second way of the tools to design it for us. And I think perhaps we all agreed that the second approach is a little bit easier.
+
+Now, as I mentioned, the Nyquist plot is used for measuring relative stability, and I used the word "unfortunately." And so what I'd like to do is begin by explaining why I said it was unfortunate. And I'll do so by looking at this example.
+
+This is an open loop transfer function containing two complex poles and two complex zeroes. And the thing about it is that those frequencies of the complex poles, [INAUDIBLE] very close to one another, they interact at frequencies slightly above crossover so that what happens is that the Nyquist curve crosses through the unity gain circle-- so this is the gain crossover frequency-- at a nice, healthy 70 degrees of phase [INAUDIBLE].
+
+But then it does this sort of detour. And it gets perilously close to the critical point before recovering and coming back towards the origin. So we never cross 180 degrees. There's no gain margin. Or rather, gain margin is infinite. And the phase margin is a rather healthy 70 degrees. Nobody would look a at a system which had a 70 degree phase margin and expect oscillations to go on for hundreds of seconds. This is not behavior we would expect. And it happens, of course, because of the proximity to the Nyquist curve to the critical point.
+
+See, what we're capturing in gain margin and phase margin is how much extra you can rotate the Nyquist curve before you enclose a critical point and the thing becomes unstable. And it's only measured, at most, two frequencies-- the gain crossover frequency and the phase crossover frequency, which you don't always get. There isn't a phase crossover frequency here.
+
+Who's to say that the worst case isn't at some completely different frequency? So it won't be captured in phase margin or gain margin. We're making nice simplifying assumptions that the open loop transfer function is well-behaved at all of the frequencies. There's no reason why it should be.
+
+Now, there is a better way. And I'm going to tell you what it is. But to do that, I'm going to introduce two new transfer functions. The first one could be called the error ratio. And just as the closed loop transfer function is the transfer function from r to y, the error ratio is a transfer function from r to e, e being the error measured-- the difference between r and Hy, the measured output.
+
+Well, this turns out to be a transfer function, 1 divided by 1 plus L. It's perhaps the most important transfer function that there is when it comes to evaluating feedback performance. And it turns out that this is the one that tells us about the ability of the loop to reject disturbance, disturbances being noise or changes in the local parameter variations or anything else.
+
+This is called the error ratio. And it's also called the sensitivity function, the sensitivity function. And it's given its own symbol. The symbol uppercase S is used for this function.
+
+It has a sister function, called the complementary sensitivity function. Or we might choose to call this the feedback ra ratio. It's same thing. It's the transfer function from r to the measured output, Y sub m, which, when you calculate that, turns out to be FGH over 1 plus FGH or L divided by 1 plus L. It's the complementary sensitivity function which tells us about the loop's ability to track a reference input.
+
+And that really captures what we want the control system to do. We want to track a reference input, which is T. And we'd like it to continue tracking that input even in the face of disturbances entering the system. That's what S tells us.
+
+Now, why is S and T complementary to one another? Well, it's rather obvious when you think about it. If S equals 1/1 plus L, and T equals L over 1 plus L, when you add the two together, you have 1 plus L over 1 plus L, which is always 1. So S plus T always equal 1.
+
+Now, when we use S and T for design purposes, it turns out that we only ever need to be interested in the magnitude of them. And furthermore, their magnitude typically varies between 0 and 2 or 3, typically, certainly not thousands or hundreds. So we don't need to use decibels. Our magnitude plot is typically in absolute values against logarithmic frequency in Hertz or radians per second. You take the choice. And this is typical of the kind of curve that you get.
+
+Before I tell you why you get this curve, let me tell you what these two functions are telling us. It's easier to explain in terms of the unity feedback system where there is no significant dynamics in the feedback path. So e truly represents the difference between the reference input and the output.
+
+This loop has an extra input added here. This is modeling the effects of disturbance. So this could be a change in output load or something like that. And when we analyze the behavior of this loop, we can apply the principle of superposition-- remember that from chapter 1-- to determine the effects of r and d differently.
+
+See, y is directly equal to d plus F times G times r minus y. When we go through this and divide by 1 plus FG, you'll find that y equals S times d plus T times r. This is the output in Laplace as a function of d and r.
+
+Now let's ask ourselves what we want. We would like y to equal r. It's as simple as that. Because if it does so, we have perfect reference tracking. Well, for that to happen, S must be equal to 0, and T must be equal to one, obviously. Well, can we have that?
+
+Well, it turns out that we can have that at low frequencies because at low frequencies, typically the magnitude of the loop gain, L, can be kept high reasonably easily. If you have an integrator, for example, it has infinite gain at [? DC. ?] It's typically easy to manipulate the shape of that.
+
+So when L is very large, S equals 1 divided by 1 plus something very large. That's going to be small. So at low frequencies, when L is large, S is small.
+
+And when L is large, well, T equals very large divided by 1 plus very large. That's pretty close to 1. Those are the numbers we want-- 0 and 1. And typically that's the value that we get at low frequencies.
+
+Now, at high frequencies, the magnitude of the open loop transfer function typically will fall away. It's normally a strictly proper system. The amplitude of L gets small at very high frequencies.
+
+So now, at high frequencies, S is going to be 1 divided by 1 plus something very small. That's close to 1. And T is going to be small divided by 1 plus small. That's close to small, isn't it? So these two are going to change over at high frequencies. S is going to approach 1, and T is going to approach 0. In the context of the loop, therefore, we've got high sensitivity to disturbance and poor reference tracking.
+
+So you see the significance now of S and T. At low frequencies, when the loop gain is large, we get what we want. At high frequencies or when the loop gain is small, we get the opposite of what we want.
+
+Now, these are typical curves that you get for S and T. And you'll probably notice that there is a peak in the sensitivity function. That's almost always present. And I'm going to explain why that's there in a moment.
+
+But before I do that, I just want to point out something that might be confusing, which is that-- I've said S plus T equals 1. And clearly, there's a range of frequencies here for which S is greater than 1, and so T is positive. So it doesn't seem to apply. It does apply. The reason is I'm looking at magnitude. When you take phase into account, this always applies. It's absolutely true, OK? So let's just clear up that little point.
+
+Now, using this technique, we can measure bandwidth as well. We should define bandwidth in terms of S and T. Now, here's a pair of curves which are fairly typical. And we can define two bandwidths based on the crossing points of these two curves with a threshold. Now, to some extent, that threshold is arbitrary. But most people use 1 over root 2 because they do. They just express bandwidth in that way.
+
+So we look at the 0.707 threshold. And normally-- well, very often-- what happens is the sensitivity curve rises above that threshold at some frequency. Once we've gone above that threshold, we'll make the choice to say that the system has lost its ability to reject disturbances satisfactorily. That really should be regarded as the bandwidth of the system.
+
+At a slightly higher frequency here, the complementary sensitivity function, the one that determines the closed loop reference tracking ability-- that crosses the reference threshold from above. And that is a higher frequency. That's the one that people typically use to determine bandwidth.
+
+But if you look at it, you've already lost your ability to reject disturbances at lower frequencies than that, at least in this case. So it makes better sense to use the first of these frequencies, the lower of these two frequencies, as your bandwidth. And in this case, it's the sensitivity curve that defines what that will be.
+
+Now, all of this looks fine in a plot like this. But it's even clearer, I think, from the point of view of the Nyquist plot. So I'm going to show you how these two transfer functions are related to the Nyquist plot.
+
+Here is the Nyquist curve. This is the open loop, a polar plot. So a vector from the origin out to the line on that polar plot-- it represents-- at least the length of that is the magnitude of the open loop at that frequency. And this angle in here is the argument of the open loop transfer function at that frequency. This obviously is clockwise. It's negative. It's a phase lag.
+
+Now, if we draw another line from the critical point out to exactly that same point on the Nyquist curve, the length of that vector is nothing other than 1 plus l of j omega. So therefore, by taking the length of this vector and the length of this vector, I have all the information I need to construct these two curves. I just need the length of those two vectors.
+
+Now, just for interest's sake, let me explain the rest of this plot to you. I've plotted-- just because I could, really, and just wanted to show you-- this is a polar plot of the closed loop transfer function and how it relates to these different vectors.
+
+So this is T of j omega 0. Its length there is simply going to be L, that length, divided by 1 plus L. That is T. So by knowing these two vector lengths, I get another vector length here that I can use to plot the polar plot of the closed loop transfer function. And the angle-- the argument of T-- that is nothing other than this angle in here. So it's geometrically possible to construct a polar plot of the T transfer function, just from the vector lengths and angles of L and 1 plus L.
+
+Now, S and T-- we only need to know the length of that vector and the length of that vector. That's all that S and T depend on.
+
+So first of all S-- S, remember, is 1 divided by 1 plus L. And the frequencies that I'm interested in are the frequencies at which we get the bandwidth of S and the frequencies at which peaking occurs because we want to avoid those frequencies.
+
+You see, if you have a peak, you're amplifying the disturbances. I mean, that's even worse than just not passing them with this region. That's bad. You want to avoid that.
+
+So first of all, the bandwidth is going to be reached when S is equal to 1 over root 2. In other words, 1 plus L is equal to root 2. You can take reciprocals of both of them. That is equivalent to drawing a circle centered on the critical point of radius root 2. Because any time that the Nyquist curve passes inside that circle, this vector is going to have a length of less than 1. Therefore, we've-- sorry, a length of less than root 2.
+
+So therefore, we've reach the bandwidth. The S curve has passed above the 1 over root 2 threshold. That's the significance of this circle, radius root 2 centered on the point minus 1.
+
+Another circle of radius 1-- that'll tell us when we get peaking because now 1 over 1 plus L is bigger than 1. Any time I have a length of a vector that's shorter than this, it's less than 1. So therefore, 1 over that is going to be greater than 1. That's the significance of those two circles.
+
+Now, we can also construct circles for the T function. And they're a little bit more complicated. Remember before I show you them that it's this vector length divided by this vector length that tells you this vector length. So for T, the curves look like this.
+
+First of all, let me tell you about peaking because that's the easier one to understand. Peaking occurs when L divided by 1 plus L is bigger than 1. So if that's the case, pick out the point when the two vector lengths are equal.
+
+This vector length equals that vector length. And you'll find that all the points for which that's true are going to lie on the same vertical line, aren't they? Because you're going to get the same kind of triangle when those two vector lengths are equal.
+
+So the dividing line between peaking and not peaking is a vertical line through the point minus 0.5 on the negative real axis. Any time that the Nyquist curve lies to the left of that, peaking appears in the closed loop transfer function. Any time to the right, it's not peaking.
+
+Now, the other lines on here correspond to lines of magnitude of T. And one of them is a circ-- you see, when T is smaller, these are lines of decreasing radius which center eventually on the origin. And when T gets very, very big, they're another family of circles, which center on the critical point. Well, one of these circles corresponds to minus 3 degrees. That is the point at which the bandwidth is reached of the T function.
+
+So we've got four lines now. We've got bandwidth and peaking of the T function. And we've got bandwidth and peaking of the S function. Four important lines that we can draw on the Nyquist plot.
+
+And there's another one. And that's the unit circle centered on the origin. What does that tell us? What's the significance of the unit circle centered on the origin? Well, what do we know about the open loop transfer function when the Nyquist curve passes through such a circle? What's the magnitude of l of j omega. It's going to be 1, isn't it? Any time it crosses inside a circle, it was radius 1. And therefore, that is the gain crossover frequency. That's the frequency at which we measure phase margin.
+
+Now, those five lines are drawn on this diagram. See? Here's the Nyquist curve over here. So here's the unit circle around the critical point and the circle of radius root 2 around the critical point. Those two lines both concern S.
+
+There's this vertical line here and this circle, which concern T. This is the bandwidth, and this is the peaking line. And then finally, there's the unit circle about the origin. Remember, that's where we measure phase margin. So we can put these five lines onto the Nyquist plot and say something about the S and T functions, based on the Nyquist path, Nyquist curve.
+
+So here's a representative example corresponding to this Nyquist curve over here. So what happens is-- the first thing that happens as we increase frequency is the Nyquist curve passes to the left of this vertical line through 0.5. That, remember, tells us peaking appears in the T function. It's this frequency here, the first frequency in the series we're going through.
+
+Next thing that happens is that we pass inside the circle of radius root 2 about the critical point. When that happens, the sensitivity function has already passed above 1 over root 2. See, it's a very early frequency. It's that frequency. That's the bandwidth of the system. Any frequency higher than that-- we've already lost the ability to reject disturbances. So all these other frequencies are happening beyond frequencies at which the control is really good.
+
+Then we pass inside the unit circle on the critical point. And that tells us we've got peaking in the sensitivity function. Then the next thing that happens-- look, we go inside the unit circle. That's the frequency at which the phase margin is measured. That means that the open loop plot has now dropped below unity. We've just drawn the open loop plot on the same curve here just for interest.
+
+And now what happens is we go back to the right of this vertical line. So peaking in the T function ceases. And finally, we reach the bandwidth of the tracking function. It's those two frequencies there, OK? So we can pick out frequencies of interest geometrically from the Nyquist curve once we know about these lines and what their significance is.
+
+Now, there is a relationship which applies to non-minimum phase systems or systems which have a pole access of 2 called the sensitivity integral. And it relates the areas above and below unity for the S function. It looks a little bit weird when I've drawn it. These areas are actually equal. And you would see it more clearly if I'd chosen a logarithmic axis here because it affects-- it's to do with the logarithm here.
+
+But the point is that for any given system, these two areas must be the same. And if you don't change any poles or zeros, they will be the same. So if you try to tune a system by just changing the gain of it, what tends to happen is you increase the bandwidth. And you can increase the bandwidth by pushing the sensitivity function out. So this area increases. But as it increases, so must that one. And the only way that that can happen is that the peak increases.
+
+This is what happens is you try to increase the bandwidth of a system by just increasing gain. It goes by the name of the "waterbed effect." And it's an example of how systems-- they're limited in one way or another. You don't get what you want. You have to give up something else.
+
+This is an attempt to increase the bandwidth of the system, which you can see is happening. But the only thing that's happened is as you sit on this part of the waterbed, it's got to pop up somewhere else. So the peak of this is increasing.
+
+Now, what is the problem with the peak of the sensitivity curve increasing? What does it mean? It means that we're more sensitive to disturbances, doesn't it?
+
+But what else does it mean? Well, what else it means is that this vector here must be getting very small. We're getting very close to the critical point. So the peak in the sensitivity function captures, OK, sensitivity to disturbances. But it means we haven't got a very big stability margin now. So it makes sense-- rather than using phase margin or gain margin, it makes a lot of sense to capture relative stability in terms of the peak in the sensitivity function.
+
+And that's what's done. We'll call it M sub s. And the nice thing about this is that because it's simply a peak that has no bearing on frequency-- phase margin you measure at one very specific frequency, when the gain of the open loop equals 1. Well, this thing has no such restriction. It can occur at any frequency alike. It always picks out the worst possible case in the frequency response.
+
+And to measure it, well, we take the maximum, or the least upper bound-- that's called the supremum in mathematics. It's the least upper bound on all frequency of the modulus of the sensitivity function. That is something called the infinity norm. The infinity norm is normally written this way, two vertical lines and then an infinity around it like that.
+
+So that's the infinity norm of the S function. And there's an equivalent parameter for the T function. The infinity norm is the maximum value.
+
+It makes good sense to base your specifications on these two parameters because, as I said, they capture the worst-case overall frequencies. Typical numbers would be something like about 2 for Ms and about 1.25, typically lower, for Mt.
+
+Now, remember before-- I've rubbed it off now-- but there was a lot of working up here for this manual process of designing a phase lead compensator. I'd like to show you what the S and T curves look like for that particular system. And I've written a small script which does that, again using cell programming.
+
+So what's happening here is I'm drawing up the initial controller and drawing its Nyquist curve. So this is the one before we applied any compensation. And remember, we had about 20 degrees of phase margin. So when I run this script, what we'll find is that there is a Nyquist curve that looks like this. MATLAB's arrows go the opposite way to mine.
+
+But this is increasing frequency. And here's the critical point in red. And notice the family of lines which are drawn on. These a lot correspond to lines of what? T, right? These are the complementary sensitivity lines. 0dB-- that means that we're going to get peaking when we're to the left of that. That goes through minus 0.5, and there's the origin, and there's 0. So these are the lines that MATLAB will draw on for us.
+
+And remember, here's the one that had a phase margin of only 20 degrees. We finished with a compensator that had a phase margin of about 42. And if I plot that on the same axes, it looks like this. So you can see what we've done by applying the phase lead compensator. We've drawn it away from the critical point and increased the distance between the Nyquist curve and the critical point.
+
+That is also reflected in the sensitivity plot. So let me show you the sensitivity plot now, firstly of the uncompensated system. And you can see it has a peak here of-- well, the peak's about 3.06. So that's pretty big for Ms. Remember, we normally want them under 2.
+
+And if I draw the same graph, the peak of the sensitivity function for the compensated system, it's down to about 1.65. But look, there's a difference in frequency now. It's a much higher frequency, and the peak is lower. I think at the bottom here there's a script that just calculates those values numerically. And it tells me that we've dropped the peak from 3 to 1.64, and the bandwidth's gone up from 1.85 to nearly 3 radians per second, which is the frequency we were aiming for, if you remember-- 3.08, I think it was. So we can use these as a specification on closed loop performance.
+
+Now, there are a couple slides in here next, which-- I'm trying to tie together the ideas of high gain in the feedback loops and the S and T functions. This is a unity gain system, unity feedback gain system-- unity feedback system, I should say. And what I'd like to do is-- I don't think I'll bother stepping through it so much. But you can express u in terms of r. And it turns out to be F times S times r.
+
+And since you know what T is, you can express that in terms of S as well. So you can say, FS equals G to the minus 1 times T. And you also know that equals that. So u equals G to the minus 1 times T times r. And if you plug that into the equation for the output, y clearly equals G times u, which equals G times G to the minus 1 times r, which equals r.
+
+The point I'm trying to get across here is that what high gain does for us in a feedback loop is it generates a virtual model, a virtual inverted model of the plant. It makes the output follow the input by putting a virtual model of the plant inverted inside the loop. In the equations, that's what it's doing for us, OK?
+
+This leads us into an area called internal model controller, where we'll explicitly do that now in our controller design. But the way that it works-- high gain does it for us automatically. I'm going to come back to this in just a couple of slides because really, this should be moved forward in the presentation.
+
+OK, now, what I want to get across in this next three or four slides is perhaps the most important point of all in this second section. And it has to do with robustness. It has to do with the presence of uncertainty in our system. Because so far, all the design techniques have started with me giving a model of the plant and assuming that it was perfect. And you know that in reality that's never the case. Even if you have a model of the plant, you never know the effects of parameter variation. You never know the effects of temperature. And it's a simplified model anyway. So what is the sensitivity of that model to those sorts of things?
+
+So let me begin with this unity feedback loop by saying that if it were a perfect control loop, there would be no difference between r and y. Those parameters would be identical. So there will be no signal at e. The presence of a signal here means that we have an imperfect control, imperfect control at that frequency.
+
+So what you could say is that this thing here, relative to the input, can be used as a measure of the amount by which the control system is not doing its job. And of course, that is the sensitivity function. The maximum value of e over r, or the error ratio, which I defined as the sensitivity function, tells you how badly the control system is doing its job.
+
+Now, there's another way of looking at the sensitivity function. And it's this. If you take the closed loop transfer function, which in this case, because it's unity feedback, is the complementary sensitivity function, it's F times G divided by 1 plus F times G.
+
+Now, I might be interested in how this thing behaved with variation in G. In other words, how good am I at tracking a reference input when G is not quite what I thought it was?
+
+Well, in order to work that out, I would differentiate this with respect to G. That would tell me the sensitivity of T on a change in G. Now, we can apply the quotient rule to this to calculate it. Do you remember the quotient rule for differentiation? vdu minus udv-- all that stuff. And this is what you get.
+
+Now, in this equation, dT by dG, you have F plus F squared G minus FGF on the top line. So that cancels with that. And you're left with F divided by 1 plus F times G all squared.
+
+Now, 1 over 1 plus FG is S. So one of those will go away. And the other one is F divided by 1 plus FG. Well, that's like T, except there's a G missing in the top line. So this is equivalent to saying S times T divided by G. So dT by dG equals S times T divided by G.
+
+Now, if I divide both sides by T and multiply both sides by G, what I end up with is dT by T divided by dG by G equals S. In other words, the relative change in tracking ability for a relative change in plant model is S.
+
+I've presented S as the function that tells you about the sensitivity to disturbances. And that's what this is. But the disturbance here is a plant model error.
+
+If I have a 1% error in G, what percentage error do I have in T? That is what S tells us, OK? Sensitivity to disturbances.
+
+Now, let's look at it in this way. Let's imagine that we definitely have an error in G, and I'm going to represent it as what's called a multiplicative perturbation. It's G, the nominal transfer function of the plant, times 1 plus e. Epsilon is an error, right? So if I have a 1% error in my model, epsilon might be plus or minus 0.01. And I'm going to denote that quantity by G-tilde.
+
+Now, of course, G is a product which appears in the open loop transfer function-- F times G or F times G times H. So L-tilde would be used to comprehend the error in the plant model. So 1 plus L-tilde is 1 plus F times G-tilde. So I'll just substitute that in for G-tilde.
+
+And the sensitivity function change is 1 divided by 1 plus L-tilde, which is this, and that's that expanded out. So this is the sensitivity function incorporating plant model error.
+
+Now, if we divide this, top and bottom, by 1 plus FG, that term there divided by 1 plus FG is going to become 1. This term here divided by 1 plus FG-- well, it's FG over 1 plus FG. That's T times epsilon. And this divided by 1 plus FG's just going to be S. So can you see now that this sensitivity function incorporating the plant model error is equal to S divided by 1 plus T times epsilon?
+
+Now, let's think about what this means. At low frequencies, remember, typically S is close to 0, and T is close to 1. We have good reference tracking. And we have zero sensitivity to disturbances.
+
+So if this is 0, S-tilde's going to be close to 0 no matter what this thing is doing down on the bottom. So S and S-tilde are pretty good plant model errors having little effect on our ability to reject disturbances.
+
+When the frequency's very high, we have the opposite, don't we? We have T falling down to 0 and S approaching 1. So this approaches 1. But T becomes 0. So again, at high frequencies, S and S-tilde are very close. Plant model error doesn't have much effect at high frequencies either.
+
+The problem is there's a range of intermediate frequencies where S and T are neither 0 nor 1. They're close to each other. And that's where plant model error has its biggest effect.
+
+What I've done in the next slide is to try to show you this. This is the relative change in S for a plant model error. Here are the S and T curves. And here, for reference, is the absolute value of the open loop magnitude plotted on the same set of axes.
+
+And what happens is that this change in S reaches a peak. But unfortunately, that peak takes place exactly in the range of frequencies where the open loop transfer function magnitude crosses 1. That is the gain crossover frequency at which the stability of the loop is determined.
+
+It's like saying that plant model error has its biggest effect exactly where you can tolerate it least. So this is an argument to at least consider the effects of plant model error on your system. And the practice of modeling uncertainty and of making your system torrent to it is called robust control.
+
+Now, it's quite an extensive area. It's extremely important. And I'm not going to go any further into it in this seminar. There is a chapter in the book which I'll distribute at the next break which introduces the topic. There is far more information in some of the recommended reading at the back of your books.
+
+In particular, there's a book by Doyle, which I'll say more about at the end. It's a very good book indeed. And that will capture a lot more about the theory of robustness and uncertainty.
+
+Now, I'm going to round out this section by talking about something called internal model control. And the reason I'm going to do it is that Dave will talk about it a little bit tomorrow. So consider this. Here is a system which has a plant and a controller. The only difference is there's no feedback now. But I would still like to apply the principle of making y follow r. How should I design the controller to achieve that?
+
+Well, y equals F times G times r in this open loop case. So what should F be? It's pretty obvious, really. It should be G to the minus 1, shouldn't it? So all I do is I take G, and I invert it, and I make my controller equal to it. And I have perfect control, and I haven't even used any feedback. So what have we been doing for the last hour and a half, eh? We might as well just not bother.
+
+Well, the problem is that this has a lot of difficulties. For a start, you are assuming in designing the controller that you know perfectly what the plant is. And of course, that's not the case. We never know perfectly what the plant is. And even if we did, it would change somewhat over time or temperature or whatever.
+
+And the other thing is we're making the assumption that we can convert it. And there are reasons why we may not be able to do that. For example, the plant may contain, I don't know, right-half-plane-zero. A right-half-plane-zero becomes a right-half-plane-pole on inversion. So you've designed an unstable controller. It might not be a problem. We can do it. But it's still an inconvenience.
+
+What about if the plant contains time delay? To invert time delay, we'd need time advance. You'd need to be able to design a controller that could see into the future. Let me know if you ever do that, by the way. We could make some money out of that. There are reasons why we can't invert it.
+
+Now, there is one technique whereby we can get around this. And it goes back to something I told you before. I'll tell you what, let me show you internal model control. And then I'll come back to how you get around that problem.
+
+Internal model control works in the opposite sense from what we've been doing. We've been designing the shape of the open loop plot such that the closed loop had desirable characteristics.
+
+Remember when we designed the phase lead compensator-- it was the phase of the open loop we were designing, designing it to meet, say, a phase margin or a gain margin specification. And those specifications were chosen such that the properties of the closed loop were what we wanted them to be.
+
+This thing works the other way around. We specify the closed loop. You choose that. Call it Q. It's a transfer function that we choose.
+
+Now, knowing that that's what we specify, we know what the transfer function of the closed loop is. All I have to do is solve for the controller. And the controller turns out to be G to the minus 1 times Q over 1 minus QH. It's a member of a class of design techniques called parametrization techniques, where we first decide what we want, and then we parameterize the controller in terms of that something, in this case, the closed loop transfer function and Q because that's the symbol that's normally given to the closed loop transfer function in this technique.
+
+Now, notice that it contains an inverted model of the plant. It suffers from exactly the same problems as this approach did. We've still got to invert the plant. So all those right-half-plane-zeros and time delays and all that stuff still affect us.
+
+Let's ignore, conveniently, these last three lines for a moment. And just let me show you the tutorial which is associated with this. And then I'll tell you how we get around those problems.
+
+So the tutorial involves us using the Q-parameterization technique on the buck controller plant that we used for designing PS ISO tool with. And what we'd like to do is choose the closed loop response to be a first order with a roll-off above 2,000 radians per second. That sets the time constant of the system because it's first order. 1 over that is going to be the time constant. So here's the transfer function that we're aiming for.
+
+So in MATLAB, I believe I have this script. Here I'm just creating a model of the plant and the feedback. And then what this line does is create a model of Q. So it's using the transfer function script and giving the transfer function 1 over 0.0005S plus 1. That's 1 over 2,000 radians per second. That's the time constant.
+
+And then in the next line down here, what we're doing is calculating the equivalent controller that gives us that. Now, I must tell you immediately that this plant-- remember, it's a buck controller plant. It had that great big peak in it.
+
+Well, the controller's going to have to undo that. Because remember, a peak in the magnitude curve is what we've got. And we'd like something that has a nice, smooth roll-off so it's first order.
+
+Well, there's going to have to be a trough to get away from that peak. So the controller is going to look pretty horrible. And when we draw its Bode plot, this is what it looks like.
+
+It's got a trough in it where we had a peak in the open loop transfer function. And the phase transition from 0 to minus 180 degrees-- that has to be compensated for in the controller by a phase transition the other way, all right? This is F designed using the Q-parameterization method.
+
+Now, what I can do is to draw the closed loop transfer function. And I must admit it does look very much like a first order transfer function. It has the roll-off, 10 to 3. 1 times 10 to the 3. It could be 2,000 radians per second. It could be. And it has a phase of what you would expect a first order system to have, between 0 and minus 90 degrees.
+
+Let's look at its step response. There it is. So how can we check whether that's first order or not? What would you do?
+
+[INAUDIBLE] draw tangents.
+
+You could draw tangents. That's a good one. You can draw tangents at various points and measure the time between taking the tangent and when it crosses the final value, measure that several points. Are you getting the same answer? Yes, you are. And it's first order, and you'll know what the time constant is.
+
+How else could we do it? How about the rise time? What would the rise time be?
+
+2.2.
+
+2.2 time constants. Let's check the rise time of this. There's the rise time, 2.2 times 0.0005. It's a lot like 1.1 milliseconds. On the face of it, it looks like a first order response with about the right time constant. So the technique has worked.
+
+But of course, it suffers, as I said, from exactly the same problems that the open loop internal model control suffered from, all these things down here, because we've got to invert G. That's the problem.
+
+Now, here's how you get around those problems. Remember, in chapter 1, I said that any real rational transfer function, whether it was minimum phase or not, could be written as a product of two transfer functions, one of which was minimum phase and the other of which was non-minimum phase.
+
+So the minimum phase thing is nicely well-behaved. It doesn't have any right-half-plane-zeros. It doesn't have any right-half-plane-poles. No time delay. We can invert that bit. That's nice.
+
+The non-minimum phase part-- that's the bit that has all the undesirable, uninvertible characteristics. That's the bit we can't invert. Now, if it contains time delay, remember, we can use a Pade approximation to represent time delay now.
+
+So we can represent G sub n as a non-minimum transfer function, even including time delay. And here it is. Here's the time delay and all the horrible stuff down here.
+
+Now, the trick is this. Instead of trying to invert this to give us the closed loop response that-- arbitrary closed loop response-- we want, what we do is we choose the closed loop response we want so that it includes the non-minimum phase part we can't invert. And then we calculate it. And we pretend that's what we wanted all along, you see? It's like fiddling with the question to suit the answer. Anyway, it works.
+
+Because now when you substitute G--
+
+[BEEPING]
+
+OK. Thank you. I thought that was a good result. I didn't know it would get that kind of response.
+
+When you substitute this into the equation, you end up with this thing here. So all this is, is this equation here but with Q substituted for F times G to the n. And this is 1 over G here.
+
+Now, notice that because we've done this, the inverted non-minimum phase part cancels with the non-minimum phase part in the numerator. They go away. And what we're left with is an equation which-- only the minimum phase part needs to be inverted. It's a nice way around the problem, if you like, if you want to use this technique. It's internal model control. And as I say, Dave will talk a little bit about it tomorrow, which is why we've done it.
+
+Let's close out this section now with a short quiz. And then I'm going to go straight into section 3. We're on track for time. After section 3, there will be coffee delivered, and that'll be great.
+
+So first of all, then, three effects of negative feedback. Three effects of negative feedback. I'll start you off. You can make a stable system unstable. It doesn't have to be good effects. You can make an unstable system stable. We can make a nonlinear system look linear. We can increase bandwidth. We can change the gain of the phases. These are all effects of applying negative feedback to a system.
+
+When negative feedback is used, what defines the closed loop zeros? Where did the closed loop zeros come from? I have to get clos--
+
+[INAUDIBLE].
+
+Sorry?
+
+1 plus L [INAUDIBLE].
+
+No, no. They were the poles, closed loop poles. The closed loop zeros-- they came from two places.
+
+The zeros of the input?
+
+You're very close. They are the zeros of the forward path and the poles of the feedback path. Anything that's a zero in the forward path is also a zero in the closed loop. Anything that's a pole in the feedback path is also a zero in the closed loop.
+
+If you remember, I represented it this way so that the closed loop transfer function-- I think I call it that. The denominator had alpha 1, alpha 2-- remember this-- plus k times beta 1, beta 2. And then the numerator had k times beta 1-- that's the zeros in the forward path-- times alpha 2. So if you know the forward path zeros and the feedback path poles, you'll know what the closed loop zeros are. That's where they come from.
+
+At what frequency is gain margin measured? There's something specific about that frequency. What is specific about it? Gain margin. You measure it when--
+
+The phase--
+
+Yeah, when the phase is plus or minus pi, plus or minus 180 degrees. That's the frequency. It's called the phase crossover frequency that you measure the gain margin. The gain margin tells you how much additional gain you can push into the open loop, assuming phase doesn't change, before the critical point becomes enclosed.
+
+What's the significance on the Nyquist plot of a unit circle centered at the origin? So in the complex plane, this is the real axis, and this the imaginary axis. And I've got a unit circle, all right? It may not be very circular. But what does it tell us? If we've got a Nyquist curve coming in something like that to the origin, what's significant about that point? The gain of the open loop is--
+
+1.
+
+1. It's the gain crossover frequency, the frequency at which we measure phase margin. You draw a vector out to that point. That's the angle in there that corresponds to phase margin. That's the significance of the unit circle.
+
+The Nyquist stability criterion-- the simplified one which applies to systems which are open loop stable. Open loop is stable, you can apply the simplified Nyquist stability criteria. It means L of S has no poles in the right-half-plane. What does it say? It involves?
+
+Encircle the negative 1?
+
+You're very close. It's enclosed the critical point. Yes. Encirclement is the full Nyquist criteria. It's sufficient that the Nyquist curve does not enclose the point minus 1 on the real axis. That's the simplified one. Very good.
+
+What does the sensitivity function S represent? What does it really tell us? I suppose we can summarize it.
+
+[INAUDIBLE]?
+
+Yes. It's the ability of the loop to reject disturbances. And it's whatever those disturbances are. It's noise or changes of load or parameter variation in the plant. All of those things qualify as disturbances. And S tells us the ability of the closed loop to reject them. It's a very important parameter.
+
+And we can also use it for things like bandwidth. Very good way of measuring bandwidth and a very good way of measuring the performance of the loop by looking at the peak because by measuring the peak of this, we're not dependent on the frequency anymore. The infinity norm of S tells us about that.
+
+I've just told you the answer to question 7. The infinity norm of S is a good indicator of performance because it's not dependent on frequency. And obviously, I'd forgotten completely what question 7 was.
+
+In what range of frequencies does plant model uncertainty have its greatest effect?
+
+[INAUDIBLE].
+
+Yeah, you're close. Yes, it is that range of frequencies, actually. It's the range of frequencies where S and T are approximately equal to one another. But most importantly, in that range of frequencies, that's the gain crossover frequency. It falls right in that region. The open loop transfer function has unity magnitude right around there. And that's where the stability of the loop is decided. Great.
+
+So I'm going to go straight into chapter 3 now, which is all about control but now from the perspective of the time domain. We're going to examine the transient response of the system.
+
+And one of the most influential control theorists of the 20th century, a man called Duke Ellington, told us, "It don't mean a thing if it ain't got that swing." And that's obviously the swing he was talking about.
+
+This is a step response of a system which clearly has some oscillatory characteristics. And the unit step response is something an input, which has 0 value until time t equals 0. And it goes to 1. And it's 1 for all time there afterwards.
+
+Ideally, we would like the output to have those same qualities, to do exactly that. This one clearly doesn't.
+
+In this case, the blue line representing the output has a sort of undershoot associated with it. Maybe that's a right-half-plane-zero indication, maybe. And then it rises up. And it sort of overshoots. And then it comes down, and it oscillates. And eventually, it sort of stabilizes on a steady-state value, which unfortunately is not the same as the input.
+
+The types of things that we're interested in specifying with respect to this are things like, well, we've seen the rise time. That might be 10% to 90%. Or perhaps 0% to 90% is more convenient if there's an undershoot. The peak overshoot-- I called that MP in a previous slide in chapter 1.
+
+Now, these are typical numbers, right? I mean, typically, peak overshoot is something that you want to bound the maximum value of. It might be a 20% specification. It might be a 1% specification. It might be 0. I'm just putting some numbers in here.
+
+And then there's something called the decay ratio. This is relevant to responses that have oscillation in them. A decay ratio is the height of the second peak, positive peak, divided by the height of the first positive peak, height meaning maximum deviation from steady state.
+
+In this case, it's b divided by a. Sometimes that's given the symbol, d, for decay ratio. It's a number which captures the rate at which the oscillations decay. Obviously, we would like this number to be pretty small. We'd like a small second peak relative to the first peak that indicates that the decay is quite rapid.
+
+Settling time, as I mentioned, only makes sense if we specify in conjunction with an error bound, which is a, perhaps, set percentage deviation about steady state. And then the settling time is the time from the instant at which the disturbance was applied to the time at which the thing enters that error bound and never leaves it again. That is called the settling time. Hopefully it will be small.
+
+And then lastly, well, steady-state error is the difference between the steady state of the response and the steady state of the input. In this case, it's nonzero. We'd like it to be small, preferably 0. And in some types of systems, notably power supplies, that must be 0. We want to have a perfectly accurate output for steady state.
+
+Now, unfortunately, as I showed you on a slide in chapter 1, tuning for any one of these parameters implies that others will deteriorate. You can improve one only at the expense of one or more others.
+
+And so what tends to happen is that you tweak some sort of parameter, perhaps gain or something, to get the best kind of response that you can, the best kind of balance between these things. And in a lot of cases, it tends to be very subjective. So if I gave 10 of you a control problem and asked you to tune it, we might end up with 10 completely different control settings, which is not terribly good either. So really, we want to have some kind of performance index which captures a measure of goodness, goodness of fit of the transient response, before we can even put some kind of optimality around this process.
+
+Now, there are various measures of performance index. And they're all based on integrating the error in the transient response. Let me show you.
+
+This slide is exactly the same transient response as the previous slide. The only thing I've done is taken out the steady state error. So I've assumed that there is no steady state error. Otherwise I've kept this the same.
+
+Now, obviously, if there's a difference between the blue line and this dashed line representing the input, that is an error. That is something undesirable about the response. So what we'll do is we'll integrate that over time. And we're going to be left with a number which captures how well the response follows the input.
+
+Now, you can't just integrate it because in an oscillatory response like this, sometimes the response is greater than the steady state input. Sometimes it's smaller. So a very oscillatory response would have these areas subtracting from one another. And you could have a small number but a very big amount of oscillation. You've got to somehow get rid of the sign before you integrate.
+
+There are three ways of doing that. You can square the error. It's a nice way. And therefore, when you integrate it, you end up with a number that's called the IES, the integral of the error squared. Very popular one. Some books call it ISE, the integral of the square of the error, but it's the same thing.
+
+This one tends to penalize large overshoots because in a sense, if you've got a large error, like it is here, and you square it, you've got a large squared error. So the number tends to be very big. And what we try to do is minimize these integrals.
+
+You could just take the absolute value of the error and then integrate it. That would be called the IAE. Or what you could do, and it's very popular, is to time-weight the absolute error. And this gives you what's called the ITAE-- the integral of the time times the absolute error.
+
+So imagine that this is a function which is weighted by a straight line like that, representing something that's proportional to time. So the integral, or the error, rather, is amplif-- I mean, its effects are more significant the further away from 0 you get. This is popular because it tends to desensitize the index to large errors immediately after the disturbance that you really can't avoid. But it makes the integral more sensitive on errors that happened out here, which you can get rid of. So ITAE is a very popular performance index and a very good one as well.
+
+I'll be coming back to these shortly. But what I thought you'd be interested in would be this family of curves, which is typical for a system. Actually, this is for a second order step response. And the variable parameter along the bottom here is damping ratio. And typically, what happens is that you get a fairly well-defined minimum value for these three indices, which corresponds to the value of the parameter, which you should select to optimize the step response. And typically, it's about 0.7 that's recognized as the best value for a second order system, the 0.7 damping ratio, which is more or less what ITAE has picked out for us. But this is typical of what you get for more complex systems where perhaps not damping ratio but possibly gain or something else is the tunable parameter.
+
+OK, now, it may seem odd in a section entitled Transient Response. But I'm going to talk a little bit about steady state before we move on and talk about things like PID controllers. And the only reason I'm doing it here is that steady state, I think, is nicely visualized in the time domain. So this is a convenient place to do it.
+
+Now, systems are classified by type number. And the type number that's used reflects the number of integrators in the open loop transfer function L of s. It turns out that that number defines the ability of the loop to have zero, finite, or infinite steady-state error following a discontinuous input.
+
+So for example, here's the canonical loop that we looked at earlier. And the open loop transfer function, clearly, is F times G times H. So it's a transfer function with poles and zeros, possibly gain, and one or zero or more integrators, powers of s in the denominator of L of s.
+
+That number there-- n, let's say-- is what classifies the system as a Type n system. If there are no integrators in the open loop, it's called a Type 0 system. If there is one integrator, it's a Type 1 system, two integrators, Type 2, and so on. This is what's meant by a type of a system.
+
+Let me just comment that previously, when we designed a phase lead compensator in one of the tutorials and I told you, this is a type III compensator, it has nothing to do with this. That is jargon that's applied specifically to the power supply industry. A type III compensator corresponds to a very specific design of phase compensator. This is a more general terminology that's applied to control loops. It reflects the number of integrators in L of s.
+
+Now, whether you get a zero, finite, or infinite steady-state error once you know the type number depends on the input you apply to the loop. And we apply typically a very small number of input stimuli to the system.
+
+For example, you might subject it to an impulse. I showed you the impulse response in chapter 1. We've been looking at step responses. We might also in some systems apply a ramp or a sudden change in input velocity or a sudden change in input acceleration. These are more useful in some systems. So they're viable inputs. Or if we were conducting a frequency analysis, we might subject the thing to a sine wave, a fixed amplitude, and vary the frequency.
+
+Now, the first four of these have Laplace transform, which is 1 over s to the power of something. See, the impulse response is 1 over s to the power of 0, 1 over s to the power of 1, power of 2, power of 3. So whether you get a finite, infinite, or zero steady-state error depends on which of these input stimuli you're applying and depends on the type number, the number of integrators in the loop. This is how steady state is classified.
+
+Let's first of all look at this case where we've got no integrators in the loop and we are applying this step input, 1 over s. What happens? So here's the system. Now, it's easiest to visualize if you imagine that there is no significant dynamics in the feedback path. The sensor is either not there or has very wide bandwidth and is insignificant because then, the error that appears here is truly the difference between the input, r, and the output, y.
+
+Now, obviously, I've told you before about error ratio and the fact that that has another-- what is another name for the error ratio, by the way?
+
+Is it s?
+
+It is. It is s. Yes, well done. The sensitivity function, s. It's e divided by r. And of course, it captures the error that's present in the loop. And it's 1 divided by 1 plus L, which in this case is k times beta over alpha.
+
+Now, we multiply through by alpha to make it alpha divided by alpha plus k times beta. The input for a unit step is 1 over s. And now we can apply the final value theorem of the Laplace transform, remember, from chapter 1. The final value theorem gives us the steady-state error, the steady-state difference between input and output. And we multiply all this by s and take a limit as s tends to 0.
+
+Well, what do we get? Well, these s's cancel. And so what we're left with is, well, there's got to be a constant term in here because I told you that it was a Type 0 system. There's no powers of s in here. So there must be a constant term in alpha of s. So it's going to be constant divided by constant plus another constant. And that's a finite number.
+
+So what we've discovered is that a Type 0 system has a finite steady-state error for a unit step input. A Type 0 system has a finite steady-state state error for a unit step input.
+
+Now let's examine the behavior of a Type 1 system for the same input. We'll put one integrator inside the plant. Here it is, 1 over s. Nothing else changes. It's still the sensitivity function. And then we'll multiply through by s times alpha of s. Here's the final value theorem being applied following a unit step input. Now, s cancels here. But now we have a power of s in the numerator, which drives this thing to 0. So the steady-state error of a Type 1 system, following a unit step input, is 0. We've got those two data points.
+
+Now, we can keep doing this for different type numbers and different types of inputs and build up graphs like this. This is a family of graphs where the vertical ones are type numbers, Type 0-- no integrators in the loop. That's these three. One integration in the loop. Two integrators in the loop. And then here's the step response, the ramp response, and the parabolic response. So the inputs are 1 over s, 1 over s squared, 1 over s cubed.
+
+Now, we looked at these two cases in the previous two slides. Firstly, we looked at the response of a Type 0 system with no integrators in the loop. And we found that there was a finite error following a unit step input. You can see that. The green line is the response. The blue line is the input, the unit step.
+
+We also found that when we added an integrator to make the system Type 1, that steady state error went away, following a unit step. And that's what we find here. And if we had two integrators is in the loop, again, we'd find zero steady-state error. So we've got finite, 0, 0, following a unit step input.
+
+What about the next line down for the ramp input? Well, if we didn't put a ramp to a system with no integrators, in actual fact, the response diverges from the input. It gets infinitely big as time becomes infinite. We've got an infinite error for a Type 0 system. If we add one integrator to the loop and subject it to a ramp, the error turns out to be finite. And if we put two integrators in the loop, the error is 0.
+
+So we've gone finite, 0, 0, infinite, finite, 0. You can see a pattern emerging here. This one is going to be infinite, infinite, finite. So the finite responses are down the diagonal.
+
+The general rule is this. If we want zero steady-state error, we need at least as many integrators inside the loop as we have powers of s in the denominator of the stimulus. For a ramp, we have one power of s down here. We need one integrator in the loop. It's a step.
+
+For a ramp, we have two powers of s in the denominator. We need two integrators in the loop to have zero steady-state error. And so on.
+
+Now, I apply this theory rather generally for all types of system with lots of integrators and different types of stimulus. But for our purposes, most often it's these two cases which are important. Most often we're applying step inputs. And most often we want zero steady-state error, which obliges us to have one integrator inside the loop. Doesn't matter where it is. It can be in the plant, or it can be in the controller. But there's got to be one of them somewhere.
+
+Now, I'm going to a move on to talk briefly about a specific type of controller, which you probably all very well know, the well-known PID controller. PID stands for proportional integral derivative.
+
+This type of controller is the most widespread controller, probably, that there is. It's reckoned that in the process control industries, where you're tuning components on a factory production line, over 95% of all controllers are PID controllers in the world. It's a very large number. It's also very well-known.
+
+And I wonder if you know, therefore, how old the PID controller was. When was the first one actually built? Anybody like to--
+
+'20s?
+
+Sorry?
+
+1920s?
+
+You're absolutely spot on. 1922, it's generally reckoned. Did you know that? Or was that a guess?
+
+I heard the story.
+
+OK, [LAUGHING]. 1922 is a generally accepted rule. It was recognized as the invention of an engineer called Nicolas Minorsky who was building a ship steering system, an automatic steering system for ships. And he was employed by the US Navy at the time. His design went on to the USS New Mexico as a pilot, literally. And it worked rather nicely.
+
+There is some debate over it because it didn't appear in exactly the form that we know the PID controller today. And it has been argued that the credit should go to a man whose name escapes me now, from 1911, who invented an autopilot system for aircraft. And if I remember his name, I'll tell you what it was before the end of the seminar.
+
+Anyway, be that as it may, it's rather a digression. This is the PID controller. It sits between the error and the control effort in the loop. So all of this comprises the controller. And it works by dividing the error into three parallel parts, one of which contains a gain, called the proportional gain, another of which integrates the error and then applies a separate gain. We call that the integral path. And the third path, in parallel, differentiates the error. So we have a derivative term with its own gain.
+
+So tuning this controller is a matter of blending three separate gain terms together. And the effect of these three gains is different. Now, I already showed you in an earlier tutorial the effect of changing proportional gain in a control. That was equivalent to lifting the magnitude curve of the Bode plot up and down in this ISO tool. So you can get a feel for the type of thing that proportional gain will do.
+
+In general, it will reduce steady-state error-- not eliminate it, just reduce it. And it will tend to introduce a faster rise time with overshoot and oscillation in general.
+
+Now, it will never remove completely steady-state error. At least if there is steady-state error, it won't do it on its own. We need integral gain to do that, following a unit step. Remember we need one integrator around the loop in order to remove steady-state error.
+
+So the purpose of the integral path is to remove steady-state error. And as we add more integral gain, that steady state disappears more quickly. The problem is that in doing so, we increase the amount of overshoot and oscillation which might already have been introduced through the proportional gain term. So it gets rid of steady-state error, but you've still got a very oscillatory response.
+
+The derivative term acts as a kind of apparent damping. It damps down oscillation. It's your friend if you've got a nice oscillatory type of response. And so tuning these things tends to be an iterative process of, first of all, getting a nice fast response through the proportional gain, then removing steady-state error if you need to through integral gain, and then damping down the oscillations using a derivative gain. And you typically iterate through these things until you get the best response.
+
+And I'm going to do a couple of tutorials in a minute. But first, let me introduce the effect of these terms in a different way. Here is the time response of the controller. So it's three parallel paths-- proportional, integral, and derivative. Each path has its own gain. And this is what it looks like graphically.
+
+So I've deliberately chosen a response which is very oscillatory, just to accentuate the properties. And down below, I've got the transient error. That's the difference between the unit step and the blue line in the curve above. And we might want to know at some time-- call it t1-- what the output of the controller will be.
+
+So the output of the controller, time t-- I suppose it should be u of t1-- is equal to kp times the instantaneous error. That's the first term there. Whatever the error happens to be at that time multiplied by the proportional gain-- that's what you get there.
+
+The integral term-- well, that's the integral of the error, strictly over all time but here from time t equals 0, t0. That orange area multiplied by the integral gain-- that's what the integral term involves.
+
+Now, the derivative term-- now, how you work that out is you take the derivative of the error at this point. So you end up with a slope, a tangent to that error curve. And you project that line forward in time by an amount depending on the derivative gain.
+
+So what the derivative gain is doing is it's looking forward for you in time. The more it looks forward, the more you'll damp down oscillation because you're predicting what the output's going to be. And the contribution is this amount in here. That's the derivative action, OK? That's the derivative term.
+
+Now, these things tend to be done manually. You tend to do it by sight. There are rules, which are reasonably well-known and are well-published. Ziegler-Nichols is one of the best known. But there are many others. But I would suggest that it tends still to be a very good trial and error iterative kind of a process.
+
+I'm going to look at a tutorial to explain this. And it's two tutorials in one, this one. The first one involves tuning a PID controller for this plant. It's a third order system with one left-half-plane-zero. It's going to have a bit of a squiggly step response, but that's OK. And we're going to select the best PID controller terms for that.
+
+And then we're going to repeat the exercise for the buck converter that we did in tutorial 2.2, I think it was, and then again with Q-parameterization. And we'll do the same thing for that.
+
+Now, in MATLAB-- just let me close down some of this previous stuff that was left open. I have a script for this. And here it is. This is the MATLAB script.
+
+Now, this one is written using a structured approach to writing MATLAB code. So there's a structure here called [? new. ?] And [? new ?] has three elements, kp, ki, and kd. Well, you know what they are by now.
+
+And what we're going to do is we're going to change these numbers in the script file and run through this code. We'll just run it and see what the difference is that these three parameters are going to make.
+
+Now, further down the file-- there's a little bit of stuff down here, which I won't bore you with. But what's going to happen is it will plot the step response of the new controller. But it will also plot the step response with the previous controller settings so we can compare them, so we could see whether we're making it better or worse. And it'll keep the response of the original one. That's the one with 1 0 0 in here, just as a reference. You'll see how it works as we go through this.
+
+So first of all, we're going to plot this response. And when I run this graph, we get this kind of a thing. This is the unit step response of a system, which is unity feedback. And so having a steady state error of 50% might be regarded by some as a bad thing. So we obviously need to get rid of that.
+
+It's also got, well, a rise time of perhaps difficult to measure. But because of this left-half-plane-zero, you've got this kind of kink thing. Remember, left-half-plane-zero gives you overshoot and faster rise time. So that's why this thing is starting to be pushed up here like that. That's the effect of the left-half-plane-zero. So we might be looking at, I don't know, 10% to 90%. It's going to be about five seconds. We'll try and improve that by firstly adding proportional gain.
+
+So let's begin with proportional gain. We've got 1 at the moment. Let's make it 2. Let's be cautious to start with. So now when we run this, the original and previous responses are the same in green.
+
+But what we've done is we've improved the rise time now. And we've also made the steady-state error smaller. So clearly, we're going in the right direction with this by increasing it.
+
+So let's keep going. Let's perhaps put 5 in here and re-run it. And when we do so, we've gone from the green curve to the red curve. This is the original one. So clearly, again, the steady-state error's getting smaller. But we can see already that there's beginning to be a little peak in here, a little bit of oscillation appearing.
+
+So let's keep going with this. Let's persevere. Perhaps we'll push this out to 9 or so. If anybody strongly feels that we want to do something different, then let me know.
+
+And I would suggest that we're now getting towards the point where the overshoot is starting to be maybe a bit worrying. And we still haven't really achieved zero steady-state error. And we're not going to because, you see, we're into the region of diminishing returns here. There we went from a gain of 5 to a gain of 10. It didn't make much difference. If we went to a gain of 1,000, we probably still wouldn't get there to 0.
+
+We need integral gain to get rid of that steady-state error. So let's try applying some integral gain here. Let's put, for example, 1 into the integral gain and re-run this. And you can see it's starting to pull it in but not really as quickly as we'd like. So let's increase this from 1 to, say, 2.5 and re-run it.
+
+That's not too bad now. It's got zero steady-state error, I would suggest. And it's starting to be pulled in pretty quickly. But we've got to be worried about the overshoot that's happening up here.
+
+Let's apply some derivative action now to try and damp down those oscillations. And we'll be conservative again. We'll just put one in there. As we do so, you can see the effect that that derivative gain has had already. It's damped down the oscillation.
+
+I'm going to perhaps go to 10 here and maybe 1.5 here. And these may make small differences. But you can see that we're now not making terribly big differences to the overall step response. And maybe you can play with this a little bit and get it even better. But you get the idea.
+
+Proportional gain gives you a faster rise time with overshoot. Integral gain pulls in a steady-state error. And then the derivative action-- now, that damps down the oscillations so you end up with a nice, clean response like this one. Very good.
+
+Now, let's go to part 2 of this, which says that we would like to use a PID controller to tune the buck controller that we were looking at. This is the buck plant. And we'll start with 1 0 0 up here, just as we did before.
+
+Oh dear, I think, is one way of putting this. This is the same step response we saw earlier. It's a very oscillatory step response. Remember, the Bode plot has a nice big peak in the magnitude curve. So we shouldn't be surprised to find this kind of oscillation here.
+
+I don't know about you. I don't think there's much point adding proportional gain in. This is oscillatory enough. And we don't want to make that part of it any worse.
+
+But we do have a big steady-state error. The steady state is now about 1.17, let's say 0.17. We would like it to be-- the steady state to be 1. So we'd need some integral gain.
+
+Again, we'll start out conservatively here. And we'll just put 1 in. It doesn't seem to have done very much. Maybe we need a bit more integral gain in here. Let's try 10. Still doesn't seem to have done very much.
+
+Well, I tell you what, let's really push the boat out, shall we? Let's do something like that and see what happens. After all, it's only a simulation. We're not going to blow anything up.
+
+OK, now it's starting to have some kind of effect, a little bit surprising, isn't it? A big number here-- it's not having much effect.
+
+OK, let's try some derivative action to try and reduce these oscillations. Now, because I've done this 94 times before, I do know what number is going to work. And it's going to be a very, very small number. Even that might be too big. Let's try it and see what happens.
+
+Yeah, well, you can kind of see the oscillations are being damped down now. But isn't it strange? This system for some reason is very much less sensitive to integral gain and very much more sensitive to derivative gain. It's because this system is much faster than the previous one was. We'll find out shortly that its poles lie very much further to the left in the complex plane.
+
+The point I'm trying to make in a graphical kind of way is you can't just apply one set of PID coefficients to all the systems in the world. They're going to be different. And it depends on the system. It depends particularly on the speed of the system. And in particular, it's the relative sensitivity of each of those PID terms that changes depending on the system.
+
+Now, this system is obviously a bit extreme. You wouldn't normally apply PID control to this thing in the first place. But if you wanted to, MATLAB does contain a tool called pidtool. And it works by you just giving it the transfer function that you want the pidtool to work with. And what it will do for you is [INAUDIBLE] GUI like this.
+
+This one happens to be built on a PI controller. Let me put a PID controller in there. And if I show you the extended parameters, these are the PID terms that it's chosen. I wonder why it's done that.
+
+That's PD.
+
+That's PD, isn't it? Thank you. Thank you. I missed PID. There it is. There we go. That's what I was hoping for.
+
+See, this time, it thinks that no proportional gain is necessary. It can do everything with an integral controller alone. You can play, to a certain extent, with the response to make it faster by doing that. If you look at what's happening, it's really just increasing the integral gain. It recognizes that the proportional gain isn't going to improve the response. So it just puts more integral gain in to make it faster. But you have to put up with the oscillations.
+
+To be frank, I usually find-- maybe this is just me-- but I find I can do better manually tuning these things. But this is at least maybe give you a starting point for your own tuning process. It's called the pidtool, and it's part of the Control Systems Toolbox.
+
+All right. Now, previously, I mentioned how we could use performance indices to quantify the goodness of the transient response. Of course, the problem that we've got now is that there isn't a single parameter that we're trying to tune. There are three. So how can we use ITAE, for example?
+
+Well, one approach is to tune pairs of parameters and represent the results in a form like this one. This, in fact, is the first of the tutorials that we just did, the one where we had reasonable results for the PID controller.
+
+And what I've done here is I've chosen a grid of proportional and integral gains. And the vertical axis here is the ITAE based on the step response. So for every combination of P and I gains, there's an ITAE response. And we can build up a surface like this.
+
+So in fact, finding the optimum combination of controller terms becomes a matter of a minimum search against this family of values and P and I coefficients. And it does turn out to be about 2.5 and 9.5, which is pretty close to where I ended up. But at least here is a systematic way of arriving at those numbers, something that isn't based on opinion. It's based on an experimentation.
+
+All right. Now, I've dealt with rather ideal conditions here. And nobody who designs PID controllers for a living would design them in quite the way that I've shown them here, not more than once, anyway.
+
+One of the things that integrators suffer from is known as windup. And windup occurs inside a control loop-- now, it's not terribly obvious until it happens to you, but once it's happened, it'll be obvious forevermore.
+
+Windup affects you when you saturate part of the loop because this shows you the controller-- so here's the sum injunction. Here's the error. And so the controller is from here to here-- sorry, here to here. Here's the controller.
+
+So the proportional path goes up here, around, and down. The derivative path goes down here, around, and up. This is just the integral path.
+
+And the only difference between this and the classical type of the PID controller-- this one is called the parallel PID form because the P, I, and D gains appear in parallel paths. It's not the one you normally see in industry. Normally, they move this gain out here after the sum injunction here. So the parallel path is actually a straight-through connection. And the reason that's done is that the proportional gain is truly a loop gain adjustment. And it interacts less with the other two parameters, so it's claimed. So that is called the standard form of PID.
+
+So what's happened here is that the proportional term appears here. So here's the output from the controller. Now, the problem is that if the control loop saturates somewhere, any amount of change of u is not influencing the output in the slightest because it's already reached the limit. It's saturated positive or negative.
+
+But of course, the integrator doesn't know that. So the fact that it's saturated means we've still got an error. And so that error is still being integrated. It's being accumulated through the integrator. And this term ramps up and up and up and up, even though the output isn't moving.
+
+And unfortunately, when you come to recover from saturation, all this latent windup, as it's called, has to be removed before the integral path plays any significant role in the control process. Now, this is illustrated here. What these lines are-- this is the after and before lines of this saturation. This is the output of the controller.
+
+So at this point, the loop is saturated. But you can see the effect on the output of the controller. It's ramping up. And this ramp is purely the accumulated output from the integrator because of windup.
+
+Now, when we recover from saturation, which happens at this point here, see, this amount has to be unwound again before the integrator starts to play a useful role. And then you get this-- see, it's not really doing very much here because you're still unwinding the integral output.
+
+Now, the way to get around this is to detect when you've reached a saturation and stop the integrator from accumulat-- from winding up. In analog or continuous time terms, it involves weighting the difference between the pre and post saturated values and then subtracting them from the integrator.
+
+If you're building a digital PID, it's much simpler than this. All you do a digital integrator is really just to sum up. You just keep summing up previous values.
+
+Well, if you detect a saturation, you just stop. It's easy as that. It's a couple lines in your PID control code. But the point is that by turning off the integrator, by removing its input--
+
+Now, when you hit a saturation, the integrator doesn't wind up. And when you recover from saturation, the recovery's immediate. The PID controller's immediately doing the thing that it should be doing. It's called anti-windup reset. And commercially available PID the controllers all have this.
+
+Now, you see this spike here and the spiky thing down here-- this is called derivative kick. And the reason that you get it-- if you subject the loop to a step input here, at the instant at which you apply the step, you're going to get another step here. There's nothing you can do about that. That's a damn great step.
+
+Now, what happens when you differentiate a step? You get an impulse. You get a damn great impulse rippling through the system. And in analog terms, that's what this is. It's called derivative kick. And so you have to get around this. You have to stop the differentiator from injecting these spikes into the system.
+
+What a lot of people do is they build control is like this one. This is a sort of block diagram of a commercial PID controller. Let me talk you through it.
+
+Here's the input reference, the sum injunction. I've told you already about the integral path with anti-windup reset. The derivative path doesn't act on the error in this case. It acts on the output of the plant. We're using the plant itself to filter out these spikes. So you never get an instantaneous change here. It's just whatever the plant output can produce for you. And that is the same. That will remove the derivative kick.
+
+We typically need a filter on the derivative path because as you know, derivatives, differentiators, give you infinite gain at infinite frequencies. It's very common to find filters on the output. And this one has a refinement to have a separate gain on the reference point. It's just another adjustment. So this is a PID controller that would perform reasonably well in practice. It looks a little bit different from the one in your diagrams in your books.
+
+All right. Now, if you remember from the first section, I explained the step response of the second order system. And if you remember what it was-- I'm going to write it out in full because we're going to need it now and in what comes.
+
+The step response, y of t, for the second order system is 1 minus-- now, it's a step response. So this is the steady state. And then the minus omega n divided by omega d times e to the minus sigma t. Remember that? Times the sine of omega d times t plus phi.
+
+Now, we defined these parameters before-- first of all, sigma-- well, remember for the underdamped system, the poles occur at s equals minus sigma plus or minus j times omega d. So that's the significance of sigma and omega d. Sigma we defined as the product of the damping ratio and the undamped natural frequency. We call that the damping coefficient.
+
+Omega d-- we call that the damped natural frequency. And we define that as omega n times the square root of 1 minus zeta squared. This is a underdamped system, so the term under the square root looks like that.
+
+And the only other parameter in here is the phase shift, phi, which we defined as the arc cosine of zeta. So these parameters all tie into the unit step response of the underdamped second order system.
+
+And remember, it's the second order system which has complex conjugate poles. So let's plot these complex conjugate poles in the complex plane like this. For a stable system, obviously, they're in left-half-plane. Here they are at minus sigma plus or minus j omega d.
+
+Now, the rectangular coordinates, of course, are very easy to see because the real number minus sigma just gives you the-- well, the x-coordinate. And then omega d gives you the y-coordinate. And if we draw lines from the origin, vectors out to each of these, we'll find that the length of this vector is none other than omega n, the undamped natural frequency, one of the basic parameters in the transfer function. And the angle that that vector subtends with the negative real axis-- that is phi. That is the arc cosine of zeta.
+
+So the rectangular coordinates tell us about these derived parameters, sigma and omega d. And the polar coordinates tell us about the two basic parameters in the transfer function, zeta and omega n.
+
+Now, this system has a step response. And we might like to examine that step response as we move the complex poles around. So what I've done in this slide is to show you the complex plane again. And remember, we did this for the zeros in chapter 1. What I've done here is for poles.
+
+This is the imaginary axis. This is the real axis. So up here, we have the upper left quadrant of the complex plane. This is the right-half-plane. And then down here, well, that's negative sine of the real axis.
+
+And I've drawn a number of crosses on here. Each cross corresponds to the location of one of a pair of complex conjugate poles. It's a second order system that I'm plotting here. And associated with each of these crosses is a step response plot.
+
+Now, the important thing is that the time axis on each of these is identical, so we can legitimately compare these responses and see what happens to them as we move the poles around the complex plane. Let's start with this one because it's nice and interesting. It's got a lot of oscillation in it. That oscillation dies away, thankfully. Because it's in the left-half-plane, it's a stable system.
+
+Now, if we compare this response with the one from the pole just to the left of it, you can see that the response dies away more quickly as we move to the left. And if we go further to the left still, well, it dies away more quickly still and more quickly still over here.
+
+But if we were to measure the time between adjacent peaks, we would find exactly the same number here as here, as here, as here. The frequency of oscillation is identical. And the same is true down here. See, this one has an oscillation frequency which is the same as that one, as that one, as that one. Everything on the same horizontal line seems have the same oscillation frequency. But the further to the left you go, the quicker it decays.
+
+Should we expect that? Well, I think we should because by moving to the left, what we're doing is increasing this parameter sigma. What effect did that have? Well, it was the exponent in the unit step response. So the bigger sigma gets, the faster the decay becomes.
+
+And what about the oscillation frequency? Well, remember, everything on the same horizontal line had the same oscillation frequency. That meant omega d must have been the same. Omega d-- that's the physical frequency of oscillation. So these things tie in.
+
+We could, if we wanted, construct a set of orthogonal grid lines in the complex plane where vertical lines corresponded to lines of constant decay parameter, sigma. Or if you like, we called that damping coefficient, zeta times omega n. And pairs of lines which are symmetrical about the real axis-- these are lines of constant oscillation frequency or omega d. We could. Nobody ever does, but we could.
+
+There's another family of lines that we could construct. We could construct lines of constant omega n and constant zeta. Now, lines of constant omega n-- what would they look like? Well, constants of omega n means that this radius, the length of this vector, must be the same. So in fact, if we change anything else but kept that the same, we'd end up with a semicircle in the left-half-plane. Those semicircles will be lines of constant undamped natural frequency.
+
+And if we change anything else except zeta, well, then this angle must be the same. So we would end up with a pair of lines, parallel lines, which are like that. Those would be lines of constant damping ratio.
+
+This is the grid which is typically applied when we design systems using the complex plane, using the root locus method as we're about to do. Lines of constant damping ratio and lines of constant undamped natural frequency. I'm going to try and show you that very briefly in MATLAB just so you know what they're going to look like.
+
+I'm going to take a transfer function, which has this-- Let's try that. And then what we'll do is we'll draw its pole-zero map, and we'll turn the grid on. That'll do us.
+
+So you can see the grid which is applied correspond-- if I get the aspect ratio right, these would be semicircular. You can see that they will be. And these lines of constant undamped natural frequency in radians per second-- no, here in Hertz, as 1 over seconds. And then these are lines of constant damped natural frequency. That's what these numbers are here-- sorry, lines of constant damping ratio. So that's what these lines are. As the damping ratio get small, so the angle gets big because it's an arc cosine. So this is the family of lines which we're going to have to get used to. All right.
+
+So what we've done is we've established a link between locations of second order poles in the complex plane and transient response. And this is leading us into a design technique known as root locus, which exploits that knowledge and therefore is useful when it comes to designing systems to meet a set of transient specifications, specifications like overshoot and settling time and all that stuff.
+
+The method involves-- now, remember that I mentioned we were going to address the problem of finding solutions to this polynomial. Alpha 1, alpha 2 plus k times beta 1, beta 2 equals 0. These are the poles of the closed loop transfer function. Remember, alpha 1, alpha 2 are the poles of the forward and feedback path. Beta 1, beta 2 are the zeros of the forward and feedback path. So these are the closed loop poles. And of course, the closed loop poles tell us about the closed loop transient response by the method we've just seen.
+
+Now, what we do is we solve this equation for a given value of k. And then we change k, and we solve it again. And we get a different set of answers. And we build up a set of answers for variation in k between 0 and infinity. And what these are are loci, or lines, which can be drawn in the complex plane.
+
+Now, when k equals 0-- k, remember, is gain, is control of gain-- the solutions are alpha 1, alpha 2 equals 0. In other words, the closed loop poles are the same as the open loop poles when there is zero gain. We shouldn't be surprised. Zero gain means the loop is open. So the poles are where they should be.
+
+And as we increase k, what happens is that the closed loop poles tend towards the open loop zeros, beta 1, beta 2. When k is infinite, that's where they are.
+
+Now, the thing is that-- let me show you an example. Let me show you an example. This a typical example for a fifth order system. We have five poles, and we have two zeros. The relative degree is 3 because 5 minus 2 equals 3. We've got three more poles than zeros.
+
+Here are the open loop poles, these crosses. Of course, they're also the L of s, the open loop transfer function poles. And here are the open loop zeros, a complex conjugate pair.
+
+Now, as k equals 0, open loop and closed loop poles are the same. And as we increase k-- remember control again-- the closed loop poles follow these blue lines. This one tends towards an open loop zero at infinite gain, as does its complex conjugate equivalent down here.
+
+But that's a problem because there's only two open loop zeros. We've got three other loci. And what happens to those is they go to infinity. Those are called infinite zeros because they're at infinity.
+
+And the paths that they take to get there follow what are called high gain asymptotes. These dashed lines here are those high gain asymptotic lines. And these asymptotic lines are always equally spaced from one another. And they focus on a point on the negative real axis. There's a focal point of them.
+
+And in this case, there are three of them because the relative degree is 3. So they're separated by 2 pi over 3, or 120 degrees. There's one. There's another one. And there's another one. Those are called high gain asymptotes.
+
+So can you see that for every value of gain, there is a particular point on the root locus where these five closed loop poles will appear. And the idea behind root locus design is that we infer properties of the transient response from knowledge of how a second order system would behave for that equivalent pair. We'd divide these up into pairs of complex conjugate poles.
+
+For example, here's a system which has a complex conjugate pole pair, open loop poles. There's one integrator in the open loop, one real 0, one real pole. So the relative degree is 3. It's 3 because we have one 0 and four poles. 4 minus 1 is 3.
+
+So we must have three high gain asymptotes. There's one. There's another one. And if I draw on the other side, well, it would be symmetrical. So there'd be another one down there.
+
+Now, the response that we get-- because poles closest to the imaginary axis take longest to decay-- right? Remember that? Let me go back to this fellow.
+
+Poles closest to the imaginary axis take longest to decay. The response is dominated by those poles. Poles that are further out to the left-- they don't tend to have much influence on the transient response compared to those dominant poles. And once you're about five times further away, you can pretty much forget them because they're not having any significant effect.
+
+Now, our gain is 0. This thing is an integrator in the open loop. That's one of the closed loop poles. And of course, it's on the imaginary axis. So the whole response is dominated by a response that's kind of exponential shaped. And as k increases, it's still exponential.
+
+And then as you increase k, this one gets further to the left. But this one, which is one of the complex conjugate pair, gets closer to the imaginary axis. And it begins to dominate the transient response. So this one, in conjunction with its conjugate partner down here-- these introduce some oscillation into the response.
+
+That oscillation becomes bigger, more pronounced, until we reach a value of gain-- in this case, it's 8-- where a pair of closed loop poles lie on the imaginary axis. This represents an unstable response. There is an upper limit of gain that can be applied because poles in the closed loop enter the right-half-plane beyond the value of 8.
+
+So these responses contribute, oscillatory response. These poles contribute-- predominantly a very slugged but then less slugged exponential response. This also is exponential. But it's so far to the left that we ignore that one largely.
+
+Now, the high gain asymptotes, as I mentioned, are always equally spaced. And where you have an odd number of them, one always goes to the left along the real axis. And the other two then are symmetrical about the real axis.
+
+The focal point-- well, all you do is you add up the real part of the poles, subtract the real part of the zeros, and divide by the magnitude of the relative degree. And then the separation is just 2 pi over the relative degree.
+
+For different values of relative degree, this is what you get-- 1, 2, 3. This is the case that we looked at. 4, 5, and 6-- they're always equally spaced. And there's always a focal point.
+
+And you can perhaps see that for a relative degree of 3 or more, you always get at least one entering the right-half-plane. So you end up with instability or a maximum value of k that you can apply.
+
+Here are the kind of things summarized that you can determine from a system. This is the same plot as I showed you before, a fifth order system with two complex conjugate poles. These and these will obviously contribute an oscillatory kind of response. The response will be dominated by these two loci as we get towards the imaginary axis because these are the ones that take longest to decay.
+
+Here's the upper limit of gain because we'll get closed loop poles in the right-half-plane. This one gives you an exponential shaped response, which becomes progressively less significant as k increases and so on.
+
+Now, there is also another situation in which you have loci entering the right-half-plane. And that is when you have the right-half-plane zero. Because every root locus must start at an open loop pole and end at an open loop zero.
+
+So if you put an open loop zero over here, one of the loci's going to end up there. Right-half-plane zeros impose also an upper limit on the gain that you can apply because in this case, one of these loci crosses into the right-half-plane at this value of gain. And therefore, you've ended up with a limit on the gain that you can apply and still end up with a closed loop stable system. So that's another thing.
+
+So this is what you can infer from the root locus plot. How do you use it for design? Because it's one thing to infer information. It's quite another to use it.
+
+Well, what you do is you decide pretty much the quantities that you're interested in, overshoot damping, all that stuff. And you mark out areas on the complex plane which you think are legitimate for you to place the closed loop poles.
+
+Now, sometimes you can get the poles there by just changing gain, by moving them along the root loci until they're in that region. Other times you can't. You're inhibited because there are open loop poles or open loop zeros pulling the loci into undesirable regions.
+
+And what you do is you place poles and zeros in your controller such that they cancel out undesirable ones in the plant. For example, if I have an undesirable pole in my plant and I put a zero on top of it or very close to it, what you end up with is a very short locus from one to the other. And short loci influence the overall response very little.
+
+So you don't even have to get the cancellation exact. You can just get close to it, and I'll show you shortly that that'll be good enough. In fact, I think I'll show you now because there's a tutorial associated with this, tutorial 3.2.
+
+Now, tutorial 3.2 is a simple one because it's a second order plant that we're asked to design a controller for. And the specifications that we're aiming for are given in terms of rise time and overshoot and steady-state error.
+
+So clearly we're talking about the transient response. So the root locus method is quite suitable for this kind of problem. Let me show you.
+
+So in MATLAB, then, we will first of all create a model of the plant using tf. It's 1 divided by s squared plus 4s plus 8. And there's my plant transfer function.
+
+Now what we're going to do is use PS ISO tool. But I'm interested in the root locus method. So we will specify root locus when we open it with the plant. And when we do so, we have a root locus plot like this.
+
+Let's turn the grid on. I like grids. They help us to work. So there's my grid for the root locus. And we'll also-- because it's a problem involving the transient response, the step response, we'll keep an eye on the unit step response as we go through the tuning exercise. There it is.
+
+So, well, the parameters that we're trying to tune here are against-- sorry, wrong one. That one. We are looking for a rise time following a unit step input of less than 0.5 seconds. It doesn't actually say what's meant by rise time. Let's assume it's 90%. Overshoot of less than 20% and a steady-state error of less than 2%. Well, let's see where we are in terms of those things. We will set some design requirements on this. So we are looking for-- final value is 1. That's fine.
+
+Rise time was 0.5 seconds. The settling time-- it wasn't constrained. But I happen to know I can do pretty well with this. So let's call it four seconds. We are aiming for a overshoot of less than 20%. Don't really want to worry about undershoot. We'll say 0 for that. And the percentage settling-- did it say 2%? It did say 2% for that. And the rise time-- we'll call it 80% [INAUDIBLE].
+
+So these yellow areas, in terms of the transient response, are the areas we've got to avoid. And you can see we've got quite a lot of work to do over here.
+
+Now, we can also constrain the areas of the root locus plot by setting design constraints on them. I'm just going to set one. This will be percentage overshoot. So I'm going to constrain the percentage overshoot to 20%.
+
+Now, when I click OK, an area of the complex plane is going to be marked out corresponding to an acceptable region where we must work to meet this 20%. What do you think that region is going to look like? Sorry?
+
+Wedges?
+
+Yeah, they're wedges. Do you know why? You probably do know why. Remember-- well, you probably don't remember. But anyway, the peak overshoot for a second order system-- we defined it before, and I said, remember this one because it's going to come in useful-- is 1 plus e to the minus pi times sigma divided by omega d. That is the peak overshoot of the transient response of the second order system.
+
+And remember that we defined sigma and omega d over here. Sigma was zeta times omega n. Omega d was omega n times 1 minus zeta squared. Well, the [INAUDIBLE] are going to be canceled when you do the division, when you form the quotient.
+
+So what you're really constraining by constraining overshoot is damping ratio. And lines of damping ratio, as you rightly said, are wedges. They're like that because it's the angle between the negative real axis and the cosine of zeta.
+
+So there you go. This is the white area where we are not exceeding the overshoot specification. Unfortunately, we've got some work to do here.
+
+So let's first of all begin by removing the steady-state error. I did have a specification against steady state. How can we get rid of steady-state error?
+
+Integrator?
+
+Integrator. Several of you had it at the same time. Let's add an integrator.
+
+To do that, we right-click Add a Pole Zero. And when I click Integrator, it's going to add a pole at the origin. What is the root locus plot going to be looking like once I've done that? Well, we now have a relative degree of 3. Three poles in the open loop. No zeros.
+
+So now instead of having high gain asymptotes separated by 180 degrees, there are going to be three of them, and they're separated by 120 degrees. It'll look like that, OK?
+
+There are the three high gain asymptotes. There's one. There's another. There's the focal point. And there's 120 degrees between them.
+
+Now, these pink lines here-- these correspond to the closed loop poles for some value of gain. I can move these pink lines along the root locus. And this, corresponds, of course, to changing the open loop gain. Can I find an acceptable value of open loop gain where I get this blue line entirely within the white area of the transient response? No, I can't. That's not going to happen for me. So we need to do some design here.
+
+Now, the problem is, you see, that these things are much to close the imaginary axis. I can't get the step response I'm looking for because the transient response is too prolonged. I would like the whole thing to be further to the left so the thing is a faster system. But I can't because of the open loop poles.
+
+So I'm going to use pole zero cancellation. I'm going to drop a pair of open loop zeros. It's equivalent to putting these zeros in the controller. I'm just going to drop them nearby the open loop poles of the plant.
+
+And you can see-- well, perhaps you can't see because I've been too accurate. But if I'd missed it by a bigger amount, you'd see a little kind of locus in there. There's a little blue line. That's the effect of canceling this out.
+
+And of course, now we've created a system with a relative degree 1. Three poles plus two 0's is a relative degree of 1. One high gain asymptote, and the response looks exponential. We got rid of the steady-state error because there's an integrator in there.
+
+Well, I suppose what we could do is just try increasing the gain to see if we get anywhere near. Can we get anywhere near? Well-- I don't know. We might be able to do it, I suppose. It doesn't look very pretty, though, does it?
+
+What am I not meeting by that? Overshoot, steady-state error, rise time? Oh, there's something.
+
+Oh, we can't build it. We can't build the damn thing. I've got a controller with one pole and two 0's. It's improper. It would be nice. But I can't build that. We've got to have one that has at least one more pole in there.
+
+So what I'm going to do is I'm going to drop a pole over here somewhere on the left. That'll take it to a second order system again. But I've got a little bit of oscillation. We can put up with that.
+
+Let's make it faster. Let's pull this pole that I've just put in there over to the left. I'm trying to get it so they break away nicely from those pole zero cancellations. That's OK. And now, you see, these poles are all within the white area. I can increase this without going over into the yellow area in the complex plane because that's when I'd exceed the 20% limit.
+
+And now, you see, I've got a controller which has two complex 0's and two real poles. And it seems to meet the specifications. Here they are, the integrator and the real pole. And here are the complex 0's, which cancel out the poles in the plant.
+
+So let's export this into the workspace, take a look at it. Here it is. Looks like what we expected, a gain of about 26 and 1/2. Now the 0's in c appear here. And the poles in the plant appear here. They're almost identically the same, look. So we've done a pretty good job of canceling them out.
+
+That's pole zero cancellation taking effect. And now I suppose we could do is-- let me show you something in MATLAB. I'm going to form the closed loop transfer function by using the feedback function again because we've got f-- oh, we haven't. We've got c times g. And it's a unity feedback.
+
+And what you can do-- if you want to know something about the step response, you can do stepinfo of the closed loop. And it'll just give you a nice text-based summary of the step information.
+
+And we were aiming for a rise time of 0.5 seconds. Well, it's 0.32. That looks pretty good. Settling time-- did we say settling time? I think we did. Settling time? No, we didn't. We said steady-state error, but I know that's good.
+
+And we said overshoot is 20%. Well, it's just under 15%, so you get some numbers directly from MATLAB based on the step response. So we've done the job just based on the root locus method. I think it's worth doing that because I'm going to come back to it when we do digital design after the next break, which is imminent.
+
+All right. Now, this method was first published in a book called Control System Dynamics by a man called Walter Evans. Evans was a little bit different from Black and Nyquist and people like that because although he started out as an instructor in university, he then went on to industry and he worked for companies such as GE and Ford and Rockwell.
+
+And at the end of his time as an instructor at Washington University, he published this book. It took, unfortunately, a few years to publish. It didn't appear until 1954. But it contained the first description of the root locus method in 1954. Every book was sold with one of these. This is a [? perspects ?] tool called a spiral, which he invented. And its purpose is to facilitate the drawing of root loci.
+
+You see, these days, MATLAB makes this kind of thing irrelevant. But in those days, nobody had MATLAB. So you had to do everything by hand with paper and pencil. And the spiral was the way it was done.
+
+Anybody ever seen a spiral? Great, fantastic.
+
+[INAUDIBLE] at least one.
+
+Have you? Well done. I'm very impressed. I've only ever seen one in my life. My colleague Mike Edwards in Houston has one of them. But it's the only one I've ever seen. It's a dying art. So that's great. OK, Walter Evans.
+
+Now, the root locus technique works nicely. And by the way, it doesn't have to be gain that you use as the free parameter. It can be anything you like. The same techniques apply. It does fall down, though. You've got more than one parameter to tune.
+
+This is, in fact, the system that we did a tutorial on earlier where we wanted to deselect P, I, and D coefficients. And it in this case is third order. So if we just select proportional gain, these green line here-- and there's a green line under here as well-- these are the loci that we're tuning by changing proportional gain. So maybe we're trying to hit a damping ratio between 0.4, 0.5. We might select a proportional gain that puts us about here.
+
+And then for each of the proportional gain settings, you get another branch as you add an integral gain, see? So proportional gain of 10-- you move along this branch as you will add in an integral again. But that introduces other branches. These are called root contours.
+
+And the whole thing gets awfully messy awfully quickly when you've got multiple parameters to tune. At the moment, there are no native tools for doing this. You pretty much have to do the best you can with-- this is perhaps with the pole zero map plotting in MATLAB, whatever you do. You're best off just sticking to a single parameter and shooting for that.
+
+Now, in our industry, I must be honest, the root locus method isn't used all frequently. It is used, but it's not all the frequent. But in other industries, particularly in things like aerospace and automotive, it's a very, very common design method.
+
+I thought you'd be interested to see this, which is an extract from a paper written for the American Society of Mechanical Engineers by David Limebeer, Sharp, and Evangelou. This is a root locus plot for a motorcycle. I find it rather interesting. You can download this, or you can get it from the ASME.
+
+So this is a root locus plot for motorcycle, rather odd. Well, what is k if it's a motorcycle? It's not gain, clearly. It turns out in this case, it's constructed forward speed, forward speed of the motorcycle. And this root locus plot is valid for a specific set of operating conditions. This one happens to be a fixed roll angle of 30 degrees. And the speed, which is a variable parameter here-- it goes from 6 to 60 meters per second.
+
+There are various modes involved in this. There's a wobble mode which becomes rather frightening towards 30 meters per second. That's probably got some oscillation associated with it. I wouldn't like to be on the pillion when he was doing that.
+
+There's front wheel hop. And there's something called weave. That's equivalent to saying, you can't go as fast as you'd like around the corner. You've got to change the roll angle or the speed or something. Otherwise, it's going to become unstable at about 40 meters per second.
+
+I found it quite interesting that you can apply this theory even to complex systems. And people do, to aircraft design and other things as well. So just a slightly different perspective.
+
+Let's do a quick quiz, and then I couldn't help noticing that fresh coffee has appeared at the back of the room. So we'll take advantage of that in just 10 questions' time.
+
+First of all, what is meant by the "decay ratio?" Remember that? In terms of the transient response?
+
+[INAUDIBLE].
+
+It is that. Do you remember how it's measured?
+
+Height of the second peak--
+
+Yeah, it's the second peak divided by the first peak. So we might call it b divided by a. And we gave it the symbol D, uppercase D, for decay ratio. The smaller it is, the quicker that the oscillations are decaying.
+
+What type of closed loop systems-- so we're after a type number now-- delivers zero steady-state error following a ramp input? What's the type number that would do that?
+
+2?
+
+Correct. Perfect. Remember, at least as many integrators in the loop as we have in the input function. A ramp is 1 over s squared. We need two integrators. Very good.
+
+Can you list three types of transient performance index? You have to get 100% because I only gave you three.
+
+[INAUDIBLE].
+
+Oh, you've got them all.
+
+[INAUDIBLE] time.
+
+Yeah. ITAE, IES-- I think Trey had that. And then somebody said, IIE. Exactly. The integral of the square of the error, the integral of the time times the absolute error, and the IIE, the integral of the absolute error.
+
+In terms of the transient response when we're tuning it with the PID, what does the D-term do?
+
+Damping.
+
+Damping. Perfect. It damps down those oscillations for us. Great.
+
+How many high gain asymptotes does a root locus plot have? How many?
+
+n minus m.
+
+n minus m, did somebody say? Great. Well done, Michelle. It's the relative degree, n minus m. That obviously applies to a strictly proper system where we have more poles than zeros. What happens if we've got more zeros than poles?
+
+You can't build it.
+
+[INAUDIBLE].
+
+Theoretically you can't build it. You can design it. What do you think it would have? How many high gain asymptotes?
+
+[INAUDIBLE]?
+
+No. You'd actually have the same number. It's the modulus of n minus m. Now, more poles than zeros means that's a positive number. If you've got more zeros than poles, m is bigger than n. You have root loci now that start at infinity and come towards the open loop zeros. But it's still n minus m. It's modulus of that. And you're never going to build it. You're right. But that's what it would be.
+
+And what angle are they separated by?
+
+2 pi [INAUDIBLE]?
+
+Yeah. 2 pi over the relative degree. OK. So it's relative degree. And then they're equally spaced about a focal point on the negative real axis.
+
+What do lines of constant damping ratio look like in a-- does anybody want to do the arm movements to this one? That one. Yeah. Well done, Michelle. It's like that. Their lines-- constant separation. So there's a fixed angle between the negative real axis. And that's what they look like-- wedges, wedges, as they were called.
+
+In terms of a pole zero map, what's the significance of vertical lines in a complex plane? So when all the poles lie on the same vertical line, second order system-- all on two poles. As long as you move them up and down the same vertical line, what's not changing?
+
+Natural [INAUDIBLE].
+
+No.
+
+[INAUDIBLE].
+
+Yeah, it's sigma. It's sigma. It's the decay. See, this is where they lie, right? It's minus sigma plus omega d. So if they're on the same vertical line, then sigma stays the same. Sigma is the decay parameter up here in the exponent. So it's the decay parameter that's constant.
+
+And remember, it's equivalent to saying that as you move further to the left in the complex plane, so the step response decays more quickly. As long as you move them to the left, that's the decay parameter that's changing. Very good.
+
+I think we should break for coffee now. Let's come back at about 10 to. That gives us just over 15 minutes for coffee, and we'll complete chapter 4--
+
+[INTERPOSING VOICES]
+
+--if my voice holds out.
+
