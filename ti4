@@ -1,0 +1,805 @@
+
+So suitably refreshed with coffee, let's begin the last section of the day, entitled Discrete Time Systems. Incidentally, while you were at coffee, you should've received one of these books, which is yours obviously to keep, and take away with you, and sell on eBay on Friday morning, whatever you want to do with it. It should contain a little bit more information than I was able to put in the slides. So I hope it will be background reading, or may be interesting to you at some point.
+
+I would point out that the second edition of this will be published in April. And it's a much more thick book. It's about two and a half times as big. And it covers the state space stuff as well. But for now anyway, you're welcome to take that away with you.
+
+I'm going to conclude the seminar with a section on digital control, or as I call it discrete time control. It should take about an hour to an hour and a half, which means that we'll have you out of here comfortably by about 4:30. It would be pessimistic if it were 4:30. But I hope nobody minds that.
+
+Half an hour, maybe beat the rush hour traffic. It'll be OK. I'll be around for a little while after that if anybody wants to chat. But we should get through this in an hour or an hour and a bit.
+
+I'm going to talk about sample systems-- digital systems, really. What happens as the systems are sampled? There are fundamental changes which the frequency domain properties of the system undergoes. The dynamic properties of the system are changed by sampling.
+
+And that will lead us naturally to an introduction to the z transform, which is the discrete time equivalent of the Laplace Transform. What the Laplace transform does for us with continuous time systems, the z transform does with discrete time systems. I'm going to explain, having just told you about the significance of the complex plane in relation to root locus design, I'm going to explain how the complex plane changes once we deal with sampled systems. The z plane as opposed to the s plane is fundamentally different. And we need to understand that.
+
+I'm going to explain the concept of aliasing, one of the least understood problems of discrete time systems. There's a lot of nonsense talked about that. And then, finally, I'm going to explain how you can design discrete time systems using a variety of different techniques.
+
+Now, I'd like to begin with a digression, just as I began the opening chapter with a digression. I'm going to digress for a couple of slides. So bear with me, if you could.
+
+If you search for the inventor of the computer, you will search in vain. Many people over many years contributed small, incremental steps, which led to the computer that we know today. One of them was a man called Alan Turing. Anybody know who Alan Turing was?
+
+He's not so widely known. Some people know. He was a mathematician.
+
+He was involved in a lot of the cryptology work that went on in World War II. He was involved in decoding the Enigma machine. And after World War II, he went on to publish papers on computing, computable numbers, it was called.
+
+And he was the first man to envisage that a machine could be built which interpreted instructions and computed numbers. It was a fundamental step. A lot of the work he undertook was classified and has only recently been declassified.
+
+And he made this statement in 1953, explaining to a world which had no concept of a computer what a computer could do. I'm going to give you a series of data points through history, which hopefully will build together to a picture of where we are in terms of computers, and ultimately in terms of control. Now, I'm going to present a couple of computers to you, which you may or may not have already seen.
+
+This is the first one. It's called the automatic guidance control computer. And it was fitted to the Apollo 11 space mission, and many other Apollo missions as well. That was the mission which landed a man on the moon on July the 20th, 1969.
+
+This particular computer was the first integrated circuit computer that there ever was. It was built by NASA. And it had a blistering speed of 1 megahertz.
+
+That's not bad, when you think about it, in 1969. It operated on a 16-bit word architecture. It had volatile and nonvolatile memory.
+
+The nonvolatile memory was something called core rope memory. It was basically 32,000 ferrite beads all wound by hand. It looked like fabric. If you go to somewhere like the Computer History Museum in San Jose, or I believe they have one in Huntsville, Alabama as well, you can find this thing all opened up for your inspection. It's a fascinating piece of engineering.
+
+There you go. By the way, just in passing, this computer had a life after the Apollo space mission. It was used when NASA's developed the first fly by wire aircraft. In 1972, they test piloted an aircraft from the US Navy called the F8 Crusader, the Vought Crusader. And that was adapted to a fly by wire technique, where mechanical actuation of the flight surfaces was replaced by electronics and actuators. And that, purely by coincidence, is a flight system which is used in one of my tutorials on the second day of this seminar.
+
+So if you're interested you can-- I'm sure you're not. But if you're interested, you can download the tutorial and take a look at it. And it's based on the Vought Crusader, which does use one of these agency computers.
+
+Now, if we fast forward a few years, we'll get to something that you're probably a bit more familiar with. This is the Apple iPad2. It uses an ARM Cortex A9, which is a dual core processor, each one running at a gigahertz. We've increased the computational speed by a factor of 2,000 here from one megahertz to one gigahertz.
+
+Or put another way, the average school kid carries 2,000 times more computing power in his rucksack than Buzz Aldrin had available when he landed the Apollo mission on the surface of the moon. We've obviously come quite a long way. It has a lot more memory too. It has 64 gigabytes of flash, rather than 32 kilobytes of core rope memory. A very big change has happened in terms of performance.
+
+Now, the underlying reason for this is the improvements that have taken place in semiconductor technology. So let me elaborate a little bit on that. Now, in 1952, only a year before Turing made his statement about what computers are like, a man called Jeffrey Dahmer made a speech at an electronic components symposium in Washington, in which he said-- he was the first person to predict that the integrated circuit was going to happen. Jeffrey Dahmer was six years ahead of the curve.
+
+He realized what Jack Kilby invented six years later. Jack Kilby at the time was a physics graduate in his first year of employment at Texas Instruments right here. And in his first year of employment, he didn't have any vocation at all. That was the policy.
+
+And so he was left alone in the lab while his manager and colleagues all went away on vacation. And when they came back, they found this thing, which he'd invented, the very first integrated circuit. This is what it looks like. It's sort of blown up.
+
+So this is a germanium bar. This silver thing in the middle is about 1/16 of an inch by 7/16 of an inch. You can see how big it is. It's in his hand right here. That's the first integrated circuit.
+
+Now, semiconductor technology has come quite a long way since then. The vacation policy has not changed at all. But semiconductors now look about this size, as opposed to this size.
+
+I did a quick calculation, worked out the ratio here is about 65 million. We are 65 million times more dense today than we were in 1958. Now, Jack Kilby, of course if you don't know received the Nobel Prize for this work jointly with a couple of other people in 2000.
+
+It was a very influential development. He took the first step. And we are still progressing at a rate which was predicted in 1965 by a man called Gordon Moore, one of the founders of Intel, who said that the number of transistors per square inch-- the transistor density-- has doubled approximately every 18 months.
+
+We are still on that curve. People say that it's not going to last for much longer. But I know they've been saying that for 10 years or more. So who knows what the future holds? It is this which has led to the improvements in computing technology.
+
+Now, the reason I'm showing you this is that digital control has really been the slow revolution over the last 10 years. And the reason for that is that very large amounts of processing power are now available very cheaply. And, therefore, digital control is applied in applications where you would never have imagined it even a decade ago.
+
+It's coming up now in things like power supply design, and a lot of other things. Motors have gone that way for a long time. And it's enabling a whole raft of new applications and technologies.
+
+This is the type of system that we're talking about, at least I'm going to talk about today, the same kind of loop that we looked at in chapters two and three. There is an output, a feedback, some injunction, and a controller. And the plant and the sensor-- well, I'm going to assume that these are still continuous time parts of the system. They still have a Laplace transform and transfer functions.
+
+But that the controller exists in the discrete time part of the system. And there is a boundary between these two parts formed by-- well, we can call them converters if we like. We're might be used to thinking of the boundary between the discrete and the continuous time world as a D to A converter, digital to analog converter, and the boundary between the continuous and discrete time, well, that's an A to D converter, an analog to digital converter, in electronic terms.
+
+I'm going to think of these in a more general way by calling this one the hold. This is a hold, which reconstructs the signal. I'll tell you why in a second. And this is a sampler which samples a continuous time system.
+
+Now, if you take a pair of scissors and cut through the loop where these blue circles are here, and then you take hold of the two ends closest to the digital part and stretch it so it's all in one big line, this is what we have. So here's y sub m of t, the continuous time measured output. It's sampled through the sampler.
+
+Here's the summing junction, the controller, the hold. This is the discrete time part of the loop. And the signals which appear in the discrete time part of the loop are shown at the bottom.
+
+So here's a nice, smooth, continuous function of time, the one that's being measured by the sensor. And after sampling, what the sampler does for us is it changes it to a sequence of numbers. That's all it is.
+
+It's a list of numbers. The only connection that that list of numbers has with time is the sampling period, the fixed interval of time between adjacent samples. Change the sample period, I think you can see that this sequence of numbers has an entirely different meaning in the time domain. But for a fixed sample period, this continuous function would end up as a list of numbers like that.
+
+Now, the controller is an algorithm, a piece of perhaps source code which operates on that list of numbers to produce another list of numbers corresponding to the control effort that we want to apply at the output. This list the numbers, obviously, is a different lists of numbers. But what's not so obvious, rather hidden in here, is that the computation of each equivalent for one input takes time.
+
+There is a delay taking place in here, a very important delay. We know already that delays in a loop correspond to phase shifts. It's the computational delay together with the conversion delay that happens here that we need to take into account.
+
+Now, we can't send that out to the plant. That doesn't make sense. This has got to be a continuous function of time again.
+
+So we need to fill in the blanks between each second consecutive sample. And that's done by various techniques, the most common of which is through the zero order hold. We create a stepwise function between the different points. So we end up with this sort of steppy thing over here.
+
+Now, the important point I'm trying to get across is that on each transition from each graph to the next one, the dynamic properties of the signals are changed. And key to designing a digital control loop is understanding the nature of those changes. The change from here to here has the effect of restricting the maximum frequency that we can represent, through what's called the Nyquist frequency. That's the maximum unique frequency. It's a frequency limitation.
+
+This one-- well, obviously there is a desired effect because we've designed a controller to change the dynamic properties, but there are undesired effects as well, such as time shifts, delays and phase lags that take place. And the principle change from this one to this one is a phase lag, another phase lag, the zero order hold reconstruction element-- I've called it [INAUDIBLE]-- that induces a phase lag as well, which is detrimental to performance. I'm going to describe each of these effects in turn.
+
+First, the sampler-- well, notionally the sampler is something as I said that converts a continuous function of time into a list of numbers. And the time separation between these numbers is normally fixed. Almost all samplers operate at a fixed sample rate, the reciprocal of which I'm going to call capital T.
+
+I hope you'll forgive the ambiguity with the complementary function. We don't need that anymore. Forget about the complementary sensitivity function. T from now on will always refer to sample period.
+
+Now, very often I'm going to make the T implicit in the notation. So, in fact, this sample signal over here, y sub m of k, k is just a counter. It's the count of the next sample.
+
+But the time at which that sample takes place is, obviously, equal to k times t, because each sample is separated by t. So y of 2 times t is that point-- I'm just going to call it y of 2, because the t is always there. So normally, we refer to a sample sequence where k is the independent variable.
+
+Now, discrete time systems have an impulse response. It's not really an impulse that we apply to find it. But it's the equivalent of an impulse response.
+
+Remember that discrete time systems, it's that impulse, that delta of t that we apply. Well, for discrete time systems, it's not. It's what's called the unit pulse. It's a sequence of numbers at zero at all times, except at time t equals 0 when the number is 1. That's called the unit pulse, in terms of a discrete time system.
+
+And when we can apply that to the system, it will respond with a unit pulse response. And actually, we use this unit pulse response in exactly the same way as we use the impulse response from a continuous time system.
+
+We use convolution, except that it's no longer integration that's involved. It's summation. Let me step you through what happens.
+
+So here's the sample signal. And here's the unit pulse response of our controller, in this case. Now, the way it happens, at time t equals 0, the first data point in the incoming signal appears at the input to the controller.
+
+And it's multiplied by the first term in its unit pulse response to produce at time t equals 0, u of 0, just the product of those two numbers. One sample period later, e of 1 appears. That's this one.
+
+That is multiplied by the first term. And meanwhile, the previous term which entered is multiplied by the second term, f of 1. So at time t equals 1, we have e of 1 equals f of 1 times e of 0 plus f of 0 times e of 1.
+
+One sample period later on, you can see what's going to happen. e of 2 is going to enter, multiplied by the first lot, and so on. And we keep going through this repetitive sequence until after an arbitrary number of input sample periods, we end up with a long, long, long sum of these products. Now, the order in which the terms appear is significant, because look. The input terms appear in the same order that they came in.
+
+So we end up with e 0, e1, e2, all the way up to e of n. But the terms in the unit pulse response are reversed in time with respect to them. So e of n is being multiplied by f of 0 means the most recent input is always multiplied by the first number in the unit pulse response. And the terms sort of slide backwards against one another until we have f of n times e of 0.
+
+Now, this is very similar to convolution, of course, when we're during a time reversal of one function of time, and then integrating. And this is what it looks like in closed form. See, we've got the input function e of kt, multiplied by f the unit pulse response.
+
+But it's time reversed n minus k. And then we sum these. This is a convolution summation. So digital systems behave in exactly the same way as do continuous time systems. We work their outputs out using convolution.
+
+Now, the reason that I'm laboring this point is that this computation here-- it's called a sum of products, for obvious reasons-- is exactly what the digital controller does each time a new input arrives. It computes a series of products and then adds them all together.
+
+Architectures which are good at doing that make very good discrete time controllers. And, of course, you probably know that there is an architecture of computer called a DSP, which has a hardware which is optimized for doing precisely this. The C20 [INAUDIBLE] processor that Ken will tell you all about, fundamentally, is a DSP.
+
+It was the first DSP to be applied to control tasks. And it's still happily doing that. It's a very good control processor.
+
+Now, remember I told you about three properties of the delta function-- namely, zero width, infinite amplitude, and unit area. And I promised you a fourth property. That fourth property tells us what happens when we combine a delta function with a continuous function of time-- in this case f of t.
+
+And this function impulse is applied at time t equals a. The notation is delta of t minus a. And what you get, in fact, is nothing more than the value of the continuous function at the instant at which you apply the delta function, the instant at which you combine the two.
+
+This is captured in what's called a screening property of the delta function. And the reason that this is important is it makes a very good model of a sampler, because we've got a continuous function coming in. The sampler is modeled by, in this case, a delta function at time t equals a. And the result is just the value of the continuous function at that time.
+
+Now, if you've got a sampler, of course you've got lots of delta functions being applied. So what you need is a series of these things, delta functions, each of which represents the effect of a sample happening separated by t seconds. This is an infinite series of delta functions.
+
+I'm going to call it delta sub t of t. This is sometimes called a Dirac cone function. Paul Dirac, the mathematician, is the first man to describe this. It's called a Dirac cone function.
+
+Sometimes it's called the shower function. It has various names. But it is an infinite series of delta functions.
+
+Now, when we apply this to a continuous function of time, of course we can use the screening property at each instant to give us a number, a number corresponding to the value of the continuous function at the instant at which it was sampled. And we end up with a list of numbers. Sometimes we denote that list by the symbol star. f star of t, the sample signal which was f of t, is equal to the combination of the infinite series of delta functions with that function of time.
+
+Now, notice in particular that after we've sampled that continuous function there is a lot of blanks between these numbers, right? We have lost information about the continuous function at all times, except when we sampled it. So we know, for example, what f of t was doing here and here at 15 and 16 times t.
+
+But we have no idea what it was doing at 15.1 or 15.2t. All that information is gone. And it's gone forever. We've lost information. Mathematically, therefore, I could take this continuous function of time and move it inside the summation. So we have this, f of nt times the delta function, the Dirac cone function.
+
+Now, I'm going to take the Laplace transform of that. And it will lead me to the z transform. It's an infinite series. So let's begin by expanding it out.
+
+So here are all the terms in the infinite series, each of which is a continuous function of time multiplied by a delta function. Now, the Laplace transform of a delta function is 1. As unit area, it's always 1.
+
+So what I have here, a series of transfer functions, all of which are 1. But they're time shifted by the time shift property of the Laplace transform. This, for example, would be e to the t times s, or e to the st. This would be e to the 0. This would be e to the minus s times t, e to the so on.
+
+So what you end up with in closed form after you've taken the Laplace transform is this-- f of nt times e to the minus snt where n is the index of summation between minus infinity and plus infinity. And the only difference between this-- because this is the Laplace transform of the sample system and the z transform-- is a substitution, which is fundamental to everything that follows. That substitution is z, a new complex variable z, is equal to e to the s times t.
+
+t is the sample period. s is the Laplace variable. z is a new complex variable, which we make use of in this.
+
+And it leads to the z transform, which is, in turn, another infinite series. Oh dear, we don't seem to have improved things very much. But we can. We can represent things in closed form in a much better way than that.
+
+Now, the thing is that this relationship is a non-linear relationship. It's non-linear in s. z and s are not linearly related. So it's difficult to apply the techniques that we've already learned for continuous time systems directly. We have to take this non-linearity into account.
+
+Now, the z transform has four properties which are identical to those of the Laplace transform. The Laplace has many others, but we looked at these four of the Laplace transform earlier. The convolution property still applies.
+
+We can replace the convolution summation with a multiplication of two z transforms. The z transform also obeys the principle of superposition. It's a linear transformation.
+
+Even though the relationship between the Laplace transform and the z transform is non-linear, both of them are linear in their own rights. This is what allows us, for example, to sum the contributions of parallel paths using the z transform. There is an equivalent to the final value theorem.
+
+Remember, for the Laplace transform the steady state value in time was equivalent to the Laplace transform multiplied by s. And the limit is s tended to 0. Its equivalent here is you multiply the z transform by z minus 1 and take the limit as z approaches 1. That tells you the same number, the final value theorem of a time sequence.
+
+And the time shifting property, well, that's the same as well-- similar, anyway. A time shifted discrete time sequence shifted by k is equal to z to the power of k times the f of z transform. These are the same four properties as we had for the Laplace transform earlier.
+
+Now, just this continuous time transfer functions can be represented as a transfer function. Continuous time systems can be represented as a transfer function, which we could factorize to reveal the locations of poles and zeros. So we can with the z transform of an equivalent discrete time system.
+
+There would be-- well, perhaps an equivalent number of poles and zeros, perhaps not, a different value of gain, perhaps. And, in fact, to move from one to the other requires the use of a discrete transformation. We'll be describing several discrete transformations later on. But there are methods whereby we can transform a transfer function s into one in terms of z.
+
+And one of the things that often changes is the relative degree of the system. A strictly proper system up here has more poles than zeros. In many cases, it transforms into a proper system with the same number of poles and zeros in the discrete time equivalent. And that's not a problem. Very often, you have proper rather than strictly proper systems in the discrete time domain, even if they were strictly proper before.
+
+The poles and zeros, of course, are moved by the transformation. But even more importantly, the meaning of the poles and zeros in the complex plane is changed by z equals e to the st. I'm going to explain that for you shortly.
+
+Now, here's an example of a difference equation of a second order system. We call this in the terminology a two pole, two zero transfer function, because obviously it has two poles and two zeros. And control engineers might write it like this.
+
+This is a transfer function, perhaps of a controller whose output is u, and whose input is e. Now, while that's very useful in control, software engineers like to see these equations in a slightly different form where all the powers of z appear as negative. And so what you do is you normalize to this term here by dividing all the other terms by alpha sub-0 time z squared.
+
+So this term becomes 1. And all the other terms involve negative powers of z, or a constant term. And that's the form that DSP and software engineers like to see it, because, well, we can multiply through by the denominators on both sides. And now we're in a position to isolate this term on the left by subtracting these two from both sides.
+
+So we have u of z equals e of z times this polynomial, minus u of z times these two terms from the other side. And now what we can do is to just multiply these out. So what we have is b 0 times e of z, plus b1 times e to the minus 1, times e of z, and so on. And we're now in a position to take the inverse z transform of this.
+
+Now, taking inverse z transforms is not as onerous as taking inverse Laplace transforms. We make use of the time shifting property of the z transform, where z to the power of k is equivalent to f of n plus k. And now you see why we want negative powers, because when we take the z transform of a negative power it's a delayed sample that we get.
+
+So b0 times e of 0, that's inverse z transform of b0 times e of k. Z to the minus 1 times e of z is e of k minus 1. It's the last input sample, the previous input sample, the input sample two sample periods ago, and the previous one to that output samples.
+
+So this is why we like to have a difference equation for the newest value of output, u of k, in terms of the newest value of input, and previous inputs and outputs of the controller. This is something that could be coded into a software routine.
+
+And that's how we do it. It's a two pole, two zero controller. Of course, there are three pole, three zero controllers, and so on. The design task is to work out what these alphas and betas are, which is where we're going with this.
+
+Now, stability is slightly different for discrete time systems. Here is a first order system with 1 0 at z equals a. And by doing exactly what we did in the previous slide, we can arrive at a difference equation, the u of k, the newest value of output, in terms of the previous input, e of k minus 1, and the previous output, u of k minus 1. And what we're going to do now is tabulate the evolution of this sequence in terms of the incoming sequence.
+
+So at time t equals 1 when k equals 1, u of 1 is going to equal b times e of 0. Or we'll pretend we knew there was something at time t equals 0. And we'll also say that there was no output. The output was 0 at time z equals 0.
+
+One sample period lighter at time k equals 2, we have b times e equals e of 1, plus a times u of 1. Well, u of 1 was b times e of 0. So that plugs in there. And we keep going like this.
+
+So what you end up with after a very large number of iterations through this, is in closed form a lot of terms and, the n terms in which the pole is a power series. You get a to the power of k, where k is the index of summation. So as k becomes very large, you're taking a to a very large power-- a times, a times, a times a, k times.
+
+Now, think about it if a is equal to 1. If your pole up here is at z equals 1, you're going to have 1, times 1, times 1, times 1. And however many times you multiply it, you're still going to get one.
+
+If a was a little bit bigger than 1-- your pole was slightly larger than 1-- this term, this sequence, is going to diverge. It's going to get infinitely big as time becomes infinite, or as k becomes infinite. And if it was less than 1, obviously the sequence will converge on 0 as k becomes very large.
+
+So this, therefore, is a stability constraint for systems with real poles. That pole must be less than or equal to 1 in order to represent a stable response. These are some simple systems with real poles.
+
+There's the unit pulse, which has no polls at All. There is a unit step, z over z minus 1, which has one pole at z equals 1, and 1, 0 at the origin. And that gives us a nice predictable unit step response in the discrete domain.
+
+Then there are unit ramps. And then there are exponential functions down here. You see as the pole location moves inside the unit circle, so we have a converging response. And if the pole is on the unit circle, well, 1 times 1, times 1 is always going to be 1. So you have some kind of an output as time becomes infinite.
+
+Complex systems-- systems with complex poles, I mean-- nothing very much is different. These are the poles using z equals e to the st. And when you combine them, they combine in much the same way as the complex conjugate pole pairs did for the continuous time system. The residues are also complex conjugates. And what you end up with is a sinusoidal term. Oscillatory terms appear in the response.
+
+So for discrete time systems, then, you've got exactly the same kind of symmetry about the real axis that you have for continuous time systems. You always have poles appearing in complex conjugate pairs. And those complex conjugate pairs always give rise to oscillation in the time response.
+
+But notice that a still appears as a power series in the solution here. a of k is still here. So exactly the same stability constraints apply. For stability, the poles must be inside the unit circle.
+
+Here are three examples of discrete time systems with complex conjugate pole pairs. The first two have the pole pairs lying on the unit circle. So their oscillation is sustained over time.
+
+And the third example here has poles which are moved slightly towards the origin. So the convergence of the sequence toward 0 happens as very large k. So this is a decaying oscillation.
+
+Now, there is an equivalent to the geometrical slide I showed you earlier for imagining the evolution of the frequency response in terms of vectors drawn from the pole zero map. You can do that for discrete time systems as well, except that now frequencies correspond to points on the unit circle. So you pick a point corresponding to the frequency you want.
+
+And by a geometrical construction of vectors from the poles and zeros out to that point, we can combine the lengths and the angles of these vectors in much the same way as we did for the continuous time system to arrive at a frequency response of the discrete time system. If we have a frequency response, how would we represent it? We would use Bode plots and Nyquist plots, just as we did before. But they look slightly different.
+
+This is a Bode plot of a discrete time system. And there are two lines. The blue line represents a continuous time system. And the green line represents a discrete time equivalent.
+
+In actual fact, this is the system from one of the tutorials we designed earlier. Do you remember when we did the type 3 buck converter? We had an integrator plus a phase lead compensator.
+
+So there was a phase lift given by two low frequency zeros, two high frequency poles. Well, that's what this is. And it's been discretized at some frequency, which gave us the green line here. This is the equivalent discrete time system.
+
+And you'll notice that the agreement in the magnitude curve is very close. That's typically the case. But the agreement in the phase shift tends to get worse and worse.
+
+The two curves depart at higher and higher frequencies. There's more phase lag in the discrete time system until we reach some frequency out here at which the frequency response gives up altogether. This is known as the Nyquist frequency.
+
+And as I said earlier, this represents the maximum unique frequency which is possible for a sample system to represent. It's equal to half the sample frequency. And I'll tell you why in just a second. This is typical.
+
+Now, you could also use a Nyquist plot, if you wanted to. Except you've got to understand that the complex plane is different for discrete time systems. And, therefore, we have to select a different Nyquist path.
+
+Remember, we wanted the region of unstable poles to be enclosed by the Nyquist path before we mapped it by l of s. And the same would be true for a discrete time system. We have somehow to capture the region containing all the unstable poles in the discrete time system.
+
+Well, you know they're outside the unit circle. Anything outside the unit circle is unstable. So this is the equivalent contour that would be used to construct a Nyquist plot for a discrete time system.
+
+See the contour sort of goes around the unit circle there. And then it goes out along the positive real axis an infinite distance, and sort of skirts around like that. That's an infinitely big circle, and then comes back again.
+
+That's the equivalent of the Nyquist path for a discrete time system. You could use that to build up a Nyquist plot. This is what the Nyquist plot would look like.
+
+This is the same system as I showed you before. This is the blue system, the continuous time system. And the discrete time system is in green.
+
+Notice in particular that this system, even though it's equivalent to the continuous one, exhibits an awful lot more phase lag. The stability margin has been eroded. And that's typical. That comes about because of the delays that take place through the digital system.
+
+Those delays are unavoidable. Digital design is largely a matter of managing those. I'm sorry. It's not the same system. It's that system. I've made a mistake. It's a different system, sampled at two hertz.
+
+All right, so let's look at how the complex plane changes under the mapping z equals e to the st. On the left, I have the s plane. And on the right, I have the z plane, the unit circle.
+
+And on this s plane, I've indicated six points with letters a to f. And I'm going to take you on a journey around the periphery of this region, and show you how it maps to the z plane. I'm going to start at the origin of the s plane at the point a.
+
+And imagine yourself traveling up the imaginary axis to point b. Point b is significant. It's j times integer s over 2-- half the sample frequency. That's point b. Now, that line there under the mapping z equals e to the st is equivalent to a journey around the upper half of the unit circle from point a to point b on the right hand diagram.
+
+Now, over here we turn left at point b. And we follow the dotted line an infinite distance to the left to point c. c is infinitely far to the left in the s plane. That is equivalent to a journey in the z plane from point b at z equals minus 1 to the origin of the z plane.
+
+This line has length 1. Somehow, this transformation has been responsible for mapping an infinitely long line into a line which has length 1. Clearly, a lot of distortion is happening when we apply this mapping.
+
+Now, point c and d are both infinitely far to the left in the s plane. And as we move from d back to e, that journey is equivalent to a journey from the origin of the z plane back to the point minus 1 in the z plane. Again, an infinitely long line has been transformed into a line of length 1. And, finally, from e, that frequency minus integer s over 2 on the imaginary axis back to f, is a journey along the lower semicircle of the unit circle from here to here.
+
+Now, what you'll notice is that we've only mapped a region of the left half plane. Not all the left half plane fits inside this unit circle, only a region of it. This strip is sometimes called primary strip. And it turns out that this is the region that we must restrict ourselves to when we do design systems using root locus, for example. We can't place poles outside this for a reason I'm going to explain shortly.
+
+Now, using the rule z equals e to the st, we can map polls exactly between the s plane and the z plane. That is an exact relationship. For example, if I have a pole here, point d, it's rectangular coordinates are minus sigma plus j omega whatever that says-- j omega 1.
+
+And all we do is apply minus sigma plus j omega 1 into z equals e to the st. So you just pop it straight in there. And you end up with a polar form of complex number, where the magnitude r is e to the minus sigma t.
+
+And the angle, in this case phi, is omega 1 times t. So point d ends up over here. Its magnitude from the origin, this line of length here, is less than 1 because it's e to the power of minus sigma. It's negative.
+
+So, therefore, e to the power of something that's negative is less than 1. And it's angle here, [? phi ?] 1, well, that equals the imaginary component there. That's how that point is related.
+
+We carry this out for all the points in turn-- in this case five points. And we end up over here. Point e, notice, lies on the imaginary axis. And that corresponds to a point on the unit circle. Point C is an unstable pole. And that, therefore, predictably lies outside the unit circle in the z plane.
+
+By the way two things-- firstly, this is exact. This relationship is exact for the poles. So if you want to know where the discrete time poles are, you just apply that.
+
+But it doesn't work for zeros. To find out where the discrete time zeros are, you have to go right through the z transform process from the very beginning. It doesn't work for the zeros.
+
+The other thing is that I've only drawn the positive parts of poles. You know poles appear in complex conjugate pairs. d, for example, has a d star down here. e has an e star down here.
+
+Let's concentrate on e for a moment. So e and e star appear over here in the s plane. And, therefore, they might appear over here in the z plane.
+
+Now, the thing is, imagine moving e up the imaginary axis in this direction. And since e star is its conjugate equivalent, that has to move down as e moves up. And the effect of doing this in the z plane is that e is going to move clockwise around the unit circle. And e star is going to move counterclockwise.
+
+They're going to get closer and closer towards one another. And at some point, they're going to be the same over here. They'll meet at minus 1 in the z plane.
+
+And that point will be equivalent to e star lying here at minus j omega s over 2, and e lying at plus j omega s over 2. I've got two points over here, but only one point over here. Now, imagine, keep on moving e past that point.
+
+Move it up here. And e star, of course, will move down past this point. And what will happen is in the z plane, these two poles will have crossed over one another. And, eventually, we'll get back to the position that we are here, except that e star will be up here and e will be down here.
+
+That corresponds to a separate set of positions. e would be up here. e star would be down here. But it be indistinguishable from the one shown in this diagram. So somehow, I've got some ambiguity going on here.
+
+It's equivalent to dividing up the s plane into a number of parallel strips, each strip containing an identical set of data. This is what it is. So imagine in this primary strip, as I've told you, you have a pattern of poles and zeros.
+
+Well, that pattern of poles and zeros is reflected down in the line minus j omega s over 2. And it's also reflected up. And each of those strips contains another identical pattern of poles and zeros.
+
+And then that's reflected again down here, and reflected up there. There are an infinite number of these other strips known as complementary strips, each containing an identical pattern of poles and zeros. And, yet, in the z plane there is only one pattern of poles and zeros-- one set over here, many over there.
+
+This is a concept called aliasing. And the reason it's called that is that imagine I'd placed a pole here, deliberately outside the primary strip. Well, aliasing would have reflected it down, as if it had been placed there in the first place. I've created an alias. There's an ambiguity between these two frequencies.
+
+Oh yeah, I forgot this. OK, we live in an age where the internet has made images like this very well-known. I'm sure you've all seen this before. Anybody not seen this before?
+
+You can be honest, if you want. Great, well done. Well, somebody who has seen it before can tell me what's in it?
+
+An old lady and a young lady, very good. There's an old lady and a young lady in this picture. Do you see both of them?
+
+Yes.
+
+Great, great. Well, let me point them out to you anyway because I just enjoy doing it. The young lady has her face turned slightly away from. So her chin is here, right?
+
+And then there's the nose, and the eyelash, and the ear. I guess that's what that is. This is a kind of necklace thing going on. And this is probably fashion, I guess, with some kind of hairdo thing. That's the young lady.
+
+The old lady-- everybody see the old lady? OK, chin down here. That's the chin. There's the mouth, the nose, the eye? You see that? Young lady, old lady.
+
+Does anybody see anything else in this picture? What?
+
+Jabba the Hutt.
+
+Jabba the Hutt. Well, I'll tell you something. I've been teaching this seminar now for just over six years. You would be amazed what I've had people tell me is in this picture, just amazed. I've never had Jabba the Hutt. I've had sheep, lions, all sorts of things, but not Jabba the Hutt.
+
+Well, I guess all of those are equally valid. It could be a young lady or an old lady. Of course, it isn't any of those things, is it? It's just a white background with a lot of black lines on it. And we are interpreting those black lines in two equally valid ways. And there might be many more than two, judging from the responses over the years-- all equally valid.
+
+Now, the reason that this is up here-- of course, with digital systems exactly the same thing goes on. We've got one set of data. But we can interpret that data in many, many equally valid ways.
+
+Let me give you an example. In this slide, there are a set of data points signified by these red dots. Each of these corresponds to a sample. So imagine you are some kind of computer, which is presented with a series of incoming data. These red dots are the data.
+
+Now, you might instinctively join the red dots together and say, hey, that's neat. That's a sine wave. Look, that blue line must be what's applied at the input to the a to d converter. And you might very well be right.
+
+But what about the gray line here? The gray line is oscillating at a much higher frequency. But it happens, sampled at this exact same points to give you exactly the same set of data. Clearly, we don't know which of these sine waves caused this set of data points. And, in fact, there are an infinite number of other frequencies as well that I could draw on here that would give me the same set of data.
+
+Now, this is due to the interaction between the sample rate and the incoming frequency's sine waves. So let's look at that. Well, one of these sine waves has a frequency of five Hertz, and an inconsequential phase shift. That's just there for decoration, five Hertz.
+
+And the other one has a frequency of 35 Hertz. What about the sample rate? Well, you can kind of get that by measuring the samples from peak to peak. So we've got 1, 2, 3, 4, 5, 6, 7, 8 samples on a five Hertz sine wave. It's a 40 Hertz sample rate, 40 samples per second if you like.
+
+Now, clearly, 4 and 35 Hertz looked the same when sampled at 45 Hertz. Anybody knows the next frequency above 35 Hertz that would give me the same set of data points?
+
+75.
+
+No, 75 would, but it's not the next one. OK, let's do a little bit of math-- not too difficult math. But it will tell us what the next frequency is.
+
+Now, remember this fella. This is the sampled system, the sampled function of time denoted y star of t. It's the combination of the incoming continuous function of time and the direct cone function.
+
+Now, the direct cone function is a periodic function. So if we draw the direct cone function out in time, it's an impulse at time t equals 0, another impulse at v time t equals t, an impulse at time 2t, an impulse at time minus t, an impulse at time minus 2t. And you can keep going all along the wall here and get many more of the direct functions in here. It's periodic, right? It's period is t.
+
+Therefore, it has a Fourier series. So let's begin by extracting the Fourier series from this infinite series. Now, to do that you can represent it as an infinite sum of phases. The phrase is e to the jn times omega s times t. omega s is the sample rate.
+
+And you sum an infinite number of these, each of which is multiplied by some coefficient. Now, to calculate the coefficient you take the function that you're interested in, integrate it between plus and minus t over 2, divide by t-- that's what you do. You do this thing up here.
+
+Now, it's not as bad as it looks, because it does look bad. But it's not that bad, because we are only integrating between plus and minus 2 over t. So of this infinite series, only one of these delta functions lies within the integration interval.
+
+It's the one at time t equals 0. So we're not integrating an infinite series at all. We're just integrating one of them, delta of t.
+
+Well, what does that look like? Well, this is similar to the screening property because, look, remember when we combine a delta function with a continuous function of time, which this is, we end up with the value of that continuous function of time at the time that we applied the delta function. Screen property tells us that.
+
+What time did we apply it. Time t equals 0. So it's e to the power of 0. All these coefficients turn out to be 1.
+
+And it's one over t. So we end up with 1 over t times an infinite series of phases. This, then, is the Fourier series representation of the direct cone function. All we're going to do is we're going to substitute this for this, and take its Laplace transform. That's what we're going to do.
+
+Here's what we've just found out. And then we're going to take its Laplace transform. There's a Laplace transform. So instead of f of t, I'm going to put 1 over t times this. This is the Fourier series representation.
+
+And there's the incoming function y of t. And I'm going to take its Laplace transform. It's a one-sided integral times e to the minus st, and so on.
+
+Now, providing this series is convergent, there's no difference between integrating an infinite series and integrating each term in the series and then adding them up. So I can interchange the order of integration and summation quite legitimately, and write it in this form here as an infinite series of integrations. Now, if you look at the integral here, it's almost exactly the same as the Laplace transform-- almost.
+
+The only thing that's different is the complex variable. Instead of s, it's s minus jn omega s. So let's call it a Laplace transform, but with a different complex variable. What I have is an infinite series of Laplace transforms now, each term divided by t. And the complex variable is slightly different.
+
+Its frequency response is found in just the same way as it is for any other Laplace transform, by substituting j omega for s. So here's what we have. The frequency response of the sample system is 1 over t times an infinite series of frequency responses, each centered on a multiple of the sample frequency omega s.
+
+This is easier to see in graphical form than it is in the terms of an equation. At least I think it is. If we have a system whose continuous time spectrum is this-- this is just the magnitude plot now of positive and negative frequencies-- after sampling at frequency omega s, whatever omega s happens to be, you end up with an infinite number of copies of this spectrum up and down the frequency axis an infinite number of times. Each copy is centered on omega s-- so 1 omega s here, 2 omega s up here, minus omega 2, and so on.
+
+Now, the problem is say, for example, that we detect a frequency here just below omega s over 2. Now, that frequency could have been contributed by this frequency spectrum or by this one in this case, because the tails of these adjacent spectrum crossover in the vicinity of omega s over 2. Omega s over 2 is called the Nyquist frequency.
+
+And, therefore, there's an ambiguity here, because I don't know whether it came from this frequency or that frequency. In terms of the sine wave example that I showed you a couple of slides ago, we had our sample frequency of 40 Hertz. And, yet, 5 Hertz and 35 Hertz looked exactly the same.
+
+So can you see now the next sample signal would have been 45 Hertz? And then 75 Hertz, you were right, 85 Hertz, 150, 125, and so on. Those are all multiples, all frequencies that would have given exactly the same set of data points because of aliasing.
+
+Now, in order to avoid aliasing, there's only one way. You've got to avoid this crossover that's happening between adjacent spectra in the region of the Nyquist frequency. And that is done using an anti-aliasing filter. We have to cut off the tails of these adjacent spectra by enough that they don't cause this ambiguity.
+
+We need a low pass filter. We apply the low pass filter so that the lowest spectra has an attenuation in the region of the Nyquist of enough that it doesn't cause a problem. And what I usually recommend is that if you attenuate the signal such that we can't resolve it after we sample it because a to d converters have a resolution limit-- if you can't resolve that frequency, you've done enough. So let's say that an N bit converter, capital N, if you attenuate minus 20 log to the base 10 times 2 to the power of n at the Nyquist frequency, that's usually enough.
+
+Now, the anti-aliasing filter-- and I'm sure you all know this-- is a hardware filter. It isn't something that you can do in software. We can design lots of different software filters if you want. And people sometimes try to do this, believe it or not.
+
+But after you've sampled, it is too late. You've got to chop these spectra off before you sample. Otherwise, you've irretrievably got the ambiguity in the system. You have to do it before sampling. Great.
+
+Now, before we go on and do design, there's a couple of extra things that I need to tell you about because they come into it. First of all, let's look at the relationship between transient response and pole location, as we did for continuous time systems. Again, I've drawn the upper half of the complex plane. And this time, I've superimposed the unit circle on it.
+
+But it's the same kind of approach as before. There's a number of crosses, each of which corresponds to one of a pair of second order poles. So, obviously, this one, for example, has a conjugate down here. We just haven't draw it on. And each of these poles is related to a unit step response where the time axis, again, is the same between all these graphs.
+
+Now, poles lying on the real axis between 0 and 1-- of course, remember this axis is the negative real axis in the s plane. So we should expect responses which are predominantly exponential shaped. And when we're at the origin of the s plane-- here's where we are, point a, remember, in the z plane this is an integrator, or a double integrator if it's second order, we get that kind of response, nothing very surprising. As we go around the unit circle, that's equivalent to going up the imaginary axis.
+
+The effect on the step response was to give a sustained oscillation. So the oscillation is sustained when we're on the unit circle. And the frequency is increased.
+
+So as we go around the unit circle, the frequencies get higher, and higher, and higher. And eventually, we get out to this point here corresponding to the point plus or minus omega s over 2 on the imaginary axis. This is the highest frequency that appears anywhere in the sample system.
+
+See, it goes plus, minus, plus, minus, plus, minus. Every time there's a new sample, the sign changes. This is the Nyquist frequency. And you can see it's equal to half the sample frequency.
+
+Now, as we move towards the origin-- so, as we expected earlier, the decay rate gets faster. So the oscillation starts to decay at some rate here. And that rate gets quicker the closer we get to the origin of the unit circle. And that's born out by the other slides back here.
+
+We can relate these two families of curves. Remember, in the s plane, an orthogonal family of lines that we constructed the vertical lines correspond to lines of constant decay parameter, or constant sigma. Well, those lines turn out to be a series of concentric circles in the z plane.
+
+So the closer you get to the origin, the faster the rate of decay. And the faster rate of decay was equivalent to moving to the left in the s plane. That's what vertical lines mean.
+
+Now, because of this line from the origin an infinite distance to the left is transformed by z equals e to the st into this line of unit length. Equal divisions over here don't correspond to equal divisions over here. The lines are approximately equally spaced out here. But they get more and more tightly packed the closer you get to the origin of the z plane, which is why you can see here the lines are getting closer and closer together, and then infinitely close together at the origin.
+
+Lines of constant damped natural frequency-- that's the physical frequency of oscillation which appears in step response-- well, these turn out to be radial lines in the z plane. Each of these corresponds to a fixed frequency. And you can see that. In this graph, the frequency gets higher as we go around the unit circle.
+
+Now, just as we don't typically use this orthogonal set of grid lines when we do s plane design, we don't use this family of lines either, normally. The conventional grid which is applied is the grid of lines of constant zeta, and lines of constant omega n, undamped natural frequency. These were, respectively, radial lines and semi-circles in the left half plane in the case of the s plane.
+
+Now, for lines of constant omega n-- remember, these are the semi circles over here. These look a little bit semicircular starting at z equals plus 1. But very quickly as we increase omega n, the non-linear influence of the mapping takes over. And they become sort of wrapped around until we reach omega n equals omega s over 2, at which point they sort of come together at this point. So these lines here are lines of constant undamped natural frequency in the z plane.
+
+Meanwhile, the radial lines over here are corresponding to lines of constant damping ratio. Remember, the phase shift in the second order step response was an arc cosine. And that's the angle arc cosine of zeta between a negative real axis in each of these radial lines.
+
+Well, these turn out to be this family of strange lines over here. They sort of start out a little bit radial like this. But they very quickly wrap around one another like that. They become heart-shaped. They're called cardioids, heart shapes in the language of mathematics.
+
+Here are the numbers corresponding to damping ratio. And that's what these are up here, damping ratio lines. And we could use this information in just the same way as we did for a continuous time system by marking out regions in the z plane corresponding to acceptable transient response, at least in terms of a second order system.
+
+For example, we might want to constrain overshoot in the step response. And we know, because we've been through it twice, that overshoot specifications correspond to a minimum value of damping ratio. Damping ratio, they're these cardiod lines. So that marks out the region like this in the complex plane.
+
+Or we might want to constrain a decay rate, which is a circle. And the intersection of those two areas corresponds to a region of acceptable response. So we can apply root locus to the z plane, just as we did for the s plane. And we will be doing it, in a short time.
+
+OK, two other things that are very important, have to do with delays and phase shifts that are present in the discrete time system. I'm trying to explain this in terms of a signal that's sampled. This green line is a feedback signal that's being sampled by the system at these red dots. So each of these corresponds to an incoming sample.
+
+Now, if there were no delays at all present in the system, and the system behaved perfectly, each of these red dots has a line of perfect control action associated with it. This is red line here is what we would do if the world was a perfect place to live in. And these blue dots, therefore, are what we should be outputting if there were a perfect controller.
+
+Unfortunately, there are a couple of things that make it non-perfect, one of which is the time delays which are present in the system. Now, there are two sources of time delay. The first is the conversion delay that takes place in the analog to digital converter.
+
+And the second is the computational delay that takes place in the controller. Those two add together. And they give you an effective time delay.
+
+So these blue dots are delayed to these green dots over here. The perfect line of control action is not red anymore. It's purple, this purple line over here.
+
+But that's not the end of the story, because we can't simply output a sequence of data. We have to reconstruct it. In this case, we're using a zero order hold. So this purple line here, already delayed from the line of perfect control action, becomes this blue steppy line here.
+
+Somehow, there is another response that's being introduced. And it's the response of this steppy kind of function over here. That turns out to be equivalent to another phase lag.
+
+So, principally, it's delays and phase lag that we're fighting with our sample to output delays in the digital system. There's nothing we can do about it. They're always going to be there.
+
+There's a long story behind this slide. If you're interested, come and see me. But I won't bore you with it.
+
+This is a slide that I've tried to put together to illustrate, visually, the effects of time delay in the frequency domain. Here, I have a sine wave of fixed frequency, relatively low, to which small increments of delay have been applied. And down below, I have a different frequency sine wave, but the same incremental change in time delay. So this time delay is being incremented. These are identical.
+
+Now, can you see that as a proportion of wavelength, the phase that this delay is incurring, the phase change, is much bigger here than it is up here, because the frequency is higher. So what time delay does for us in the frequency domain is to not change the amplitude at all. But it gives us a frequency dependent phase lag.
+
+It's always a phase lag because it's a delay. And it's frequency dependent, meaning that the higher the frequency we work at, the bigger the phase lag is. Now, you know already that most real systems that we work on have too much phase lag.
+
+Phase lead compensators are typically required to compensate for that. So phase lag is serious. And it's particularly serious in wide bandwidth systems where we've got high frequencies, because small amounts of time delay give us large amounts of phase lag in those systems.
+
+Here is, by way of example, what happens when you apply time delay to this third order system. This is the open loop transfer function. And it's Nyquist plot appears like this.
+
+Now, when I incrementally add small amounts of time delay-- these are the time delays added in seconds here-- you see the Nyquist plot is rotated clockwise. And it gets closer, and closer, and closer to the critical point. The length of the 1 plus l vector is getting smaller, and smaller, and smaller.
+
+And that induces a larger and larger peak in the sensitivity function. Remember, we used that to specify performance in an earlier tutorial. So what I've got here is visually confirmation that time delay is eroding phase margin, because there's frequency dependent phase lag involved. And we're getting some very big numbers in the ms.
+
+There's a sensitivity magnitude over here. I'm just saying take it seriously. That's all I'm saying.
+
+Now, the other thing that we've got to be careful of, apart from managing time delays, is the effect of this reconstruction using a zero to hold. That's the thing that turns this sequence of numbers into a sort of steppy function. Now, I say, though I may be wrong, that the frequency response of this thing is equivalent to the frequency response of a signal which goes from 0 to 1 at time t equals 0-- that's 1 that's 0-- and back to 0 times t equals t. This signal has a frequency response. And it's very similar to the frequency response of the zero order hold unit.
+
+Now, in order to find the frequency response of this thing is pretty easy. What I do is I take two step functions. This one is 1 over s.
+
+And then I take a delayed step function. This is e to the minus st times 1 over s. And I'm going to subtract this one from this one. So the response I've got is 1 over s minus e to the minus st, times 1 over s, which of course equals 1 minus e to the minus st divided by s.
+
+Now, its frequency response is found by just replacing s by j omega. So what we end up with is 1 minus e to the minus j omega t divided by j omega. Now, I'm going to make this look like a sine function, because if I can make it look like this-- this is the exponential form of a sinusoid. e to the j something minus e to the minus j something divided by 2j, that's a sinusoid.
+
+To get it to look like that, I have to factor out a term e to the minus j omega t over 2. So satisfy yourself that this term multiplied by this term would give you e to the power of 0, which is 1. This term multiplied by that gives you e to the minus j omega t.
+
+And then I need a 2j on the bottom. And I'll just factor that out. And what I end up with is a sine function times 2 over omega, because the j's will cancel, times this. This is a complex number.
+
+It's a complex number in polar form, because this is real. And this is a complex exponential. That's the phase.
+
+Now, the real part of this actually doesn't make that much difference, but the phase does. The zero order hold gives us another frequency dependent phase lag. In addition to the phase lag of the time delays in the system, we get another phase lag from the zero order hold reconstruction.
+
+And it's minus omega times t over 2. See, it's a phase lag because it's minus. It's frequency dependent. But it's equal to t over 2.
+
+So at least we can manage it by selecting the sample rate to be high enough that t is small. But it's always significant. We have to account for that. It's very significant. And I'm going to show you why in a tutorial that's coming up very shortly.
+
+OK, pausing for breath. That is the background theory that we need in order to do design. We don't need any more background theory than that.
+
+I'm going to approach design in two different ways, the two fundamental ways of doing it. The first is called design by emulation, emulation implying copying. The idea here is to start with an existing controller that we've already designed in the Laplace domain. And we are going to attempt to replicate the performance of that controller in the discrete domain by transforming its transfer function into the z domain using a set of rules designed by emulation.
+
+Now, there are six or seven different ways of doing that. And they fall into three categories-- pole zero matching, numerical approximation, there are four or five of those, and hold equivalent, there are two of those. I'm going to step through each of those in turn, and compare their performance so you can see what the relative merits and drawbacks of each are. That's design by emulation.
+
+The other approach is to throw away any existing controller that you have and begin your design from scratch, from the beginning, with a clean sheet of paper. And you do your entire design in the digital domain using the unit circle, root locus, Bode plots, whatever you like. But you do so always in the discrete domain. This one tends to give slightly better performance compared with design by emulation for the same sample rate-- slightly better performance. We'll see one by one what happens.
+
+So let's begin with design by emulation using the pole zero matching technique. And remember, before I told you that the z equals e to the st rule is exact for poles. The basis of the pole zero match technique is that if you also use it for zeros, the results are reasonably close, especially for relatively high sample frequency, or low t, small t.
+
+And it does work reasonably well. Its main drawback is that one of the rules obliges us to impose a one sample period delay in the calculation. And that time delay adds a phase lag, which is a little bit unfair. But let me show you the method first. And then you can be the judge of whether it's suitable or not.
+
+I'm going to illustrate it for this third order system down here with Laplace transform a as a [INAUDIBLE], times s plus z1 divided by all that lot. So we've got three poles and one zero to transform. And here is the pole zero map in the s plane.
+
+Now, the first rule says you transform all the poles and zeros using that mapping z equals e to the st. So here we go, then. S plus z1 transforms to a pole z minus e to the minus z1t. We have to arrange a zero over here corresponds to one on the positive axis over here, which is why the minus sign comes in. And we do that for all the poles as well. So we've got one 0 and three poles already transformed, according to step one.
+
+Step two is a significant one. It says, map any infinite zeros to z equals minus 1, but maintain a relative degree of 1. Now, what's an infinite zero? Well, the answer was actually provided in the root locus plot when we covered that in Chapter three.
+
+This could be said to be a system with three poles and one zero, or a system with three zeros and three poles. It's just that two of those zeros are so far to the left that their influence decays in zero time. They're called infinite zeros.
+
+And we've got to transform them to z equals minus 1, but maintain a relative degree of 1, which means we can only take one of them across, maintain a relative degree of 1 over here. So we end up with z plus 1 over here. We've still got one infinite zero. That's the key to the problem with this response. You'll see in a second.
+
+And then the final step says, well, you just match the gain. So you work out the dc gain is this, which is worked out for s equals 0. So it's a times z1 over p1, times p2, times p3. That's the DC gain of that.
+
+And you calculate the dc gain of this for z equals 1, because when s equals 0, z equals e to the power of 0. It's 1. That's the dc gain. You calculate the dc gain. And you fiddle the gain over here so the gains match.
+
+Now, I'm going to illustrate this in terms of a tutorial. And that tutorial looks like this. It's back to the buck controller that we did in an earlier tutorial using a type three compensation network. Remember, we already designed this.
+
+We used the Bode plot to design a phase lead compensator and an integrator fitted to this type 3 controller. And what I'm going to do now is I'm going to transform this transfer function. This is the transfer function we ended up with. Here are the capacity values using the match pole zero technique.
+
+Now, in Matlab the script that I need is this one. Let me walk you through it. So here are the passive values. Here, I'm constructing the pole and zero frequencies based on those passive values. And down here, using zpk, the zero pole grain approach to writing the transfer function.
+
+And then a little bit further on, what I'm doing here is I'm selecting a sample period of 1 microsecond. So that's equivalent to a 1 megahertz sample frequency. And then there's an important function here called c to d. This is a Matlab script, meaning continuous to discrete.
+
+This is the one that does the work for us. It needs to know the continuous time transfer function, the sample period. And then there is a string. The string tells it which method to use. And matched tells it to use the matched pole zero technique that I've just described.
+
+A little bit further down at the bottom, there are some lines which measure the phase response, because it's principally the phase response which is an error when you do this. And I'm going to pick out the phase response at 1 times 10 to the 6 radians per second.
+
+Let me run it. And it will be clearer. So here, then, is the Bode plot of the continuous time system in blue, and the discrete time equivalent formed using the match pole zero technique in green.
+
+As I mentioned before, the gain responses are relatively close. The phase responses show some phase lag creeping in at high frequencies. And when we reach the Nyquist frequency here, it gives up all together. This black line is the Nyquist frequency.
+
+Now, the phase I'm going to measure at 10 to the 6 radians per second, just here. And it turns out to be minus 34 degrees. That's a lot of phase shift to tolerate in the system. The match poled zero technique gives you a lot of phase lag.
+
+Now, practically all of that phase lag is coming from step two. Now, the significance of step two is that when we go back to the two pole two zero controller, when we've got a relative degree of one, the form of this one we construct the difference equation means that u of k will not involve a term involving e of k.
+
+The newest value of input won't be a term in the newest value of output. It will only be delayed values of inputs that have an influence. So we're waiting one sample period before we compute the output.
+
+Now, that's fine, because it gives us a whole sample period to compute control law. But maybe the controller that we've got is fast enough that we can do better than that, significantly better. And if it is, you can get rid of more or less all that phase lag just by computing out the output in the same sample period as the new input comes in. All of that phase lag is pretty much due to time delay, one sample period delay from step two.
+
+But this gets a bad press, I think, because it's nice because you can do it with a paper and pencil. You don't need any flashy tools to do it. But if you stick to the rules, it does give you that nice little phase lag.
+
+There's one other important point that I ought to get across. And it has to do with the third step. When we deal with power supplies, for example, it's very likely that you'll be transforming a controller with an integrator in it.
+
+The dc gain of an integrator is what? Somebody said infinite. It's infinite.
+
+So how am I going to match the gains? The answer is, you can't do it. For integrators and differentiators, if there's any poles or zeros at the origin, step three can't be carried out.
+
+So what you do, then, is you neglect those terms when you carry out step three. Delete any integrators or differentiators. And then you can match the gain. So that's important if you're doing power supply design.
+
+Now, the next family of techniques are called numerical approximation techniques. And there are three main methods of doing this. The idea is-- this is conceptually what we're doing.
+
+Imagine it from the point of view of the very simplest kind of system you might ever work with, a first order system. If we were to apply these methods for a more complex system than this, you're going to get identical results. So why make life complicated? We'll stick with this simple first order system. a divided by s plus a-- so if a is 1 over 2, this is the first order system that we saw in chapter one.
+
+Now, in order to find the output of a system like this, we'd have to solve the differential equation on which it's biased. And that is an integral. It's a times the integral between 0 and t of this integrand e minus u. And [INAUDIBLE] is the dummy variable of integration. This is what you have to compute in order to work out u for a given e.
+
+Now, if it's a continuous time function, that's no problem. But the numerical approximation techniques try to do this integration at discrete intervals of time. And all I'm looking for is a relationship between a continuous integration and a discrete time equivalent. That's all I'm looking for.
+
+So imagine that all the data is known. And we know the value of this integrand at the discrete intervals of time. We're going to try and calculate this integration.
+
+Now, the integration has to be that knowing the area under this curve-- this is e minus u at time t equals k-- I have somehow to work out the area under this strip of the curve at time t equals k plus 1, and add it to what I already know. That would be the discrete time integration taking place. The problem is that the strip contains a curvy bit on the top.
+
+And we don't know what that is. That's where the approximations that we're going to make fall down. And you're going to see that some approximations are better than others.
+
+First of all, we're going to do the obvious. We're just going to use a forward approximation rule to give us a nice, rectangular area for the approximated area. If you ever remember doing integration at school, where you divided the curve up into lots and lots of tiny strips, and then you took a limit as the width of the strip became zero, we're doing the same thing here.
+
+They were called [INAUDIBLE] strips, if you remember. That's all we're doing. It's a forward approximation technique, because the strip is rectangular looking forward from time t equals k.
+
+So the rectangle, then, is going to be the base times the height. It's t times whatever the height was. Well, the height is a times e of k minus u of k, because we're looking forward from time t equals k.
+
+So that, then, is the difference equation. What's the z transform that it corresponds to? Well, it turns out to be this.
+
+This is the z transform of the system that we've approximated with a forward approximation method. And if you compare it with the transfer function we started out with, the only difference is that s has been replaced by z minus 1 divided by t. Of course, if I'd known that in the beginning, I could have saved all the algebra and just plugged that in. And that's the forward approximation method.
+
+Now, Matlab does not have a forward approximation method for a reason which will shortly become only too clear. However, you can write your own. And that's what I've done in the script here. All I need do is uncomment this.
+
+And when we now run this script, what we get is this. Well, it's not as bad as the match pole zero technique, because we had minus 34 degrees of phase lag. We've now got about minus 12.
+
+It's not that great either, because we've got some difference between the curves at quite low frequencies. But it's pretty easy to use, isn' it? You just take every instance of s in the transfer function and replace it with z minus 1 divided by t. What could be simpler?
+
+Well, the forward approximation technique has a problem. And the problem doesn't immediately strike you until you see an example. Let's, for example, consider what happens when we use it to transform a nice simple transfer function. We'll take it as 1 divided by s plus 4, for example.
+
+We'll apply the forward approximation technique to this. What we have to do is to replace s by z minus 1, divided by t. And let's do, this first of all, for t equals 1-- 1 second, for example. So what's the equivalent transfer function going to be?
+
+Well, it's going to be f of z equals z minus 1 divided by 1 plus 4. That's the bottom line, which of course equals 1 divided by z plus 3. That is the z transform of that transfer function for a sample period of 1 Hertz.
+
+Now, there's a problem with that. Can anybody see what the problem is? Somebody saw it. I know you did. I didn't catch all the-- if the word unstable was on anybody's lips, that's absolutely right.
+
+We've started out with a continuous time pole at s equals minus 4. That is beautifully stable. It's in the left half plane.
+
+We have ended up with a z transform with a pole outside the unit circle. This is not stable. The pole is at z equals minus 3.
+
+Now let's repeat the exercise. But this time, we'll use a faster sample rate-- for example 10 Hertz, t equals 0.1. What we're going to get is f of z equals z minus 1 divided by 0.1 plus 4, 1 over all that. What's that?
+
+Well, let's multiply through by 0.1. And what's on the bottom line is z minus 1 plus 0.4. That's going to be z minus 0.6. Stable, we're back inside the unit circle.
+
+So you've got to be careful with this. The forward approximation method might work well for very high sample rates. But because it has this ability to make stable systems unstable, well, be careful.
+
+The reason that it happens is that when we map the left half plane of the s plane, it ends up over here. You get the entire left half plane moved along to the right by one, and this sort of contracted a little bit towards that point. The unit circle is but a subset of that. So a stable pole might very well end up outside the unit circle after you map using the forward approximation technique. You've got to be a little bit careful with it.
+
+The next logical stop is instead of taking a forward approximation from time t equals k, take a backward one. Still work with a rectangle, but look backwards from time t equals k plus 1. What you end up with through an identical series of logic is a transfer function, which looks like this.
+
+The only difference is instead of z minus 1 over t, the power of z has appeared in the denominator down here. This is called the backwards approximation technique. Once again, Matlab does not have a backwards approximation technique, which should tell you something about the backwards approximation technique.
+
+But I have written one. And when we run it, it looks like this-- deceptively good, because we've now got some nice phase lead, friendly phase lead, plus 13 degrees of it. But we've also got more daylight between the curves at lower frequencies.
+
+And this is the problem with the backwards approximation technique. When you map the entire left half plane using the backwards approximation technique, all of it gets stuffed within this tiny circle of radius 0.5 centered on the plus 0.5 point on the positive real axis. If there was a lot of distortion happening before, there's even more happening now.
+
+That is why the backwards approximation technique introduces that distortion at lower frequencies. People don't tend to use this one much either. I have seen it used, but it's not very common.
+
+What's the next logical step? Well, we've done rectangles. Let's try trapezoids. Instead of a rectangle, now let's use the trapezoid.
+
+We'll take a straight line from the amplitude of the integrand at time t equals to at time t equals k plus 1. And now we need the area of this. It's half the base times the sum of the sides. That's the area of a trapezoid.
+
+So, well, that's what it is. And when you work it out, you get this transfer function in which the instance of s has been replaced by 2 over t times z minus 1 over z plus 1. This actually performs much better, because the entire left half plane ends up exactly inside the unit circle.
+
+Stability is guaranteed with this thing. It's relatively easy to do with a paper and pencil. And it's so popular it goes by at least three names, which mean exactly the same thing.
+
+It's called numerical approximation using the trapezoidal method. It's called Tustin's method after a man called Arnold Tustin who first published it. And it's called the bilinear transform. All of those names mean exactly the same thing.
+
+It performs well enough that the math works have trouble themselves to create script for it. And that script is simply invoked by replacing the keyword matched with Tustin. And when we run it, we get what I regard as not bad performance. It's only 3.4 degrees of phase lag at the frequency that we've been measuring. It's pretty good.
+
+Easy to apply by hand, good results, nice. Now, although those results are pretty good, they're not perfect. Nothing in life is ever perfect, have you noticed? I've noticed that.
+
+Because when we map the entire left half plane inside the unit circle, that's not the actual mapping that we wanted. We wanted just the primary strip to be mapped inside because that's what we know the z equals e to the st mapping does for us. So we don't get perfect mapping. I've summarized these three approximation methods here.
+
+All that happens is this. Using Tustin, we map the entire left half plane inside the unit circle. And we only wanted the primary strip. So the poles have ended up in places that are not quite right. They're not quite right.
+
+But what we can do is apply a technique called pre-warping. And pre-warping is a method which doesn't change the Tustin method. We still use Tustin.
+
+But instead of just applying it and forgetting about the consequences, what we do is we move the pole locations around over here such that when we apply the Tustin method, they end up where they should have been, not where they are. We sort of change things here, and then apply Tustin.
+
+There's a little bit of information in the books about this, more in the textbook that I handed out. And I think rather than step through that information, I'm going to show you how it works in Matlab so you can see for yourselves.
+
+There is a script for it. It's called pre-warp. And you have to tell it the frequency that you're interested in preserving. Now, we've been measuring this, the phase, at 10 to the 6 radians per second. So let's put that in, those 10 to the 6 radians per second.
+
+And when we run this, well, that's what you get. That's a very, very small number. Well, that's not much. Let's call it zero, shall we, between friends?
+
+But if we zoom in on the frequency at which we've been measuring, we'll find these two plots cross over exactly at 10 to the 6 radians per second because that frequency has been preserved by pre-warping. It's exact. But the price of doing that is that we've introduced a little bit of daylight further down in the frequency response.
+
+So it comes with a cost. But it does at least preserve specific frequencies in the frequency domain. It's called pre-warping.
+
+You can read a little bit more about pre-warping in the next couple of slides. But I'd like to run on in the interest of time to the step invariant method, which is a member of transformation techniques called hold equivalents, or invariant methods. There are two names for this.
+
+The logic is this. We have a transfer function that we already know, because we've designed it. We're attempting to copy it. And, therefore, we must know how the system would respond to a unit step, 1 over s.
+
+We know in the analog domain, the continuous domain, what that is. An inverse Laplace transform will give it in the time domain. And if I were to take the z transform of that time function, I would end up with u of z.
+
+Now, I know the step function is in the z transform. It's z divided by z minus 1. All I have to do is to divide this by that. And I have that. That's what I'm looking for. The only problem is I have to take a z transform, which is the tricky bit.
+
+Well, it actually works very well. What we're doing is we're preserving the response of the discrete system to a particular input. This system should have the same response to a unit step that the continuous time system had.
+
+In Matlab, all we need do is replace the key word with zoh. And when we run this, this is what we have. Now, if this looks disappointing to you, it's actually not, because this is the most accurate of all the methods.
+
+And the reason it's the most accurate of all the methods is that when you build your system, you will really find this amount of phase lag, because this is coming from the zero order hold, the thing that I approximated with that unit step, the difference between unit steps. That phase lag is genuinely going to be there. So this is true. This is what you're going to end up with.
+
+There is one other technique which is important. And it's a variation on this one. It involves preserving the response of the system-- not to a unit step anymore, but to a ramp, a sudden change of velocity if you like, 1 over s squared. We know what the output of our system would be.
+
+So we go through the same set of logic here. And we call this the ramp invariant method, or the first order hold equivalent method. Those two names are the same.
+
+In Matlab, what we do is we replace zoh, predictably, by foh. And when we run this script, this is what we get. Now, this is very good.
+
+In fact, of all the techniques if you measure the performance throughout the entire frequency domain, this gives you the best performance of all. It gives you the closest agreement of phase. And when you do get some departure, it's a little bit nice friendly phase lead, but not very much of that.
+
+So if you are transforming a system, and your objective is to get the phase and frequency response as close as possible, this is a one to use, the first order hold approximation method. But it doesn't take into account the phase lag, which comes from the zero order hold. That you either have to account for manually using a minus omega t over 2, which is the phase lag we calculated. Or you have to apply the zero order hold equivalent method, or the step invariant method, which is the same thing.
+
+All right, nearly there, I think-- this is a telling graph, I think. It compares the phase response of all the seven methods that I've just told you about. The matched and the zero order hold methods give you very similar phase responses-- the zero order hold method deliberately, because it captures that phase lag from the zero order hold, and the match pole zero method accidentally, because step two puts you in a relative degree of one. That's what that phrase lead is.
+
+The pre-warp method gives us this purple line here. So there's quite a lot of departure. But it goes straight through the frequency that we wanted to preserve. So that's perfect. Everything else has suffered.
+
+And the first order hold equivalent method, the gray line, gives you the best response over all frequencies, and then some nice phase lead. So that's what that looks like for the example that we've just done in the tutorial. There's a text summary of the different methods, their relative benefits and drawbacks.
+
+And I want to make some recommendations to you. The one that you should use, if you can, is the zero order hold equivalent method, because it captures the phase lag which is present when you put a zero order hold in the system. And you will have one.
+
+Now, if you've already accounted for that zero order hold by some means, then use the first order hold method, first order hold equivalent or ramp invariant method, because it gives the best phase approximation. Both of these require access to tools like Matlab to do a convenient job. If you don't have access to them, then I would recommend Tustin's method, because it gives us a nice-- remember, it was only about 3.4 degrees of phase lag.
+
+It's not too bad. It's easy to apply by hand. But then you do have to account for the extra zero order hold phase by applying minus omega t over 2 to the results. So those are the recommendations I make for design by emulation.
+
+Now, moving on to the other design technique called direct digital design-- it's relatively easy to explain, because we've already done all the hard work. We take the opposite approach. We throw away any existing controller. And we design it completely from scratch.
+
+The first step in this technique is to transform the plant into the discrete time domain. We want the z transform of the plant. And in so doing, we want to capture the phase lag effects of the zero order hold. So we use the step invariant method, or the zero order hold equivalent method.
+
+And having done that, we apply any of the techniques that we used in chapters two or three, Bode, Nyquist, root locus, whatever it happens to be. Take your fancy, you can use them.
+
+But you have to make allowances for the fact that we're dealing with a discrete time system. So let me do this in the form of an example. This is the last tutorial that I shall apply today.
+
+And it's a relatively simple one. What we're going to do is to measure-- well, we've got a simple second order system. And we would like to achieve a response which has a peak overshoot of less than 16%, and a settling time within 2% of less than 10 seconds.
+
+So we need to do this using, I would suggest, the root locus method, because these response characteristics are expressed in terms of the transient response. The first thing to do is to create a model of the plant. So the continuous plant had the transfer function 1 divided by-- it was one, I think 10s plus 1. I don't always remember.
+
+s times 10s plus 1. So what we're going to do is call it 10s squared plus s. And then we've got a zero in there like that. And I think that is the continuous time transfer function.
+
+And now what we'd like to do-- well, what are we going to do now? What's the next step?
+
+Discrete transformation, what method should we use? Zero order hold, because we want the zero order hold phase effects to be taken into account. So what we'll do is we'll create a transfer function gd for discrete.
+
+And we'll use c to d. We give it the transfer function that we're interested in. Now, it did tell me the sample rate. And it's 1 Hertz. So that's nice and easy, 1 Hertz.
+
+And then we need to use the zero order hold method in order-- that wasn't very good. I don't know what method it used there. Oh, it did actually pick it up, zoh. So there is the discrete time transfer function that we're interested in. It seems to have acquired a zero, but, hey that happens.
+
+And now what we're going to do is to use the root locus method because in the tutorial, the specifications are expressed in terms of the step response-- peak overshoot, settling time. These are all transients specifications. So we will use the root locus method to do this. And we will use SISO tool.
+
+We want root locus. And we will give it discrete time transfer function. Just the fact that I give it the discrete time transfer function means that when it draws the root locus plot it knows that it wants the unit circle to deal with. So it doesn't draw the left half plane. It tells me that it's a discrete time system.
+
+Now, I don't know about you, but I usually like to design stable control systems. It's just a personal preference, really. So let's look at the unit circle on its own.
+
+And let's turn the grid on, because the grid is helpful to us. There we go. And we'll also keep an eye, as we did before, on the unit step response. There we go, all right, almost there.
+
+Now, we were looking for a peak overshoot of 16% and a settling time of 10 seconds. So let's begin by setting some design constraints on the unit circle. I will right click in here and select design requirements, the first of which it seems to have remembered from the last time it did this seminar. It was a settling time of 10 seconds.
+
+When I click OK, it's going to mark out a region in the unit circle corresponding to-- well, wherever I put the poles, it will meet the 10 second settling time. What do you think that region is going to look like? Yeah? I think you know, because you're-- no, but you're very close.
+
+Well, remember, if we want a fast settling time in the s plane, it corresponds to moving it to the left. So the vertical lines correspond to the lines of-- well, they're decay parameter. But they could correspond in some sense to settling time as well.
+
+Vertical lines in the s plane correspond to families of concentric circles in the z plane. So somewhere, there is a circle corresponding to the decay parameter, which would give me a 10 second settling time. And it's that one. And I think you can see already that no part of the root locus lies inside there, which explains why these are 50, 100, 150 seconds. We're a long way from achieving a 10 second settling time here.
+
+The other constraint that we had to place on this thing was in terms of the overshoot. The percentage overshoot we were asked to fit was 16%. And by now, you know what we're constraining when we constrain peak overshoot. What is it?
+
+Damping ratio, that's great. What do lines of constant damping ratio look like? Cardioids, you're right. They were cardioids. So there's a cardioid in here corresponding to the minimum damping ratio that we're allowed to apply. And, obviously, the intersection of these two areas is where we're going to aim for.
+
+Now, not much I can do about it just by changing the game, because moving the gain alone is just going to-- well, it's going to make the oscillation go up and down. But it's not going to change the settling time by very much. All we want to do is to move the root locus inside this nice, friendly white area. And what's stopping us is this pole here, that z equals plus 0.9.
+
+We're going to cancel that out, get rid of that thing and put another one in in a better place. So I need a zero. And I'm going to drop it on top.
+
+It's a real zero. Drop it on top of that real poll. When I do so, it becomes a net first order system. There's a poll excess of 1 now.
+
+And the response is predictably exponential. And let's put a poll in to compensate for that-- a real poll, for example, here. Maybe I'd like it a little bit further to the left so I've got a bigger range of root locus to work with.
+
+And now we'll select-- again, maybe just move it to about there, for example, because we've got a little bit of robustness margin in here. We don't want it right on the border. Pull it in a little bit.
+
+But we can see now we're meeting the 16% overshoot rule. I believe that. And the settling time to within 10 seconds, we're good too. We can measure these things if we want to on this response. Peak response is only 6.8%.
+
+And then the settling time, 7.71 seconds. It's rather good, isn't it? So it's just a matter of proceeding exactly as we did for the continuous time system, but making allowance for the fact that it's the z plane we're working in, not the s plane. See how that works?
+
+All right, I have given you a couple of slides which I think do little more than summarize the considerations that we should make when dealing with digital system design. Sampling imposes a maximum frequency restriction that we can represent through Nyquist. Time delay is unavoidable due to computational and sampling delays. Reconstruction is also adding to time delay. And then controller design using emulation or direct digital design methods, well, there are trade-offs there as well. So I think we've summarized all those quite nicely.
+
+Let's do a quick quiz. And we're almost ready to wrap up. What rule maps the s plane to the z plane?
+
+[INAUDIBLE]
+
+Perfect, Peggy, z equals e to the st, thank you.
+
+[INAUDIBLE]
+
+Yeah, that's right. What do lines of constant damping ratio look like in the z plane?
+
+[INAUDIBLE]
+
+Cardiods, great, fantastic.
+
+This was a cheeky one. How do we calculate the response of the digital system at frequency omega 0? I did actually have this on an earlier slide. But I didn't highlight it very well.
+
+So if I have a continuous time transfer function. Let's call it g of s. And I want to know its frequency response. I evaluate it at s equals j omega. We did cover that.
+
+Now, if I have a discrete time transfer function with a z transform, I evaluate it at what? e to the something, it's not negative though. All we do is drop j omega in there. It's e to the j omega t.
+
+You substitute e to the j omega t for z in the transfer function to work it out. That will be a complex number at every frequency that will tell you the magnitude and the phase. We can represent it as a Bode plot, if we want to.
+
+How much phase shift is contributed by a zero order hold? I don't know why. People don't seem to get this one. I'm going to have to revise this slide.
+
+So the phrase angle of a zero order hold-- I think I wrote it like this. It's a phase lag. It's a frequency-dependent phase lag. 2 over 2, lovely, thank you.
+
+This is the amount of phase shift which the zero order hold gives you-- minus omega t divided by 2. That's the bit that you must manually account for if you use, for example, the Tustin method for the discrete transformation, because it's not accounted for. What effect does moving a pole closer to the origin of the unit circle have?
+
+[INAUDIBLE]
+
+Nope. Getting closer to the origin is equivalent to what in the s plane?
+
+[INAUDIBLE]
+
+It's going to the left. Going to the left in the s plane makes the decay rate faster. Remember, vertical lines just in the last tutorial correspond to circles. So go closer to the center, it's the decay rate that's getting faster.
+
+What should we be careful with with a forward approximation method?
+
+[INAUDIBLE]
+
+Yeah, it's the only one, wasn't it, that didn't guarantee a stable response after we'd applied it-- depends on the sample period. That's right.
+
+When might you use pre-warping? In other words, which technique do you use it with? People don't shout. Somebody?
+
+Tustin.
+
+Tustin, I know somebody said Tustin there. So I'm going to give you that, Tustin. Lucky there's no t-shirt associated with that. Otherwise, you'd personally get one.
+
+Tustin method-- you use Tustin. But before you apply Tustin, you apply pre-warping to move the poles and zeros around so they're in the right locations. And what transformation method you use with direct digital design? And why do you do that?
+
+[INAUDIBLE]
+
+Zero order hold equivalent method, also known as the step invariant method, that's correct. And we do it because it accounts for this-- minus omega t divided by 2. It accounts for the phase lag introduced by a zero order hold. That's excellent.
+
+Now, before we disappear, I have a couple of things to say. So don't rush out the door just yet, please. I'd like to summarize this. And I'd also point you in the direction of the recommended reading section, which is the last printed page in your books.
+
+It's about books. So this accounts for my favorite Groucho Marx quote at the bottom of the slide here. These are the books that I try to-- now, nobody's going to go out and buy all of these. I know that.
+
+But I would like to highlight one or two of these in particular, because I think they're very good reads. The very first one here by Astrom and Murray is a recent book called feedback systems. And the reason I recommend is it uses practical real world examples to introduce you to control concepts.
+
+It's not great on transfer functions. He tends to start with the state space approach, and pretty much stay with state space. But it has a very nice link to all sorts of real world examples from biology, and mechanical engineering, physics, and all sorts of things.
+
+It's a very good read. It also has a very desirable property that if you search for the authors names on the web, I think I'm right in saying you can download the PDF quite legally. And it's a very good book.
+
+The next one I'd like to recommend is the Schaum series book by DiStefano, Stubberud and Williams. It's been my handbook for many years. And the reason I like it is, like most of the Schaums books, it's replete with examples.
+
+There's 700 or 800 worked examples in there on all the topics that we've covered today. And if you want to just get to control theory by doing examples, that's the best way. The Schaum series, this book, is a very good one.
+
+I mentioned this book by Doyle, Francis, and Tannenbaum in respect of robust control. It's quite a mathematical book. It, again, has the desirable property that you can legally download it, because what happened was that the copyright passed back to the authors. And they very graciously put it online.
+
+The PDF is only about a kilobyte or so. It's quite a small book. But it's very, very good.
+
+And then the last book I want to highlight, if it's digital control you're particularly interested in, I don't think that the Franklin, Powell, and Workman book has yet been bettered. It's my own personal favorite.
+
+The only problem with it is it's currently out of print. You can probably get a second hand copy for a very reasonable price through Amazon or something like that. But that's a very good one.
+
+So we've covered a lot of material today. I'd like to thank you for your stamina, as well as your patience. And I hope you've enjoyed it.
+
+If you want to, you can get in touch with me. These are two email addresses. There's the official one r.poley@ti.com. And there's the unofficial, poleyshark@gmail.com. It's a long story.
+
+Either of those will reach me. You're very welcome to get in touch with me. And with that, I wish you a very pleasant evening, a safe journey home.
+
+And tomorrow, come back and see us. And we'll do some motor control with Dave Wilson. So take care. And I'll see you tomorrow.
+
